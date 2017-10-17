@@ -109,7 +109,7 @@ public class LinearOpModeCamera extends LinearOpMode {
 
   public void startCamera() {
 
-    camera = openCamera(Camera.CameraInfo.CAMERA_FACING_FRONT);
+    camera = openCamera(Camera.CameraInfo.CAMERA_FACING_BACK);
     camera.setPreviewCallback(previewCallback);
 
     Camera.Parameters parameters = camera.getParameters();
@@ -118,7 +118,7 @@ public class LinearOpModeCamera extends LinearOpMode {
     height = parameters.getPreviewSize().height / ds;
     parameters.setPreviewSize(width, height);
 
-    camera.setParameters(parameters);
+    //camera.setParameters(parameters);
 
     data = parameters.flatten();
 

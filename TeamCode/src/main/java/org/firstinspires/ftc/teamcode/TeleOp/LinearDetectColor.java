@@ -64,7 +64,7 @@ public class LinearDetectColor extends LinearOpModeCamera {
             */
 
             while (opModeIsActive()) {
-                if (imageReady()) { // only do this if an image has been returned from the camera
+                if (imageReady()) { // only do this if an image has 0een returned from the camera
                     int redValue = 0;
                     int blueValue = 0;
                     int greenValue = 0;

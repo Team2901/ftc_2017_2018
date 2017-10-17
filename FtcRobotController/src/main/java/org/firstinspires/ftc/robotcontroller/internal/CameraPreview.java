@@ -9,6 +9,7 @@ import android.view.SurfaceView;
 import android.hardware.Camera;
 
 import java.io.IOException;
+import java.util.List;
 
 /**
  * Created by FTC-5648 on 9/15/2015.
@@ -72,6 +73,9 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
    //         mCamera.setDisplayOrientation(90);
             setCameraDisplayOrientation(((Activity) this.getContext()), Camera.CameraInfo.CAMERA_FACING_FRONT, mCamera);
 
+            List<Camera.Size> previewSizes = parameters.getSupportedPreviewSizes();
+            Camera.Size previewSize= previewSizes.get(0);
+            parameters.setPreviewSize(previewSize.width, previewSize.height);
             mCamera.setParameters(parameters);
 
             mCamera.setPreviewCallback(previewCallback);
@@ -109,6 +113,10 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
         try {
             Camera.Parameters parameters = mCamera.getParameters();
             setCameraDisplayOrientation(((Activity) this.getContext()), Camera.CameraInfo.CAMERA_FACING_FRONT, mCamera);
+
+            List<Camera.Size> previewSizes = parameters.getSupportedPreviewSizes();
+            Camera.Size previewSize= previewSizes.get(0);
+            parameters.setPreviewSize(previewSize.width, previewSize.height);
             mCamera.setParameters(parameters);
 
             mCamera.setPreviewCallback(previewCallback);
