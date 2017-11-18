@@ -11,12 +11,12 @@ import org.firstinspires.ftc.teamcode.Robot.ClawbotHardware;
  * Created by Kearneyg20428 on 2/7/2017.
  */
 @TeleOp(name="Clawbot", group="TeleOp")
-public class ClawbotTeleOp extends OpMode  {
+public class ClawbotTeleOp extends OpMode {
 
-    final double    CLAW_SPEED  = 0.05 ;
-    double          clawOffset  = 0.0 ;
+    final double CLAW_SPEED = 0.05;
+    double clawOffset = 0.0;
 
-    ClawbotHardware robot       = new ClawbotHardware();
+    ClawbotHardware robot = new ClawbotHardware();
 
     @Override
     public void init() {
@@ -31,11 +31,20 @@ public class ClawbotTeleOp extends OpMode  {
         double right;
 
         // Run wheels in tank mode (note: The joystick goes negative when pushed forwards, so negate it)
-        left = -gamepad1.left_stick_y;
-        right = -gamepad1.right_stick_y;
-        robot.leftMotor.setPower(left);
-        robot.rightMotor.setPower(right);
-
+        if (gamepad1.dpad_up) {
+            power(.75, .75);
+        } else if (gamepad1.dpad_down) {
+            power(-.75, -.75);
+        } else if (gamepad1.dpad_left) {
+            power(-.75, .75);
+        } else if (gamepad1.dpad_right) {
+            power(.75, -.75);
+        } else {
+            left = -gamepad1.left_stick_y;
+            right = -gamepad1.right_stick_y;
+            robot.leftMotor.setPower(left);
+            robot.rightMotor.setPower(right);
+        }
         // Use gamepad left & right Bumpers to open and close the claw
         if (gamepad1.right_bumper)
             clawOffset += CLAW_SPEED;
@@ -57,11 +66,16 @@ public class ClawbotTeleOp extends OpMode  {
             robot.armMotor.setPower(0.0);
 
         // Send telemetry message to signify robot running;
-        telemetry.addData("claw",  "Offset = %.2f", clawOffset);
-        telemetry.addData("claw",  "Absolute = %.2f", robot.MID_SERVO - clawOffset);
+        telemetry.addData("claw", "Offset = %.2f", clawOffset);
+        telemetry.addData("claw", "Absolute = %.2f", robot.MID_SERVO - clawOffset);
         telemetry.addData("arm pos", "%d", robot.armMotor.getCurrentPosition());
         telemetry.addData("arm speed", "%.2f", robot.armMotor.getPower());
-        telemetry.addData("left joystick position","%.2f",-gamepad1.left_stick_y);
+        telemetry.addData("left joystick position", "%.2f", -gamepad1.left_stick_y);
         telemetry.update();
+    }
+
+    public void power(double left, double right) {
+        robot.leftMotor.setPower(left);
+        robot.rightMotor.setPower(right);
     }
 }
