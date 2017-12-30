@@ -31,20 +31,20 @@ public class Simple_Drive_2901 extends OpMode     {
     public void loop() {
         double LeftDrive;
         double RightDrive;
-        double LiftMotor = gamepad1. right_trigger;
+        double liftMotor = gamepad1. right_trigger;
 
 
         // Run wheels in tank mode (note: The joystick goes negative when pushed forwards, so negate it)
         LeftDrive = -gamepad1.left_stick_y;
-        RightDrive = -gamepad1.right_stick_x;
+        RightDrive = -gamepad1.right_stick_y;
 
         // Use gamepad buttons to move the arm up (Y) and down (A)
         if (gamepad1.y)
-            robot.LiftMotor.setPower(LIFT_UP_POWER);
+            robot.liftMotor.setPower(LIFT_UP_POWER);
         else if (gamepad1.a)
-            robot.LiftMotor.setPower(LIFT_DOWN_POWER);
+            robot.liftMotor.setPower(LIFT_DOWN_POWER);
         else
-            robot.LiftMotor.setPower(0.0);
+            robot.liftMotor.setPower(0.0);
 
         // Use gamepad left & right Bumpers to open and close the claw
         if (gamepad1.right_bumper)
@@ -54,6 +54,16 @@ public class Simple_Drive_2901 extends OpMode     {
 
         robot.leftMotor.setPower(LeftDrive);
         robot.rightMotor.setPower(RightDrive);
-        robot.LiftMotor.setPower(LiftMotor);
+        robot.liftMotor.setPower(liftMotor);
+
+       double targetPosition = robot.clawServo.getPosition();
+        if (gamepad1.b) {
+            targetPosition= targetPosition + .01;
+            robot.clawServo.setPosition(targetPosition);
+        }
+        else if (gamepad1.x) {
+            targetPosition= targetPosition - .01;
+            robot.clawServo.setPosition(targetPosition);
+        }
     }
 }
