@@ -73,6 +73,7 @@ public class Simple_Drive_2901 extends OpMode     {
         if (gamepad2.left_trigger > .5 ) {
            robot.armServo.setPosition(.75);
         }
+    robot.armServo.setPosition(.75);
 
         telemetry.addData("ClawServo",robot.clawServo.getPosition());
         telemetry.addData("LiftMotor",robot.liftMotor.getCurrentPosition());

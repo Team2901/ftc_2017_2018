@@ -67,7 +67,7 @@ public class RedCode extends LinearOpModeCamera {
             //step 3:drive backwords
             //step 4: turn right or left depending on the jewel needed
 
-            
+
             //steps for block placement
             //turn 90 left
             //drive forward to left, right, or center position
