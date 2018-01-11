@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Environment;
 
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.vuforia.Image;
 import com.vuforia.PIXEL_FORMAT;
@@ -72,15 +73,33 @@ public class BaseCode extends LinearOpModeCamera {
         robot.closeClaw();
         robot.raiseLift(233);
 
-        while(opModeIsActive()) {
+       // while(opModeIsActive()) {
             vuMark = RelicRecoveryVuMark.from(relicTemplate);
             if (vuMark != RelicRecoveryVuMark.UNKNOWN) {
-                bitmap =getImage();
+                bitmap = getImage();
                 saveBitmap(bitmap);
                 telemetry.addData("VuMark", "%s visible", vuMark);
-                break;
+            //    break;
             } else telemetry.addLine("vuMark not visable");
             telemetry.update();
+       // }
+   // lower arm/ jewel knocker
+        robot.lowerJewelKnocker();
+
+
+    if (isOurJewelOnLeft(bitmap)){
+        // if your jewel is on the left turn right
+        robot.leftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        int position= robot.leftMotor.getCurrentPosition() + 1140;
+        robot.leftMotor.setTargetPosition(position);
+        robot.leftMotor.setPower(.75);
+    }
+    else {
+        // if your jewel is on the right turn left.
+        robot.rightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        int position= robot.rightMotor.getCurrentPosition() + 1140;
+        robot.rightMotor.setTargetPosition(position);
+        robot.rightMotor.setPower(.75);
         }
 
         while (opModeIsActive()) {
@@ -178,7 +197,11 @@ public class BaseCode extends LinearOpModeCamera {
         telemetry.addData("Red count", "%d", leftRed);
         telemetry.addData("Blue count", "%d", leftBlue);
         telemetry.addData("Count", "%d", count);
+        telemetry.addData("JewelColor", leftJewelColor);
+
+
         telemetry.update();
+
 
         if (leftJewelColor.equals(teamColor))
             return true;
@@ -231,7 +254,7 @@ public class BaseCode extends LinearOpModeCamera {
             sampleBox_x2 = Integer.parseInt(reader.readLine());
             sampleBox_y2 = Integer.parseInt(reader.readLine());
         } catch (Exception e){
-            telemetry.addData ("ERROR WRITING TO FILE", e.getMessage());
+            telemetry.addData ("ERROR READING THE FILE", e.getMessage());
         }
     }
 }

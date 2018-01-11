@@ -94,4 +94,8 @@ public class Team2901RobotHardware {
         liftMotor.setTargetPosition(encodercount);
         liftMotor.setPower(.5);
     }
+
+    public void lowerJewelKnocker(){
+        armServo.setPosition(0);
+    }
 }
