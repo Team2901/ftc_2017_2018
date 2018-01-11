@@ -28,6 +28,8 @@ public class LinearOpModeCamera extends LinearOpMode {
   public int width;
   public int height;
   public YuvImage yuvImage = null;
+  public JewelFinder jewel;
+
 
   volatile private boolean imageReady = false;
 

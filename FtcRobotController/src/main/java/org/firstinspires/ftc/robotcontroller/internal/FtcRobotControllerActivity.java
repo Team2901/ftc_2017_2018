@@ -159,6 +159,21 @@ public class FtcRobotControllerActivity extends Activity
   /////////////////////////////////////////////////////////
   // ADDED FOR CAMERA!!!
 
+    public void addJewelFinder(final LinearOpModeCamera context) {
+      runOnUiThread (new Runnable(){
+        @Override
+        public void run(){
+          FrameLayout previewLayout= (FrameLayout) findViewById(R.id.previewLayout);
+          JewelFinder box = new JewelFinder(FtcRobotControllerActivity.this);
+          context.jewel = box;
+          previewLayout.addView(context.jewel);
+        }
+      });
+    }
+
+
+
+
   public void initPreview(final Camera camera, final OpModeCamera context, final Camera.PreviewCallback previewCallback) {
     runOnUiThread(new Runnable() {
       @Override
