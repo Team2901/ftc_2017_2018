@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Environment;
 
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.vuforia.Image;
@@ -30,8 +31,8 @@ import java.io.IOException;
  * Created by gallagherb20503 on 11/7/2017.
  */
 
-
-public class BaseCode extends LinearOpModeCamera {
+@Autonomous 
+public class fixing extends LinearOpModeCamera {
     VuforiaLocalizer vuforia;
     RelicRecoveryVuMark vuMark = null;
     int sampleBox_x1= 0;
@@ -71,45 +72,39 @@ public class BaseCode extends LinearOpModeCamera {
         relicTrackables.activate();
 
         robot.closeClaw();
-        robot.raiseLift(100);
+        robot.raiseLift(233);
 
-       /*while(opModeIsActive()) {
-            vuMark = RelicRecoveryVuMark.from(relicTemplate);
-            if (vuMark != RelicRecoveryVuMark.UNKNOWN) {
-            bitmap = getImage();
-            saveBitmap(bitmap);
+
+       vuMark = RelicRecoveryVuMark.from(relicTemplate);
+       /* if (vuMark != RelicRecoveryVuMark.UNKNOWN) {
+
             telemetry.addData("VuMark", "%s visible", vuMark);
             //    break;
         } else telemetry.addLine("vuMark not visable");
         telemetry.update();
-    } */
+        // }
+        */
+        robot.lowerJewelKnocker();
 
-            // lower arm/ jewel knocker
-            robot.lowerJewelKnocker();
-
-    bitmap = getImage();
+        bitmap = getImage();
         saveBitmap(bitmap);
 
-        int position= 0;
-
-    if (isOurJewelOnLeft(bitmap)){
-        // if your jewel is on the left turn right
-        robot.leftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        position= robot.leftMotor.getCurrentPosition() + 1140;
-        telemetry.addData("current Position", "%d", position);
-        robot.leftMotor.setTargetPosition(position);
-        robot.leftMotor.setPower(.75);
-    }
-    else {
-        // if your jewel is on the right turn left.
-        robot.rightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        position= robot.rightMotor.getCurrentPosition() + 1140;
-        telemetry.addData("current Position", "%d", position);
-        robot.rightMotor.setTargetPosition(position);
-        robot.rightMotor.setPower(.75);
+        if (isOurJewelOnLeft(bitmap)){
+            // if your jewel is on the left turn right
+            robot.leftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            int position= robot.leftMotor.getCurrentPosition() + 1140;
+            robot.leftMotor.setTargetPosition(position);
+            robot.leftMotor.setPower(.75);
+        }
+        else {
+            // if your jewel is on the right turn left.
+            robot.rightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            int position= robot.rightMotor.getCurrentPosition() + 1140;
+            robot.rightMotor.setTargetPosition(position);
+            robot.rightMotor.setPower(.75);
         }
 
-        while (opModeIsActive()) {
+
             //steps to knock the jewel off
             //step 1: take picture
             //step 2:analis picture
@@ -123,11 +118,9 @@ public class BaseCode extends LinearOpModeCamera {
             // turn right 90
             //drive forward
             //drop block
-            telemetry.addData("current Position", "%d", position);
 
         }
-        robot.armServo.setPosition(1);
-    }
+
     Bitmap getImage (){
         try{
             VuforiaLocalizer.CloseableFrame closeableFrame = vuforia.getFrameQueue().take ();
@@ -266,8 +259,6 @@ public class BaseCode extends LinearOpModeCamera {
             telemetry.addData ("ERROR READING THE FILE", e.getMessage());
         }
     }
-
-
 }
 
 
