@@ -38,7 +38,7 @@ public class BaseCode extends LinearOpModeCamera {
     int sampleBox_x2= 100;
     int sampleBox_y1= 0;
     int sampleBox_y2= 100;
-    String teamColor ="red";
+    String teamColor;
     Bitmap bitmap;
     File sd = Environment.getExternalStorageDirectory();
     File sampleBox = new File(sd + "/team", "sampleBox.txt");
