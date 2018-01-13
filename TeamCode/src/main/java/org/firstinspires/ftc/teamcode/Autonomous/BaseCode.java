@@ -35,8 +35,8 @@ public class BaseCode extends LinearOpModeCamera {
     VuforiaLocalizer vuforia;
     RelicRecoveryVuMark vuMark = null;
     int sampleBox_x1= 0;
-    int sampleBox_x2= 100;
-    int sampleBox_y1= 0;
+    int sampleBox_x2= 40;
+    int sampleBox_y1= 40;
     int sampleBox_y2= 100;
     String teamColor ="red";
     Bitmap bitmap;
@@ -70,8 +70,9 @@ public class BaseCode extends LinearOpModeCamera {
         waitForStart();
         relicTrackables.activate();
 
-        robot.closeClaw();
-        robot.raiseLift(100);
+        /*robot.closeClaw();
+        robot.raiseLift(100);*/
+
 
        /*while(opModeIsActive()) {
             vuMark = RelicRecoveryVuMark.from(relicTemplate);
@@ -188,7 +189,7 @@ public class BaseCode extends LinearOpModeCamera {
                 double[] HBV = RGBtoHSV(red, green, blue);
                 double hue = HBV[0];
 
-                if (((300 < hue) || (hue < 60)))
+                if (((300 < hue) || (hue < 20)))
                     leftRed = leftRed + 1;
 
                 if (((180 < hue) && (hue <= 300)))

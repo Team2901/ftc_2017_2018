@@ -18,6 +18,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 import org.firstinspires.ftc.teamcode.Robot.Team2901RobotHardware;
+import org.firstinspires.ftc.teamcode.Robot.stressed;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -31,27 +32,30 @@ import java.io.IOException;
  * Created by gallagherb20503 on 11/7/2017.
  */
 
-@Autonomous 
+@Autonomous
 public class fixing extends LinearOpModeCamera {
     VuforiaLocalizer vuforia;
     RelicRecoveryVuMark vuMark = null;
     int sampleBox_x1= 0;
-    int sampleBox_x2= 100;
-    int sampleBox_y1= 0;
+    int sampleBox_x2= 30;
+    int sampleBox_y1= 50;
     int sampleBox_y2= 100;
     String teamColor ="red";
     Bitmap bitmap;
     File sd = Environment.getExternalStorageDirectory();
-    File sampleBox = new File(sd + "/team", "sampleBox.txt");
+    File sampleBox = new File(sd + "/Team", "sampleBox.txt");
 
 
 
-    Team2901RobotHardware robot = new Team2901RobotHardware();
+    stressed robot = new  stressed();
     HardwareMap hwMap = null;
 
     public void runOpMode() {
 
         robot.initAutonomous(hardwareMap);
+
+       // readConfigFile();
+
 
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
@@ -71,11 +75,11 @@ public class fixing extends LinearOpModeCamera {
         waitForStart();
         relicTrackables.activate();
 
-        robot.closeClaw();
-        robot.raiseLift(233);
+        //robot.closeClaw();
+      //  robot.raiseLift(233);
 
 
-       vuMark = RelicRecoveryVuMark.from(relicTemplate);
+       //vuMark = RelicRecoveryVuMark.from(relicTemplate);
        /* if (vuMark != RelicRecoveryVuMark.UNKNOWN) {
 
             telemetry.addData("VuMark", "%s visible", vuMark);
@@ -84,26 +88,27 @@ public class fixing extends LinearOpModeCamera {
         telemetry.update();
         // }
         */
-        robot.lowerJewelKnocker();
+       // robot.lowerJewelKnocker();
 
         bitmap = getImage();
         saveBitmap(bitmap);
 
         if (isOurJewelOnLeft(bitmap)){
             // if your jewel is on the left turn right
-            robot.leftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            int position= robot.leftMotor.getCurrentPosition() + 1140;
-            robot.leftMotor.setTargetPosition(position);
-            robot.leftMotor.setPower(.75);
+          //  robot.leftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            //int position= robot.leftMotor.getCurrentPosition() + 1140;
+            //robot.leftMotor.setTargetPosition(position);
+            //robot.leftMotor.setPower(.75);
         }
         else {
             // if your jewel is on the right turn left.
-            robot.rightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            int position= robot.rightMotor.getCurrentPosition() + 1140;
-            robot.rightMotor.setTargetPosition(position);
-            robot.rightMotor.setPower(.75);
+            //robot.rightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            //int position= robot.rightMotor.getCurrentPosition() + 1140;
+            //robot.rightMotor.setTargetPosition(position);
+            //robot.rightMotor.setPower(.75);
         }
 
+        saveBitmap(bitmap);
 
             //steps to knock the jewel off
             //step 1: take picture
@@ -118,6 +123,7 @@ public class fixing extends LinearOpModeCamera {
             // turn right 90
             //drive forward
             //drop block
+        sleep(1000);
 
         }
 
@@ -180,12 +186,25 @@ public class fixing extends LinearOpModeCamera {
 
                 double[] HBV = RGBtoHSV(red, green, blue);
                 double hue = HBV[0];
+                telemetry.addData("Color", "%d",(int)hue);
 
-                if (((300 < hue) || (hue < 60)))
+
+                if (((300 < hue) || (hue < 20)))
+                {
+
                     leftRed = leftRed + 1;
+                    bitmap.setPixel((int) (x * xPercent), (int) (y * yPercent), Color.MAGENTA);
+                }
 
-                if (((180 < hue) && (hue <= 300)))
+
+                else if (((180 < hue) && (hue <= 300))) {
                     leftBlue = leftBlue + 1;
+                    bitmap.setPixel((int) (x * xPercent), (int) (y * yPercent), Color.GREEN);
+                }
+                else {
+                        bitmap.setPixel((int) (x * xPercent), (int) (y * yPercent), Color.YELLOW);
+                    }
+
             }
         }
 
