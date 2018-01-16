@@ -26,6 +26,12 @@ public class Simple_Drive_2901 extends OpMode     {
         robot.initTeleOp(hardwareMap);
     }
 
+    @Override
+    public void start() {
+            robot.armServo.setPosition(1);
+
+    }
+
 
     @Override
     public void loop() {
@@ -69,7 +75,8 @@ public class Simple_Drive_2901 extends OpMode     {
             robot.clawServo.setPosition(targetPosition);
         }
 
-        targetPosition= robot.armServo.getPosition();
+
+       targetPosition= robot.armServo.getPosition();
         if (gamepad2.left_trigger > .5 ) {
            robot.armServo.setPosition(1);
         }
@@ -79,5 +86,7 @@ public class Simple_Drive_2901 extends OpMode     {
         telemetry.addData("LiftMotor",robot.liftMotor.getCurrentPosition());
         telemetry.update();
     }
+
+
 
 }

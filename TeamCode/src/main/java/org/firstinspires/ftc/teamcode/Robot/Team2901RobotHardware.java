@@ -44,7 +44,7 @@ public class Team2901RobotHardware {
         liftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         liftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-        armServo.setPosition(0);
+       // armServo.setPosition(0);
 
 
     }

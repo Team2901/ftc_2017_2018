@@ -24,7 +24,7 @@ import java.io.FileWriter;
 public class RobotSetup extends LinearOpModeCamera{
     VuforiaLocalizer vuforia;
     File sd = Environment.getExternalStorageDirectory();
-    File sampleBox = new File(sd + "/Team", "sampleBox.txt");
+    File sampleBox = new File(sd + "/team", "sampleBox.txt");
 
 
 
@@ -53,7 +53,7 @@ after start jewel finder position is saved to finder
 
     waitForStart();
 
-
+    saveConfigFile();
 
 }
 

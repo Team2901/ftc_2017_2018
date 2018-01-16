@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.Autonomous;
 
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.os.Environment;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -35,7 +36,7 @@ public class BaseCode extends LinearOpModeCamera {
     VuforiaLocalizer vuforia;
     RelicRecoveryVuMark vuMark = null;
     int sampleBox_x1= 0;
-    int sampleBox_x2= 40;
+    int sampleBox_x2= 50;
     int sampleBox_y1= 40;
     int sampleBox_y2= 100;
     String teamColor;
@@ -63,15 +64,17 @@ public class BaseCode extends LinearOpModeCamera {
         VuforiaTrackable relicTemplate = relicTrackables.get(0);
         relicTemplate.setName("relicVuMarkTemplate"); // can help in debugging; otherwise not necessary
 
+        readConfigFile();
 
         telemetry.addData("start","");
         telemetry.update();
 
         waitForStart();
+
         relicTrackables.activate();
 
         /*robot.closeClaw();
-        robot.raiseLift(100);*/
+        robot.raiseLift(20);*/
 
 
        /*while(opModeIsActive()) {
@@ -139,7 +142,10 @@ public class BaseCode extends LinearOpModeCamera {
                             image.getHeight(),
                             Bitmap.Config.RGB_565);
                     bitmap.copyPixelsFromBuffer (image.getPixels());
-                    return bitmap;
+                    Matrix matrix = new Matrix ();
+                    matrix.postRotate(90);
+
+                    return Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
                 }
             }
         } catch (Exception e){
@@ -150,7 +156,7 @@ public class BaseCode extends LinearOpModeCamera {
     }
     public void saveBitmap(Bitmap bitmap)  {
         String filename =   Environment.getExternalStorageDirectory(). getAbsolutePath()
-                +    "/Pictures?vuforia.png";
+                +    "/Pictures/vuforia.png";
         FileOutputStream out = null;
         try{
             out= new FileOutputStream(filename);
@@ -189,10 +195,10 @@ public class BaseCode extends LinearOpModeCamera {
                 double[] HBV = RGBtoHSV(red, green, blue);
                 double hue = HBV[0];
 
-                if (((300 < hue) || (hue < 20)))
+                if (((310 <= hue) || (hue < 20)))
                     leftRed = leftRed + 1;
 
-                if (((180 < hue) && (hue <= 300)))
+                if (((180 < hue) && (hue < 280)))
                     leftBlue = leftBlue + 1;
             }
         }
@@ -204,6 +210,7 @@ public class BaseCode extends LinearOpModeCamera {
         else
             leftJewelColor = "blue";
 
+        telemetry.addData("", String.format(" %d %d %d %d", sampleBox_x1, sampleBox_y1, sampleBox_x2, sampleBox_y2));
         telemetry.addData("Red count", "%d", leftRed);
         telemetry.addData("Blue count", "%d", leftBlue);
         telemetry.addData("Count", "%d", count);
