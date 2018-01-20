@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.Autonomous;
 
 import android.os.Environment;
 
+import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cRangeSensor;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.vuforia.PIXEL_FORMAT;
 import com.vuforia.Vuforia;
@@ -9,6 +10,7 @@ import com.vuforia.Vuforia;
 import org.firstinspires.ftc.robotcontroller.internal.FtcRobotControllerActivity;
 import org.firstinspires.ftc.robotcontroller.internal.LinearOpModeCamera;
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
@@ -25,6 +27,7 @@ public class RobotSetup extends LinearOpModeCamera{
     VuforiaLocalizer vuforia;
     File sd = Environment.getExternalStorageDirectory();
     File sampleBox = new File(sd + "/team", "sampleBox.txt");
+    ModernRoboticsI2cRangeSensor rangeSensor;
 
 
 
@@ -50,9 +53,16 @@ after start jewel finder position is saved to finder
     VuforiaTrackable relicTemplate = relicTrackables.get(0);
     relicTemplate.setName("relicVuMarkTemplate"); // can help in debugging; otherwise not necessary
 
+    rangeSensor = hardwareMap.get(ModernRoboticsI2cRangeSensor.class, "rangeSensor");
 
     waitForStart();
 
+    while (opModeIsActive()) {
+        telemetry.addData("cm", "%.2f cm", rangeSensor.getDistance(DistanceUnit.CM));
+        telemetry.addData("inches", "%.2f inches", rangeSensor.getDistance(DistanceUnit.INCH));
+        telemetry.addData("target", "34.00cm");
+        telemetry.update();
+    }
     saveConfigFile();
 
 }
