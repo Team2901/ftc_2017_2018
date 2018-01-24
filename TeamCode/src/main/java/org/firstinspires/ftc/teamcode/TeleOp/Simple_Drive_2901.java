@@ -80,7 +80,7 @@ public class Simple_Drive_2901 extends OpMode     {
         if (gamepad2.left_trigger > .5 ) {
            robot.armServo.setPosition(1);
         }
-        else if (gamepad2.right_trigger< .5){
+        else if (gamepad2.right_trigger> .5){
             robot.armServo.setPosition(0);
         }
 

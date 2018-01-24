@@ -166,6 +166,7 @@ public class FtcRobotControllerActivity extends Activity
           FrameLayout previewLayout= (FrameLayout) findViewById(R.id.previewLayout);
           JewelFinder box = new JewelFinder(FtcRobotControllerActivity.this);
           context.jewel = box;
+          previewLayout.removeAllViews();
           previewLayout.addView(context.jewel);
         }
       });

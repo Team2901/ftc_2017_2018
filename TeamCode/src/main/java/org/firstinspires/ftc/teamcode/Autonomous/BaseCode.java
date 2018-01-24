@@ -41,6 +41,8 @@ public class BaseCode extends LinearOpModeCamera {
     int sampleBox_y2= 100;
     String teamColor;
     Bitmap bitmap;
+    boolean isJewelOnLeft;
+
     File sd = Environment.getExternalStorageDirectory();
     File sampleBox = new File(sd + "/team", "sampleBox.txt");
 
@@ -95,14 +97,20 @@ public class BaseCode extends LinearOpModeCamera {
         saveBitmap(bitmap);
 
         int position= 0;
-
-    if (isOurJewelOnLeft(bitmap)){
+isJewelOnLeft= isOurJewelOnLeft(bitmap);
+    if (isJewelOnLeft){
         // if your jewel is on the left turn right
         robot.leftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         position= robot.leftMotor.getCurrentPosition() + 1140;
         telemetry.addData("current Position", "%d", position);
         robot.leftMotor.setTargetPosition(position);
         robot.leftMotor.setPower(.75);
+
+        while (robot.leftMotor.isBusy())
+        {
+
+        }
+
     }
     else {
         // if your jewel is on the right turn left.
@@ -111,28 +119,18 @@ public class BaseCode extends LinearOpModeCamera {
         telemetry.addData("current Position", "%d", position);
         robot.rightMotor.setTargetPosition(position);
         robot.rightMotor.setPower(.75);
-        }
 
-        while (opModeIsActive()) {
-            //steps to knock the jewel off
-            //step 1: take picture
-            //step 2:analis picture
-            //step 3:drive backwords
-            //step 4: turn right or left depending on the jewel needed
-
-
-            //steps for block placement
-            //turn 90 left
-            //drive forward to left, right, or center position
-            // turn right 90
-            //drive forward
-            //drop block
-            telemetry.addData("current Position", "%d", position);
+        while (robot.rightMotor.isBusy()){
 
         }
+        }
+
+
+
         robot.armServo.setPosition(1);
     }
-    Bitmap getImage (){
+
+    public Bitmap getImage (){
         try{
             VuforiaLocalizer.CloseableFrame closeableFrame = vuforia.getFrameQueue().take ();
             for (int i=0; i < closeableFrame.getNumImages(); i++){
@@ -154,6 +152,7 @@ public class BaseCode extends LinearOpModeCamera {
 
         return null;
     }
+
     public void saveBitmap(Bitmap bitmap)  {
         String filename =   Environment.getExternalStorageDirectory(). getAbsolutePath()
                 +    "/Pictures/vuforia.png";
