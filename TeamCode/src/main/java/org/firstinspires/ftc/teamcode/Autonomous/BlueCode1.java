@@ -20,12 +20,12 @@ public class BlueCode1 extends BaseCode {
         int forwardmonkeys;
 
         if(isJewelOnLeft) {
-            turnticks= 3000;
+            turnticks= 200;
             forwardmonkeys= 3000;
         }
         else {
-            turnticks= 3000 + 1140;
-            forwardmonkeys= 3000 + 500;
+            turnticks= 150;
+            forwardmonkeys= 9000 + 5000;
         }
 
         robot.leftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);

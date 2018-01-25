@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
  * Created by gallagherb20503 on 11/7/2017.
  */
 
-@Autonomous (name = "BlueCode1")
+@Autonomous (name = "RedCode1")
 public class RedCode1 extends BaseCode {
 
     public void runOpMode() {
