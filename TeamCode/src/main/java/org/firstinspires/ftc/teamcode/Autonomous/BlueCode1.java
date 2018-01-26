@@ -20,29 +20,42 @@ public class BlueCode1 extends BaseCode {
         int forwardmonkeys;
 
         if(isJewelOnLeft) {
-            turnticks= 200;
-            forwardmonkeys= 3000;
+            turnticks= 1900;
+            forwardmonkeys= 5200;
         }
         else {
-            turnticks= 150;
-            forwardmonkeys= 9000 + 5000;
+            turnticks= 1300;
+            forwardmonkeys= 5200;
         }
+
+        robot.leftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.rightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        robot.leftMotor.setTargetPosition(robot.leftMotor.getCurrentPosition() - turnticks);
+        robot.rightMotor.setTargetPosition(robot.rightMotor.getCurrentPosition() + turnticks);
 
         robot.leftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.rightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.leftMotor.setTargetPosition(robot.leftMotor.getCurrentPosition() - turnticks); ///need//
-        robot.rightMotor.setTargetPosition(robot.rightMotor.getCurrentPosition() + turnticks); //need//
-        robot.leftMotor.setPower(-.75); //  need//
-        robot.rightMotor.setPower(.75); //need//
-        while (robot.leftMotor.isBusy()) {
+
+        robot.leftMotor.setPower(.5); //  need//
+        robot.rightMotor.setPower(.5); //need//
+        while (robot.leftMotor.isBusy() || robot.rightMotor.isBusy()) {
 
         }
+        robot.leftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.rightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        robot.leftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.rightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.leftMotor.setTargetPosition(robot.leftMotor.getCurrentPosition() + forwardmonkeys);
         robot.rightMotor.setTargetPosition(robot.rightMotor.getCurrentPosition() + forwardmonkeys);
-        robot.leftMotor.setPower(.75);
-        robot.rightMotor.setPower(-.75);
+
+        robot.leftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.rightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        robot.leftMotor.setPower(.5);
+        robot.rightMotor.setPower(.5);
+
+        while (opModeIsActive()){
+
+        }
     }
 }
