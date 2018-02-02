@@ -19,6 +19,7 @@ public class Simple_Drive_2901 extends OpMode     {
 
     final double LIFT_SPEED = 0.05;
     double liftOffset = 0.0;
+    double drivePower=1;
 
     @Override
     public void init () {
@@ -37,8 +38,6 @@ public class Simple_Drive_2901 extends OpMode     {
     public void loop() {
         double LeftDrive;
         double RightDrive;
-        double drivePower=1;
-
 
         // Run wheels in tank mode (note: The joystick goes negative when pushed forwards, so negate it)
         LeftDrive = -gamepad1.left_stick_y;
@@ -58,10 +57,8 @@ public class Simple_Drive_2901 extends OpMode     {
 
         robot.liftMotor.setPower(gamepad2.left_stick_y* -1);
 
-
         robot.leftMotor.setPower(LeftDrive*drivePower);
         robot.rightMotor.setPower(RightDrive* drivePower);
-
 
        double targetPosition = robot.clawServo.getPosition();
         if (gamepad2.b) {
