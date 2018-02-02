@@ -29,7 +29,7 @@ public class Camera_test extends OpMode {
     public void init() {
         appContext = hwMap.appContext;
 
-        testBot.init(hardwareMap);
+        //testBot.init(hardwareMap);
         hwMap = hardwareMap;
         preview = new SurfaceView(appContext);
     }
