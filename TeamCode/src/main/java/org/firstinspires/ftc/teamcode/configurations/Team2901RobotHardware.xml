@@ -5,8 +5,11 @@
             <NeveRest40Gearmotor name="RightDrive" port="0" />
             <NeveRest40Gearmotor name="LeftDrive" port="1" />
             <NeveRest40Gearmotor name="LiftMotor" port="2" />
+            <Servo name="TopLeftClaw" port="0" />
+            <Servo name="TopRightClaw" port="1" />
             <Servo name="ArmServo" port="3" />
-            <Servo name="ClawServo" port="4" />
+            <Servo name="BottomLeftClaw" port="4" />
+            <Servo name="BottomRightClaw" port="5" />
             <ModernRoboticsI2cRangeSensor name="rangeSensor" port="0" bus="0" />
         </LynxModule>
     </LynxUsbDevice>
