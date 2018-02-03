@@ -75,54 +75,42 @@ public class BaseCode extends LinearOpModeCamera {
 
         relicTrackables.activate();
 
-        /*robot.closeClaw();
-        robot.raiseLift(20);*/
+        robot.closeBottomClaw();
+    //    robot.raiseLift();
 
+        // lower arm/ jewel knocker
+        robot.lowerJewelKnocker();
 
-       /*while(opModeIsActive()) {
-            vuMark = RelicRecoveryVuMark.from(relicTemplate);
-            if (vuMark != RelicRecoveryVuMark.UNKNOWN) {
-            bitmap = getImage();
-            saveBitmap(bitmap);
-            telemetry.addData("VuMark", "%s visible", vuMark);
-            //    break;
-        } else telemetry.addLine("vuMark not visable");
-        telemetry.update();
-    } */
-
-            // lower arm/ jewel knocker
-            robot.lowerJewelKnocker();
-
-    bitmap = getImage();
+        bitmap = getImage();
         saveBitmap(bitmap);
 
         int position= 0;
-isJewelOnLeft= isOurJewelOnLeft(bitmap);
-    if (isJewelOnLeft){
-        // if your jewel is on the left turn right
-        robot.leftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        position= robot.leftMotor.getCurrentPosition() + 1140;
-        telemetry.addData("current Position", "%d", position);
-        robot.leftMotor.setTargetPosition(position);
-        robot.leftMotor.setPower(.75);
+        isJewelOnLeft= isOurJewelOnLeft(bitmap);
+        if (isJewelOnLeft){
+            // if your jewel is on the left turn right
+            robot.leftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            position= robot.leftMotor.getCurrentPosition() + 1140;
+            telemetry.addData("current Position", "%d", position);
+            robot.leftMotor.setTargetPosition(position);
+            robot.leftMotor.setPower(.75);
 
-        while (robot.leftMotor.isBusy())
-        {
+            while (robot.leftMotor.isBusy())
+            {
 
-        }
-
-    }
-    else {
-        // if your jewel is on the right turn left.
-        robot.rightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        position= robot.rightMotor.getCurrentPosition() + 1140;
-        telemetry.addData("current Position", "%d", position);
-        robot.rightMotor.setTargetPosition(position);
-        robot.rightMotor.setPower(.75);
-
-        while (robot.rightMotor.isBusy()){
+            }
 
         }
+        else {
+            // if your jewel is on the right turn left.
+            robot.rightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            position= robot.rightMotor.getCurrentPosition() + 1140;
+            telemetry.addData("current Position", "%d", position);
+            robot.rightMotor.setTargetPosition(position);
+            robot.rightMotor.setPower(.75);
+
+            while (robot.rightMotor.isBusy()){
+
+            }
         }
 
 

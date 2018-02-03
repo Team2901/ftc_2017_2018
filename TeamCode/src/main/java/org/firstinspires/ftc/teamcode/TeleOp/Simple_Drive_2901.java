@@ -47,7 +47,7 @@ public class Simple_Drive_2901 extends OpMode     {
             drivePower=1.0;
         }
 
-        robot.liftMotor.setPower(gamepad2.left_stick_y* .5);
+        robot.liftMotor.setPower(gamepad2.left_stick_y* .75);
 
         robot.leftMotor.setPower(-LeftDrive*drivePower);
         robot.rightMotor.setPower(-RightDrive* drivePower);
@@ -62,13 +62,13 @@ public class Simple_Drive_2901 extends OpMode     {
             bottomLeftPosition -= .01;
             bottomRightPosition -= .01;
         }
-        else if (gamepad2.right_trigger > .5) {
+        else if (gamepad2.left_bumper) {
             telemetry.addData("", "pressed rt");
             bottomLeftPosition += .01;
             bottomRightPosition += .01;
         }
 
-        if (gamepad2.left_bumper) {
+        if (gamepad2.right_trigger > .5) {
             telemetry.addData("","pressed lb");
             topLeftPosition -= .01;
             topRightPosition -= .01;
@@ -77,6 +77,15 @@ public class Simple_Drive_2901 extends OpMode     {
             telemetry.addData("","pressed rb");
             topLeftPosition += .01;
             topRightPosition += .01;
+        }
+
+        double targetPosition = robot.armServo.getPosition();
+        if (gamepad2.a) {
+            targetPosition = targetPosition + .01;
+            robot.armServo.setPosition(targetPosition);
+        } else if (gamepad2.b) {
+            targetPosition = targetPosition - .01;
+            robot.armServo.setPosition(targetPosition);
         }
 
         robot.bottomLeftClaw.setPosition(Range.clip(bottomLeftPosition, CLAW_MIN, CLAW_MAX));

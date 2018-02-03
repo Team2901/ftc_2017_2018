@@ -2,9 +2,12 @@ package org.firstinspires.ftc.teamcode.Robot;
 
 import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cRangeSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
+
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 /**
  * Created by gallagherb20503 on 9/30/2017.
@@ -41,8 +44,9 @@ public class Team2901RobotHardware {
         bottomRightClaw.setDirection(Servo.Direction.REVERSE);
         topRightClaw.setDirection(Servo.Direction.REVERSE);
 
-        leftMotor.setDirection(DcMotor.Direction.FORWARD); // Set to REVERSE if using AndyMark motors
-        rightMotor.setDirection(DcMotor.Direction.REVERSE);
+        leftMotor.setDirection(DcMotor.Direction.REVERSE); // Set to REVERSE if using AndyMark motors
+        rightMotor.setDirection(DcMotor.Direction.FORWARD);
+        liftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
 
         leftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -51,25 +55,22 @@ public class Team2901RobotHardware {
         leftMotor.setPower(0);
         rightMotor.setPower(0);
         liftMotor. setPower(0);
-
     }
 
     public void initTeleOp(HardwareMap ahwMap) {
         init(ahwMap);
 
-        bottomLeftClaw.setPosition(0);
-        bottomRightClaw.setPosition(0);
-        topLeftClaw.setPosition(0);
-        topRightClaw.setPosition(0);
-
         leftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         rightMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        liftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        liftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
     public void initAutonomous (HardwareMap ahwMap) {
         // Save reference to Hardware map
         init(ahwMap);
+
+        openBottomClaw();
+        openTopClaw();
 
         leftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -82,6 +83,33 @@ public class Team2901RobotHardware {
 
     public void raiseJewelKnocker(){
         armServo.setPosition(1);
+    }
+
+
+    public void closeBottomClaw(){
+        bottomLeftClaw.setPosition(.7);
+        bottomRightClaw.setPosition(.7);
+    }
+    public void openBottomClaw(){
+        bottomLeftClaw.setPosition(.1);
+        bottomRightClaw.setPosition(.1);
+    }
+    public void closeTopClaw(){
+        topLeftClaw.setPosition(.7);
+        topRightClaw.setPosition(.7);
+    }
+    public void openTopClaw(){
+        topLeftClaw.setPosition(.1);
+        topRightClaw.setPosition(.1);
+    }
+
+    public void raiseLift(){
+        liftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        liftMotor.setTargetPosition(100);
+        liftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        liftMotor.setPower(.5);
+        while (liftMotor.isBusy()){
+        }
     }
 
 }
