@@ -42,6 +42,7 @@ public class BlueCode1 extends BaseCode {
         while (robot.leftMotor.isBusy() || robot.rightMotor.isBusy()) {
 
         }
+
         robot.leftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.rightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 

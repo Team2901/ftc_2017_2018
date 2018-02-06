@@ -68,10 +68,7 @@ public class Team2901RobotHardware {
     public void initAutonomous (HardwareMap ahwMap) {
         // Save reference to Hardware map
         init(ahwMap);
-
-        openBottomClaw();
-        openTopClaw();
-
+        
         leftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         liftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
