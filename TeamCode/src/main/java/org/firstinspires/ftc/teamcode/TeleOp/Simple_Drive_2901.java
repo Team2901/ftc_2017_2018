@@ -99,6 +99,8 @@ public class Simple_Drive_2901 extends OpMode     {
         telemetry.addData("TopRightClaw",robot.topRightClaw.getPosition());
         telemetry.addData("LiftMotor",robot.liftMotor.getCurrentPosition());
         telemetry.addData("drivePower",drivePower);
+        telemetry.addData("LeftMotor",robot.leftMotor.getCurrentPosition());
+        telemetry.addData("RightMotote",robot.rightMotor.getCurrentPosition());
 
         telemetry.update();
     }

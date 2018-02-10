@@ -9,6 +9,8 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
+import java.util.Date;
+
 /**
  * Created by gallagherb20503 on 9/30/2017.
  */
@@ -100,13 +102,15 @@ public class Team2901RobotHardware {
         topRightClaw.setPosition(.1);
     }
 
-    public void raiseLift(){
-        liftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        liftMotor.setTargetPosition(100);
-        liftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        liftMotor.setPower(.5);
-        while (liftMotor.isBusy()){
-        }
-    }
+public void raiseLift(){
+    Date date= new Date();
+    long startTime = date.getTime();
+    liftMotor.setPower(-.1);
+    // current time - start time < 123
+    while(new Date().getTime()-startTime<500){
 
+    }
+    liftMotor.setPower(0);
+
+}
 }

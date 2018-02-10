@@ -20,19 +20,19 @@ public class BlueCode1 extends BaseCode {
         int forwardmonkeys;
 
         if(isJewelOnLeft) {
-            turnticks= 1900;
-            forwardmonkeys= 5200;
+            turnticks= 1300;
+            forwardmonkeys= 4200;
         }
         else {
-            turnticks= 1300;
-            forwardmonkeys= 5200;
+            turnticks= 900;
+            forwardmonkeys= 4200;
         }
 
         robot.leftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.rightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        robot.leftMotor.setTargetPosition(robot.leftMotor.getCurrentPosition() - turnticks);
-        robot.rightMotor.setTargetPosition(robot.rightMotor.getCurrentPosition() + turnticks);
+        robot.leftMotor.setTargetPosition(robot.leftMotor.getCurrentPosition() + turnticks);
+        robot.rightMotor.setTargetPosition(robot.rightMotor.getCurrentPosition() - turnticks);
 
         robot.leftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.rightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -46,8 +46,8 @@ public class BlueCode1 extends BaseCode {
         robot.leftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.rightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        robot.leftMotor.setTargetPosition(robot.leftMotor.getCurrentPosition() + forwardmonkeys);
-        robot.rightMotor.setTargetPosition(robot.rightMotor.getCurrentPosition() + forwardmonkeys);
+        robot.leftMotor.setTargetPosition(robot.leftMotor.getCurrentPosition() - forwardmonkeys);
+        robot.rightMotor.setTargetPosition(robot.rightMotor.getCurrentPosition() - forwardmonkeys);
 
         robot.leftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.rightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
