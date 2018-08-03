@@ -2,10 +2,8 @@ package org.firstinspires.ftc.teamcode.TeleOp;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.util.Range;
 
-import org.firstinspires.ftc.teamcode.Robot.ClawbotHardware;
-import org.firstinspires.ftc.teamcode.Robot.FlagBotHardware;
+import org.firstinspires.ftc.teamcode.Hardware.FlagBotHardware;
 
 /**
  * Created by Kearneyg20428 on 2/7/2017.

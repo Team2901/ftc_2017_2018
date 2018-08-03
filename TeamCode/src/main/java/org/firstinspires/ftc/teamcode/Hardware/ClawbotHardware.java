@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.Robot;
+package org.firstinspires.ftc.teamcode.Hardware;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -9,14 +9,18 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * Created by Kearneyg20428 on 2/7/2017.
  */
 
-public class FlagBotHardware {
+public class ClawbotHardware {
 
-
+    public static final double MID_SERVO       =  0.5 ;
+    public static final double ARM_UP_POWER    =  .15 ;
+    public static final double ARM_DOWN_POWER  = -0.5 ;
+    public static final double MIN_SAFE_CLAW_OFFSET = 0;
+    public static final double MAX_SAFE_CLAW_OFFSET = .4;
 
     public DcMotor leftMotor = null;
     public DcMotor rightMotor = null;
-    public DcMotor spinMotor = null;
-
+    public DcMotor armMotor = null;
+    public Servo claw = null;
 
     private ElapsedTime period  = new ElapsedTime();
     private HardwareMap hwMap = null;
@@ -26,20 +30,23 @@ public class FlagBotHardware {
         hwMap = ahwMap;
 
         // Define and Initialize Motors
-        leftMotor = hwMap.dcMotor.get("left");
-        rightMotor = hwMap.dcMotor.get("right");
-        spinMotor = hwMap.dcMotor.get("spin_motor");
+        leftMotor = hwMap.dcMotor.get("left_drive");
+        rightMotor = hwMap.dcMotor.get("right_drive");
+        armMotor = hwMap.dcMotor.get("left_arm");
         leftMotor.setDirection(DcMotor.Direction.REVERSE); // Set to REVERSE if using AndyMark motors
         rightMotor.setDirection(DcMotor.Direction.FORWARD);
 
         leftMotor.setPower(0);
         rightMotor.setPower(0);
-        spinMotor.setPower(0);
+        armMotor.setPower(0);
 
         leftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         rightMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        spinMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        armMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
+        claw = hwMap.servo.get("left_hand");
+
+        claw.setPosition(0);
     }
 
     public void waitForTick(long periodMs) {
