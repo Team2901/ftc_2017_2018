@@ -14,31 +14,33 @@ public class PidPractice extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-       pidBot.init(hardwareMap);
+        pidBot.init(hardwareMap);
 
 
         waitForStart();
         while (opModeIsActive()) {
             double angle = pidBot.getAngle();
 
-            if (Math.abs(goal-angle) < 1){
+            if (Math.abs(goal - angle) < 1) {
                 pidBot.leftMotor.setPower(0);
                 pidBot.rightMotor.setPower(0);
-            }else{
+            } else {
                 pidBot.leftMotor.setPower(-getPower(angle));
                 pidBot.rightMotor.setPower(getPower(angle));
             }
-            telemetry.addData("Angle" , angle);
+            telemetry.addData("Angle", angle);
             telemetry.update();
+
 
         }
 
     }
-    double getPower(double currentPosition){
-        if(currentPosition<goal/2){
-            return (.05*currentPosition);
-        }else{
-            return (.05*(goal-currentPosition);
+
+    double getPower(double currentPosition) {
+        if (currentPosition < goal / 2) {
+            return (.01 * currentPosition + (Math.signum(currentPosition) * .001));
+        } else {
+            return (.01 * (goal - currentPosition + (Math.signum(currentPosition) * .001)));
         }
     }
 }

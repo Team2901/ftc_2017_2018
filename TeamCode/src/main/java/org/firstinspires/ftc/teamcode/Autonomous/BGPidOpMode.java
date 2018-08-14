@@ -8,14 +8,15 @@ import org.firstinspires.ftc.teamcode.Hardware.PidBotHardware;
 @Autonomous(name="PidBotPracticeBG")
 public class BGPidOpMode extends LinearOpMode{
     double targetAngle= 90;
-    double GetPower (double targetAngle, double currentAngle) {
+   /* double GetPower (double targetAngle, double currentAngle) {
         if (currentAngle < targetAngle/2){
             //Finish next time//
         } else {
 
         }
-    }
 
+    }
+*/
     PidBotHardware pidBot= new PidBotHardware();
     @Override
     public void runOpMode() throws InterruptedException {
