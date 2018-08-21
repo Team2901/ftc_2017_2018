@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.Hardware.PidBotHardware;
 
 @Autonomous(name = "PidPractice")
@@ -12,19 +13,43 @@ public class PidPractice extends LinearOpMode {
 
     PidBotHardware pidBot = new PidBotHardware();
     ElapsedTime timer = new ElapsedTime();
-    double goal = 90;
+
 
     @Override
     public void runOpMode() throws InterruptedException {
         pidBot.init(hardwareMap);
 
+        waitForStart();
 
+        turn(90);
+
+    }
+
+
+
+
+    double getPower(double currentPosition , double goalAngleFinal, double startAngleFinal) {
+
+        double relativeCurrent =  AngleUnit.normalizeDegrees(currentPosition - startAngleFinal);
+        if (relativeCurrent < (goalAngleFinal-startAngleFinal) / 2) {
+
+            //Stopped Here fixing
+            return (.01 * currentPosition + (Math.signum(currentPosition) * .075));
+        } else {
+            return (.01 * (goalAngleFinal - currentPosition + (Math.signum(currentPosition) * .075)));
+        }
+    }
+
+    public void turn( double goalAngleFromCurrent ){
+
+        ElapsedTime timer = new ElapsedTime();
         Double goalTime = null;
 
-        waitForStart();
+        double goalAngleFinal =  AngleUnit.normalizeDegrees(goalAngleFromCurrent + pidBot.getAngle());
+
         while (opModeIsActive() && (goalTime == null || timer.time() - goalTime < 5)) {
             double angle = pidBot.getAngle();
-            if (Math.abs(goal - angle) < 1) {
+            if (Math.abs(goalAngleFinal - angle) < 1) {
                 pidBot.leftMotor.setPower(0);
                 pidBot.rightMotor.setPower(0);
 
@@ -33,8 +58,8 @@ public class PidPractice extends LinearOpMode {
                     goalTime= timer.time();
                 }
             } else {
-                pidBot.leftMotor.setPower(-getPower(angle));
-                pidBot.rightMotor.setPower(getPower(angle));
+                pidBot.leftMotor.setPower(-getPower(angle, goalAngleFinal));
+                pidBot.rightMotor.setPower(getPower(angle , goalAngleFinal));
 
                 goalTime = null;
             }
@@ -46,14 +71,5 @@ public class PidPractice extends LinearOpMode {
 
         telemetry.addData("I BROKE FREEE", "");
         telemetry.update();
-
-    }
-
-    double getPower(double currentPosition) {
-        if (currentPosition < goal / 2) {
-            return (.01 * currentPosition + (Math.signum(currentPosition) * .075));
-        } else {
-            return (.01 * (goal - currentPosition + (Math.signum(currentPosition) * .075)));
-        }
     }
 }
