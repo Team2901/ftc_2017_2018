@@ -38,4 +38,14 @@ public class BGPidOpMode extends LinearOpMode{
             telemetry.update();
         }
     }
+    double getPower (double currentPostition){
+        if (currentPostition< 45)
+        {
+            return .05 * currentPostition + Math.signum(currentPostition)*.01;
+        }
+        else
+            {
+            return .05 * (targetAngle - currentPostition) + Math.signum(targetAngle-currentPostition)*.01;
+        }
+    }
 }
