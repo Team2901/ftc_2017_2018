@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.Autonomous;
+package org.firstinspires.ftc.teamcode.Utility;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -6,6 +6,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Environment;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
@@ -40,8 +41,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 
-@Autonomous(name = "Base")
-public class BaseCombinedAutonomous extends LinearOpModeCamera {
+public class RelicRecoveryUtilities extends LinearOpModeCamera {
 
 
     public String teamColor;
@@ -75,13 +75,8 @@ public class BaseCombinedAutonomous extends LinearOpModeCamera {
 
         robot.init(hardwareMap);
 
-        robot.bLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.bRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.fLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.fRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        robot.jewelKnockDevice.setPosition(1);
-
+        //Imu setup
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
         parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
         parameters.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
@@ -180,6 +175,7 @@ public class BaseCombinedAutonomous extends LinearOpModeCamera {
     }
 
     //Converts RGB channels from the bitmap to HSV counts to get a the of the hue of the pixels
+    @NonNull
     public static double[] RGBtoHSV(double r, double g, double b) {
 
         double h, s, v;
@@ -221,62 +217,11 @@ public class BaseCombinedAutonomous extends LinearOpModeCamera {
         return new double[]{h,/*s,*/v};
     }
 
-    /*Used to knock the jewels either on the left or right, it is used for movement toward the Cryptobox
-   It includes movement of the JewelKnocker so as not to get caught on anything
-    */
-    public void knockJewelRight() {
-        robot.bLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.bRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.fLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.fRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-
-        robot.bLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.fLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.bRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.fRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-        robot.bLeft.setTargetPosition(-1140 / 2);
-        robot.fLeft.setTargetPosition(-1140 / 2);
-        robot.bRight.setTargetPosition(-1140 / 2);
-        robot.fRight.setTargetPosition(-1140 / 2);
-
-        drive(.3, .3, .3, .3);
-
-        while (robot.bLeft.isBusy()) ;
-
-        robot.jewelKnockDevice.setPosition(.85);
-    }
-
-    //Read comment on the knockJewelRight() function
-    public void knockJewelLeft() {
-        robot.bLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.bRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.fLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.fRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-        robot.bLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.fLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.bRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.fRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-        robot.bLeft.setTargetPosition(855);
-        robot.fLeft.setTargetPosition(855);
-        robot.bRight.setTargetPosition(855);
-        robot.fRight.setTargetPosition(855);
-
-        drive(.3, .3, .3, .3);
-
-        while (robot.bLeft.isBusy()) ;
-
-
-        robot.jewelKnockDevice.setPosition(.85);
-    }
-
     /*
     This function takes the modified bitmap that we created and saves it to a file on the phone
     so we can confirm the code works correctly
     */
+
     public static void saveBitmap(String filename, Bitmap bitmap) {
 
         String filePath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Pictures";
@@ -296,13 +241,6 @@ public class BaseCombinedAutonomous extends LinearOpModeCamera {
 
     }
 
-    //This allows the robot to set power to all motors without the use of so many lines of code
-    public void drive(double fL, double fR, double bL, double bR) {
-        robot.fLeft.setPower(fL);
-        robot.fRight.setPower(fR);
-        robot.bLeft.setPower(bL);
-        robot.bRight.setPower(bR);
-    }
 
     /*
     This program draws a box on top of the picture that we analyze then saves the picture to a file
@@ -322,7 +260,10 @@ public class BaseCombinedAutonomous extends LinearOpModeCamera {
         saveBitmap("previewImage.png", mutableBitmap);
     }
 
-    //This is the boolean value that allows us to know if Our Jewel is on left, we have been using this is the sampling ox we use
+    /*
+    This is the boolean value that allows us to know if Our Jewel is on left, we have been using
+    this in the sampling ox we use
+     */
     public boolean isOurJewelOnLeft(Bitmap bitmap) {
         int leftRed = 0;
         int leftBlue = 0;
@@ -426,7 +367,11 @@ public class BaseCombinedAutonomous extends LinearOpModeCamera {
         return normalizeAngle((int) angles.firstAngle);
     }
 
-    //This function allows you to input a goal angle between 1-360 and a direction that allows you to turn in that direction and angle
+    /*This function allows you to input a goal angle between 1-360 and a direction that allows you
+    to turn in that direction and angle
+
+    DELETE THIS ONCE BETTER TURN CODE HAS BEEN CREATED
+    */
     public void turn(int goal, String direction) {
         robot.bLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         robot.bRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -618,82 +563,5 @@ public class BaseCombinedAutonomous extends LinearOpModeCamera {
 
     }
 
-    //This is the movement from the spot twos because the robot has different measurements from different spots. THis is used after we
-    // knock of the jewel
-    public void columnTwoMove(int mark) {
-        if (teamColor == "red") {
-            if (mark == 1) {
-                robot.driveForword(.25, .3);
-            } else if (mark == 2) {
-                robot.driveForword(.9, .3);
-            } else {
-                robot.driveForword(1.55, .3);
-            }
-        } else if (teamColor == "blue") {
-            if (mark == 3) {
-                robot.driveForword(.3, .3);
-            } else if (mark == 2) {
-                robot.driveForword(1, .3);
-            } else {
-                robot.driveForword(1.56, .3);
-            }
-        }
+
     }
-
-    //This is the movement for the spot ones
-    public void columnOneMove(int mark) {
-        if (teamColor == "red") {
-            if (mark == 1) {
-                robot.driveForword(1.15, .3);
-            } else if (mark == 2) {
-                robot.driveForword(1.81, .3);
-            } else if (mark == 3) {
-                robot.driveForword(2.35, .3);
-            }
-
-        } else if (teamColor == "blue") {
-            if (mark == 3) {
-                robot.driveBackword(1.7, .3);
-            } else if (mark == 2) {
-                robot.driveBackword(2.41, .3);
-            } else if (mark == 1) {
-                robot.driveBackword(2.95, .3);
-            }
-        }
-    }
-
-    //This is the pinch that allows the robot to pinch to hold the block in autonomous
-    public void pinch(boolean ifBlue1) {
-        robot.bLeftPincer.setPosition(.85);
-        robot.bRightPincer.setPosition(.85);
-         sleep(2000);
-        robot.lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robot.lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        if (!ifBlue1 ) {
-            robot.lift.setTargetPosition(-1710);
-
-        }else{
-            robot.lift.setTargetPosition(-855);
-        }
-        robot.lift.setPower(1);
-    }
-
-    //This is the release function used at the end of the autonomous
-
-    public void push() {
-        robot.driveBackword(.5, .5);
-
-        robot.open();
-        robot.driveForword(.9, .5);
-
-        robot.driveBackword(.3, .3);
-
-        robot.open();
-
-
-        robot.lift.setTargetPosition(0);
-        robot.lift.setPower(.85);
-    }
-
-}
