@@ -3,17 +3,16 @@ package org.firstinspires.ftc.teamcode.TeleOp;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.Hardware.ClawbotHardware;
-import org.firstinspires.ftc.teamcode.Hardware.RoboTron;
+import org.firstinspires.ftc.teamcode.Hardware.SlideDrive;
 
 /**
  * Created by Kearneyg20428 on 2/7/2017.
  */
-@TeleOp(name="RoboTronTeleOp", group="TeleOp")
-public class RoboTronTeleOp extends OpMode {
+@TeleOp(name="SlideDriveTeleOp", group="TeleOp")
+public class SlideDriveTeleOp extends OpMode {
 
 
-    RoboTron robot = new RoboTron();
+    SlideDrive robot = new SlideDrive();
 
     @Override
     public void init() {

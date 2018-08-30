@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * Created by Kearneyg20428 on 2/7/2017.
  */
 
-public class RoboTron {
+public class TwistedHolonomicDrive {
 
 
     public DcMotor leftFrontMotor = null;
@@ -18,7 +18,7 @@ public class RoboTron {
     public DcMotor rightFrontMotor = null;
     public DcMotor rightBackMotor = null;
 
-    public DcMotor centerMotor = null;
+
 
     private ElapsedTime period = new ElapsedTime();
     private HardwareMap hwMap = null;
@@ -32,21 +32,18 @@ public class RoboTron {
         leftBackMotor = hwMap.dcMotor.get("leftBackMotor");
         rightFrontMotor = hwMap.dcMotor.get("rightFrontMotor");
         rightBackMotor = hwMap.dcMotor.get("rightBackMotor");
-        centerMotor = hwMap.dcMotor.get("centerMotor");
 
 
-        leftFrontMotor.setDirection(DcMotor.Direction.REVERSE);
-        leftBackMotor.setDirection(DcMotor.Direction.REVERSE);
+        leftFrontMotor.setDirection(DcMotor.Direction.FORWARD);
+        leftBackMotor.setDirection(DcMotor.Direction.FORWARD);
         rightFrontMotor.setDirection(DcMotor.Direction.FORWARD);
         rightFrontMotor.setDirection(DcMotor.Direction.FORWARD);
-        centerMotor.setDirection(DcMotor.Direction.FORWARD);
 
 
         leftFrontMotor.setPower(0);
         rightFrontMotor.setPower(0);
         leftBackMotor.setPower(0);
         rightBackMotor.setPower(0);
-        centerMotor.setPower(0);
 
 
     }

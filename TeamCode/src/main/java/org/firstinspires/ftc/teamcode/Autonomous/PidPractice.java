@@ -58,8 +58,8 @@ public class PidPractice extends LinearOpMode {
                     goalTime= timer.time();
                 }
             } else {
-                pidBot.leftMotor.setPower(-getPower(angle, goalAngleFinal));
-                pidBot.rightMotor.setPower(getPower(angle , goalAngleFinal));
+               // pidBot.leftMotor.setPower(-getPower(angle, goalAngleFinal));
+                //pidBot.rightMotor.setPower(getPower(angle , goalAngleFinal));
 
                 goalTime = null;
             }
