@@ -2,16 +2,15 @@ package org.firstinspires.ftc.teamcode.Autonomous;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.teamcode.Hardware.PidBotHardware;
+import org.firstinspires.ftc.teamcode.Presentation.PresentationBotHardware;
 
 @Autonomous(name = "PidPractice")
 public class PidPractice extends LinearOpMode {
 
-    PidBotHardware pidBot = new PidBotHardware();
+    PresentationBotHardware pidBot = new PresentationBotHardware();
     ElapsedTime timer = new ElapsedTime();
 
 

@@ -29,10 +29,10 @@ public class TwistedHolonomicTeleOp extends OpMode {
         double yJoystick = -gamepad1.left_stick_y;
 
         if (rightStick > .2 || rightStick < -.2) {
-            robot.leftFrontMotor.setPower(rightStick);
-            robot.leftBackMotor.setPower(rightStick);
-            robot.rightFrontMotor.setPower(rightStick);
-            robot.rightBackMotor.setPower(rightStick);
+            robot.leftFrontMotor.setPower(-rightStick);
+            robot.leftBackMotor.setPower(-rightStick);
+            robot.rightFrontMotor.setPower(-rightStick);
+            robot.rightBackMotor.setPower(-rightStick);
         } else {
 
 

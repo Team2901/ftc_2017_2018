@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
-import org.firstinspires.ftc.teamcode.Hardware.PidBotHardware;
+import org.firstinspires.ftc.teamcode.Presentation.PresentationBotHardware;
 
 @Autonomous(name="PidBotPracticeBG")
 public class BGPidOpMode extends LinearOpMode{
@@ -17,7 +17,7 @@ public class BGPidOpMode extends LinearOpMode{
 
     }
 */
-    PidBotHardware pidBot= new PidBotHardware();
+    PresentationBotHardware pidBot= new PresentationBotHardware();
     @Override
     public void runOpMode() throws InterruptedException {
         pidBot.init(hardwareMap);
