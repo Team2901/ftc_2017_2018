@@ -38,7 +38,7 @@ public class PresentationBotHardware {
         leftMotor = hwMap.dcMotor.get("left_drive");
         rightMotor = hwMap.dcMotor.get("right_drive");
 
-        leftMotor.setDirection(DcMotor.Direction.REVERSE); // Set to REVERSE if using AndyMark motors
+        leftMotor.setDirection(DcMotor.Direction.REVERSE);
         rightMotor.setDirection(DcMotor.Direction.FORWARD);
 
         leftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
