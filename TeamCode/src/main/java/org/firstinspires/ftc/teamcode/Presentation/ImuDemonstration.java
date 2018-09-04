@@ -21,25 +21,20 @@ public class ImuDemonstration extends LinearOpMode {
 
         while (opModeIsActive()) {
 
-            while (opModeIsActive() && (goalTime == null || timer.time() - goalTime < 5)) {
+            double angle = robot.getAngle();
 
-                double angle = robot.getAngle();
-
-                if (Math.abs(goal - angle) < 1) {
-                    robot.leftMotor.setPower(0);
-                    robot.rightMotor.setPower(0);
-                    if (goalTime == null) {
-                        goalTime = timer.time();
-                    }
-                } else {
-                    robot.leftMotor.setPower(-getPower(angle));
-                    robot.rightMotor.setPower(getPower(angle));
-                    goalTime = null;
+            if (Math.abs(goal - angle) < 1) {
+                robot.leftMotor.setPower(0);
+                robot.rightMotor.setPower(0);
+                if (goalTime == null) {
+                    goalTime = timer.time();
                 }
-                telemetry.addData("Angle", angle);
-                telemetry.update();
+            } else {
+                robot.leftMotor.setPower(-getPower(angle));
+                robot.rightMotor.setPower(getPower(angle));
+                goalTime = null;
             }
-            telemetry.addData("I BROKE FREEE", "");
+            telemetry.addData("Angle", angle);
             telemetry.update();
         }
     }

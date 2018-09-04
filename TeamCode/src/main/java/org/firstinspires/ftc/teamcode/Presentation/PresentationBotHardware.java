@@ -42,7 +42,7 @@ public class PresentationBotHardware {
         rightMotor.setDirection(DcMotor.Direction.FORWARD);
 
         leftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-        leftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        rightMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
 
         leftMotor.setPower(0);
         rightMotor.setPower(0);
