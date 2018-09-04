@@ -25,44 +25,43 @@ public class PidPractice extends LinearOpMode {
     }
 
 
+    double getPower(double absCurrent, double absGoal, double absStart) {
 
+        double relCurrent = AngleUnit.normalizeDegrees(absCurrent - absStart);
+        double relGoal = AngleUnit.normalizeDegrees(absGoal-absStart);
+        if (relCurrent < (relGoal) / 2) {
 
-    double getPower(double currentPosition , double goalAngleFinal, double startAngleFinal) {
-
-        double relativeCurrent =  AngleUnit.normalizeDegrees(currentPosition - startAngleFinal);
-        if (relativeCurrent < (goalAngleFinal-startAngleFinal) / 2) {
-
-            //Stopped Here fixing
-            return (.01 * currentPosition + (Math.signum(currentPosition) * .075));
+            return (.01 * relCurrent + (Math.signum(relCurrent) * .075));
         } else {
-            return (.01 * (goalAngleFinal - currentPosition + (Math.signum(currentPosition) * .075)));
+            return (.01 * (relGoal - relCurrent + (Math.signum(absCurrent) * .075)));
         }
     }
 
-    public void turn( double goalAngleFromCurrent ){
+    public void turn(double relGoal) {
 
         ElapsedTime timer = new ElapsedTime();
         Double goalTime = null;
 
-        double goalAngleFinal =  AngleUnit.normalizeDegrees(goalAngleFromCurrent + pidBot.getAngle());
+        double absStart = AngleUnit.normalizeDegrees(pidBot.getAngle());
+        double absGoal = AngleUnit.normalizeDegrees(relGoal + pidBot.getAngle());
 
         while (opModeIsActive() && (goalTime == null || timer.time() - goalTime < 5)) {
-            double angle = pidBot.getAngle();
-            if (Math.abs(goalAngleFinal - angle) < 1) {
+            double absCurrent = pidBot.getAngle();
+            if (Math.abs(absGoal - absCurrent) < 1) {
                 pidBot.leftMotor.setPower(0);
                 pidBot.rightMotor.setPower(0);
 
-                if (goalTime == null){
+                if (goalTime == null) {
 
-                    goalTime= timer.time();
+                    goalTime = timer.time();
                 }
             } else {
-               // pidBot.leftMotor.setPower(-getPower(angle, goalAngleFinal));
-                //pidBot.rightMotor.setPower(getPower(angle , goalAngleFinal));
+                pidBot.leftMotor.setPower(-getPower(absCurrent, absGoal, absStart));
+                pidBot.rightMotor.setPower(getPower(absCurrent, absGoal, absStart));
 
                 goalTime = null;
             }
-            telemetry.addData("Angle", angle);
+            telemetry.addData("Angle", absCurrent);
             telemetry.update();
 
 

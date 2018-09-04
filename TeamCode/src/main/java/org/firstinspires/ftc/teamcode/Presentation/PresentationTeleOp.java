@@ -1,7 +1,9 @@
 package org.firstinspires.ftc.teamcode.Presentation;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+@TeleOp(name = "PResentation TeleOP")
 public class PresentationTeleOp extends OpMode {
 
     PresentationBotHardware robot = new PresentationBotHardware();
