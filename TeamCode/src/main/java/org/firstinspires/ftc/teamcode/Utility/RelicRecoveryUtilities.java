@@ -32,9 +32,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RelicRecoveryUtilities {
-    
+
     public static void writeConfigFile(String filename, List<? extends Object> config) throws IOException {
-        final File file = new File(Environment.getExternalStorageDirectory() + "/team", filename);
+        final File teamDir = new File(Environment.getExternalStorageDirectory(), "team");
+
+        boolean newDir = teamDir.mkdirs();
+
+        final File file = new File(teamDir, filename);
+
         try (BufferedWriter writer = new BufferedWriter (new FileWriter(file))){
             for (Object o : config) {
                 writer.write(o.toString());
@@ -44,7 +49,12 @@ public class RelicRecoveryUtilities {
     }
 
     public static List<String> readConfigFile (String filename) throws IOException {
-        final File file = new File(Environment.getExternalStorageDirectory() + "/team", filename);
+        final File teamDir = new File(Environment.getExternalStorageDirectory(), "team");
+
+        boolean newDir = teamDir.mkdirs();
+
+        final File file = new File(teamDir, filename);
+
         final List<String> config = new ArrayList<>();
 
         try (BufferedReader reader = new BufferedReader(new FileReader(file))){
