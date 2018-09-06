@@ -8,7 +8,9 @@ import com.vuforia.PIXEL_FORMAT;
 import com.vuforia.Vuforia;
 
 import org.firstinspires.ftc.robotcontroller.internal.FtcRobotControllerActivity;
+import org.firstinspires.ftc.robotcontroller.internal.JewelFinder;
 import org.firstinspires.ftc.robotcontroller.internal.LinearOpModeCamera;
+import org.firstinspires.ftc.robotcontroller.internal.LinearOpModeJewelCamera;
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
@@ -23,7 +25,7 @@ import java.io.FileWriter;
  * Created by gallagherb20503 on 1/10/2018.
  */
 @Autonomous(name = "RobotSetup")
-public class RobotSetup extends LinearOpModeCamera{
+public class RobotSetup extends LinearOpModeJewelCamera {
     VuforiaLocalizer vuforia;
     File sd = Environment.getExternalStorageDirectory();
     File sampleBox = new File(sd + "/team", "sampleBox.txt");
@@ -69,6 +71,8 @@ after start jewel finder position is saved to finder
 
 public void saveConfigFile(){
     try (BufferedWriter writer = new BufferedWriter (new FileWriter(sampleBox))){
+        JewelFinder jewel = getJewel();
+
         writer. write(String.format("%03d", jewel.sampleLeftXPct), 0, 3);
         writer.newLine ();
         writer. write(String.format("%03d", jewel.sampleTopYPct), 0, 3);

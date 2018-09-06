@@ -5,13 +5,12 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Rect;
 import android.os.Environment;
 
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.robotcontroller.internal.LinearOpModeCamera;
+import org.firstinspires.ftc.robotcontroller.internal.JewelFinder;
+import org.firstinspires.ftc.robotcontroller.internal.LinearOpModeJewelCamera;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -26,9 +25,10 @@ import java.io.OutputStream;
  */
 
 //@Autonomous
-public class JewelAuto extends LinearOpModeCamera {
+public class JewelAuto extends LinearOpModeJewelCamera {
     String filePath = "Pictures";
     String imageName = "TestImage.JPEG"; //TODO come back//
+    String imageName2 = "TestImage2.JPEG"; //TODO come back//
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -37,16 +37,16 @@ public class JewelAuto extends LinearOpModeCamera {
             telemetry.addData(String.valueOf(width), height);
             telemetry.update();
             waitForStart();
-            Bitmap rgbImage = convertYuvImageToRgb(yuvImage, width, height, 0);
+
             stopCamera();
             File sd = Environment.getExternalStorageDirectory();
-            File image = new File(sd + "/" + filePath, imageName);
+            File image;
             try {
-                OutputStream outStream = new FileOutputStream(image);
-                rgbImage.compress(Bitmap.CompressFormat.JPEG, 0, outStream);
-                yuvImage.compressToJpeg(new Rect(0, 0, width, height), 0, outStream);
-                outStream.flush();
-                outStream.close();
+                image = new File(sd + "/" + filePath, imageName);
+                saveYuvImage(image);
+
+                image = new File(sd + "/" + filePath, imageName2);
+                saveBitmapImage(image);
             } catch (Exception e) {
                 telemetry.addData("NEED TO FIX", e.getMessage());
             }
@@ -112,6 +112,8 @@ public class JewelAuto extends LinearOpModeCamera {
                 Canvas c = new Canvas(mutableBitmap);
                 Paint p = new Paint();
                 p.setColor(Color.BLACK);
+
+                JewelFinder jewel = getJewel();
                 c.drawRect((int) (jewel.sampleLeftXPct * xPercent), (int) (jewel.sampleTopYPct * yPercent), (int) (jewel.sampleRightXPct * xPercent), (int) (jewel.sampleBotYPct * yPercent), p);
 
                 telemetry.addData("Red count", "%d", LeftRed);

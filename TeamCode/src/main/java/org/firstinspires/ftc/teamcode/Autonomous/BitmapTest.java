@@ -15,7 +15,9 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcontroller.internal.JewelFinder;
 import org.firstinspires.ftc.robotcontroller.internal.LinearOpModeCamera;
+import org.firstinspires.ftc.robotcontroller.internal.LinearOpModeJewelCamera;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.internal.android.dx.cf.iface.Attribute;
 import org.firstinspires.ftc.teamcode.R;
@@ -30,7 +32,7 @@ import java.io.IOException;
  */
 
 @Autonomous(name="BitmapTest", group="Concept")
-public class BitmapTest extends LinearOpModeCamera {
+public class BitmapTest extends LinearOpModeJewelCamera {
     String filePath = "Pictures";
     String imageName = "TestImage.JPEG";
     private ElapsedTime runtime = new ElapsedTime();
@@ -114,6 +116,7 @@ public class BitmapTest extends LinearOpModeCamera {
         Canvas c = new Canvas(mutableBitmap);
         Paint p = new Paint();
         p.setColor(Color.BLACK);
+        JewelFinder jewel = getJewel();
         c.drawRect((int) (jewel.sampleLeftXPct*xPercent),(int) (jewel.sampleTopYPct*yPercent), (int) (jewel.sampleRightXPct*xPercent),(int) (jewel.sampleBotYPct*yPercent), p);
 
         telemetry.addData("Red count", "%d", LeftRed);

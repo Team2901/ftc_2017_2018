@@ -7,6 +7,7 @@ import android.graphics.Matrix;
 import android.graphics.Rect;
 import android.graphics.YuvImage;
 import android.hardware.Camera;
+import android.os.Environment;
 import android.util.Log;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -14,6 +15,10 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.robotcontroller.internal.FtcRobotControllerActivity;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 
 /**
  * TeleOp Mode
@@ -27,9 +32,7 @@ public class LinearOpModeCamera extends LinearOpMode {
 
   public int width;
   public int height;
-  public YuvImage yuvImage = null;
-  public JewelFinder jewel;
-
+  private YuvImage yuvImage = null;
 
   volatile private boolean imageReady = false;
 
@@ -196,9 +199,28 @@ public class LinearOpModeCamera extends LinearOpMode {
     return value;
   }
 
-  // returns ROTATED image, to match preview window
-  static public Bitmap convertYuvImageToRgb(YuvImage yuvImage, int width, int height, int downSample) {
+  public YuvImage getYuvImage() {
+    return yuvImage;
+  }
+
+  public Bitmap getBitmapImage(int downSample) {
     return OpModeCamera.convertYuvImageToRgb(yuvImage, width, height, downSample);
   }
 
+  public void saveYuvImage(File file) throws IOException {
+    try (OutputStream outStream = new FileOutputStream(file)) {
+      yuvImage.compressToJpeg(new Rect(0, 0, width, height), 0, outStream);
+      outStream.flush();
+      outStream.close();
+    }
+  }
+
+  public void saveBitmapImage(File file) throws IOException {
+    try (OutputStream outStream = new FileOutputStream(file)) {
+      Bitmap rgbImage = getBitmapImage(0);
+      rgbImage.compress(Bitmap.CompressFormat.JPEG, 0, outStream);
+      outStream.flush();
+      outStream.close();
+    }
+  }
 }
