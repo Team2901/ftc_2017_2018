@@ -1,26 +1,17 @@
 package org.firstinspires.ftc.teamcode.Autonomous;
 
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Environment;
-import android.util.AttributeSet;
-import android.view.View;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcontroller.internal.JewelFinder;
-import org.firstinspires.ftc.robotcontroller.internal.LinearOpModeCamera;
 import org.firstinspires.ftc.robotcontroller.internal.LinearOpModeJewelCamera;
-import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.robotcore.internal.android.dx.cf.iface.Attribute;
-import org.firstinspires.ftc.teamcode.R;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -117,7 +108,10 @@ public class BitmapTest extends LinearOpModeJewelCamera {
         Paint p = new Paint();
         p.setColor(Color.BLACK);
         JewelFinder jewel = getJewel();
-        c.drawRect((int) (jewel.sampleLeftXPct*xPercent),(int) (jewel.sampleTopYPct*yPercent), (int) (jewel.sampleRightXPct*xPercent),(int) (jewel.sampleBotYPct*yPercent), p);
+        c.drawRect((int) (jewel.getBoxLeftXPct() *xPercent),
+                (int) (jewel.getBoxTopYPct()*yPercent),
+                (int) (jewel.getBoxRightXPct()*xPercent),
+                (int) (jewel.getBoxBotYPct()*yPercent), p);
 
         telemetry.addData("Red count", "%d", LeftRed);
         telemetry.addData("Blue count", "%d", LeftBlue);

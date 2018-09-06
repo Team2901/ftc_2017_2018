@@ -2,8 +2,6 @@ package org.firstinspires.ftc.robotcontroller.internal;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.os.Environment;
-import android.text.TextPaint;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -11,67 +9,35 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
-import java.io.File;
-
 /**
  * Created by butterss21317 on 11/14/2017.
  */
 
 public class JewelFinder extends TextView implements View.OnTouchListener {
-    private TextPaint mTextPaint;
-    private float mTextWidth;
-    private float mTextHeight;
-    public int pWidth;
-    public int pHeight;
+    private int pWidth;
+    private int pHeight;
 
+    private float dx, dy;
 
-    public int sampleLeftXPct = 0;
-    public int sampleRightXPct = 20;
-    public int sampleTopYPct = 0;
-    public int sampleBotYPct = 20;
-
-
+    public int boxLeftXPct = 0;
+    public int boxRightXPct = 20;
+    public int boxTopYPct = 0;
+    public int boxBotYPct = 20;
 
     public JewelFinder(Context context) {
-        super(context);
-        init(null, 0);
+        this(context, null);
     }
 
     public JewelFinder(Context context, AttributeSet attrs) {
-        super(context, attrs);
-        init(attrs, 0);
+        this(context, attrs, 0);
     }
 
     public JewelFinder(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        init(attrs, defStyle);
-    }
-
-    private void init(AttributeSet attrs, int defStyle) {
         this.setBackgroundColor(0x55FF2500);
         this.setLayoutParams(new FrameLayout.LayoutParams(175,175));
         this.setOnTouchListener(this);
-
     }
-
-    public void moveBox(final float xpct,final float ypct) {
-        pWidth = ((View) this.getParent()).getWidth();
-        pHeight = ((View) this.getParent()).getHeight();
-
-        final int pWidth = this.pWidth;
-        final int pHeight = this.pHeight;
-
-        this.post(new Runnable() {
-
-            @Override
-            public void run() {
-                setX(((float) xpct) / 100 * pWidth);
-                setY(((float) ypct) / 100 * pHeight);
-
-            }
-        });
-    }
-
 
     @Override
     protected void onDraw(Canvas canvas) {
@@ -90,17 +56,10 @@ public class JewelFinder extends TextView implements View.OnTouchListener {
         pHeight = ((View) this.getParent()).getHeight();
     }
 
-    /**
-     * Gets the example dimension attribute value.
-     *
-     * @return The example dimension attribute value.
-     */
+    @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-
     }
-
-    float dx, dy;
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
@@ -110,7 +69,6 @@ public class JewelFinder extends TextView implements View.OnTouchListener {
         float rawY = event.getRawY();
 
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
-            this.setText(String.format("Hi"));
             dx = v.getX() - event.getRawX();
             dy = v.getY() - event.getRawY();
             return true;
@@ -118,10 +76,10 @@ public class JewelFinder extends TextView implements View.OnTouchListener {
             float x = getXBound(rawX + dx);
             float y = getYBound(rawY + dy);
 
-            sampleLeftXPct = (int) ((x/pWidth)*100);
-            sampleRightXPct = (int) (((x + this.getWidth())/pWidth)*100);
-            sampleTopYPct = (int) ((y/pHeight)*100);
-            sampleBotYPct = (int) (((y + this.getHeight())/pHeight)*100);
+            boxLeftXPct = (int) ((x/pWidth)*100);
+            boxRightXPct = (int) (((x + this.getWidth())/pWidth)*100);
+            boxTopYPct = (int) ((y/pHeight)*100);
+            boxBotYPct = (int) (((y + this.getHeight())/pHeight)*100);
 
             this.setText(String.format("%.1f %.1f", x, y));
 
@@ -134,20 +92,22 @@ public class JewelFinder extends TextView implements View.OnTouchListener {
         }
         return false;
     }
-    public float getXBound(float valueX){
+
+    private float getXBound(float valueX){
 
         float x;
 
-        if(valueX > pWidth - this.getWidth())// box x size
-            x = pWidth - this.getWidth() ;
-        else if (valueX  < 0)
-            x = 0 ;
-        else
-            x  = valueX;
-
+        if(valueX > pWidth - this.getWidth()) {// box x size
+            x = pWidth - this.getWidth();
+        } else if (valueX  < 0) {
+            x = 0;
+        } else {
+            x = valueX;
+        }
         return x;
     }
-    public float getYBound(float valueY){
+
+    private float getYBound(float valueY){
 
         float y;
 
@@ -159,5 +119,21 @@ public class JewelFinder extends TextView implements View.OnTouchListener {
             y  = valueY;
 
         return y;
+    }
+
+    public int getBoxLeftXPct() {
+        return boxLeftXPct;
+    }
+
+    public int getBoxRightXPct() {
+        return boxRightXPct;
+    }
+
+    public int getBoxTopYPct() {
+        return boxTopYPct;
+    }
+
+    public int getBoxBotYPct() {
+        return boxBotYPct;
     }
 }

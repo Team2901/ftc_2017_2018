@@ -16,7 +16,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 
 /**
  * Created by gallagherb20503 on 10/21/2017.
@@ -114,7 +113,10 @@ public class JewelAuto extends LinearOpModeJewelCamera {
                 p.setColor(Color.BLACK);
 
                 JewelFinder jewel = getJewel();
-                c.drawRect((int) (jewel.sampleLeftXPct * xPercent), (int) (jewel.sampleTopYPct * yPercent), (int) (jewel.sampleRightXPct * xPercent), (int) (jewel.sampleBotYPct * yPercent), p);
+                c.drawRect((int) (jewel.getBoxLeftXPct() * xPercent),
+                        (int) (jewel.getBoxTopYPct() * yPercent),
+                        (int) (jewel.getBoxRightXPct() * xPercent),
+                        (int) (jewel.getBoxBotYPct() * yPercent), p);
 
                 telemetry.addData("Red count", "%d", LeftRed);
                 telemetry.addData("Blue count", "%d", LeftBlue);

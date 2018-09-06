@@ -9,7 +9,6 @@ import com.vuforia.Vuforia;
 
 import org.firstinspires.ftc.robotcontroller.internal.FtcRobotControllerActivity;
 import org.firstinspires.ftc.robotcontroller.internal.JewelFinder;
-import org.firstinspires.ftc.robotcontroller.internal.LinearOpModeCamera;
 import org.firstinspires.ftc.robotcontroller.internal.LinearOpModeJewelCamera;
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
@@ -73,13 +72,13 @@ public void saveConfigFile(){
     try (BufferedWriter writer = new BufferedWriter (new FileWriter(sampleBox))){
         JewelFinder jewel = getJewel();
 
-        writer. write(String.format("%03d", jewel.sampleLeftXPct), 0, 3);
+        writer. write(String.format("%03d", jewel.getBoxLeftXPct()), 0, 3);
         writer.newLine ();
-        writer. write(String.format("%03d", jewel.sampleTopYPct), 0, 3);
+        writer. write(String.format("%03d", jewel.getBoxTopYPct()), 0, 3);
         writer.newLine ();
-        writer. write(String.format("%03d", jewel.sampleRightXPct), 0, 3);
+        writer. write(String.format("%03d", jewel.getBoxRightXPct()), 0, 3);
         writer.newLine ();
-        writer. write(String.format("%03d", jewel.sampleBotYPct), 0, 3);
+        writer. write(String.format("%03d", jewel.getBoxBotYPct()), 0, 3);
         writer.newLine ();
     } catch (Exception e){
         telemetry.addData ("ERROR WRITING TO FILE", e.getMessage());
