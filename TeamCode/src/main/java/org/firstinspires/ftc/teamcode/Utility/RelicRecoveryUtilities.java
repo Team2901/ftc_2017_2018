@@ -58,9 +58,10 @@ public class RelicRecoveryUtilities {
         final List<String> config = new ArrayList<>();
 
         try (BufferedReader reader = new BufferedReader(new FileReader(file))){
-            while (reader.ready()) {
-                String line = reader.readLine();
+            String line = reader.readLine();
+            while (line != null) {
                 config.add(line);
+                line = reader.readLine();
             }
         }
         return config;
