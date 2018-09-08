@@ -12,6 +12,9 @@ public class RunToEncoder extends LinearOpMode {
 
         robot.init(hardwareMap);
 
+        robot.leftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.rightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
         waitForStart();
 
         robot.leftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -22,6 +25,9 @@ public class RunToEncoder extends LinearOpMode {
 
         robot.leftMotor.setPower(.75);
         robot.rightMotor.setPower(.75);
+
+        while(robot.leftMotor.isBusy());
+
 
     }
 }
