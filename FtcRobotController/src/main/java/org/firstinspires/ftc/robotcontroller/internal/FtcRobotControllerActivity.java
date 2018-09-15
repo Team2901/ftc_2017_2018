@@ -126,7 +126,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 
 @SuppressWarnings("WeakerAccess")
 public class FtcRobotControllerActivity extends Activity
-{
+  {
   public static final String TAG = "RCActivity";
   public String getTag() { return TAG; }
 
@@ -166,72 +166,72 @@ public class FtcRobotControllerActivity extends Activity
   protected FtcEventLoop eventLoop;
   protected Queue<UsbDevice> receivedUsbAttachmentNotifications;
 
-  /////////////////////////////////////////////////////////
-  // ADDED FOR CAMERA!!!
-
-  public void addJewelFinder(final LinearOpModeJewelCamera context) {
-    runOnUiThread (new Runnable(){
-      @Override
-      public void run(){
-        FrameLayout previewLayout= (FrameLayout) findViewById(R.id.previewLayout);
-        JewelFinder box = new JewelFinder(FtcRobotControllerActivity.this);
-        context.jewel = box;
-        previewLayout.removeAllViews();
-        previewLayout.addView(context.jewel);
-      }
-    });
-  }
-
-  public void initPreview(final Camera camera, final OpModeCamera context, final Camera.PreviewCallback previewCallback) {
-    runOnUiThread(new Runnable() {
-      @Override
-      public void run() {
-        context.preview = new CameraPreview(FtcRobotControllerActivity.this, camera, previewCallback);
-        FrameLayout previewLayout = (FrameLayout) findViewById(R.id.previewLayout);
-        previewLayout.addView(context.preview);
-      }
-    });
-  }
-
-  // poor coding style here.  Shouldn't have to duplicate these routines for regular and linear OpModes.
-  public void initPreviewLinear(final Camera camera, final LinearOpModeCamera context, final Camera.PreviewCallback previewCallback) {
-    runOnUiThread(new Runnable() {
-      @Override
-      public void run() {
-        context.preview = new CameraPreview(FtcRobotControllerActivity.this, camera, previewCallback);
-        FrameLayout previewLayout = (FrameLayout) findViewById(R.id.previewLayout);
-        previewLayout.addView(context.preview);
-      }
-    });
-  }
-
-
-  public void removePreview(final OpModeCamera context) {
-    runOnUiThread(new Runnable() {
-      @Override
-      public void run() {
-        FrameLayout previewLayout = (FrameLayout) findViewById(R.id.previewLayout);
-        previewLayout.removeAllViews();
-      }
-    });
-  }
-
-  public void removePreviewLinear(final LinearOpModeCamera context) {
-    runOnUiThread(new Runnable() {
-      @Override
-      public void run() {
-        FrameLayout previewLayout = (FrameLayout) findViewById(R.id.previewLayout);
-        previewLayout.removeAllViews();
-      }
-    });
-  }
-
-  // END CAMERA ADD!!!
-  //////////////////////////////////////////////
-
   protected WifiMuteStateMachine wifiMuteStateMachine;
   protected MotionDetection motionDetection;
 
+
+    /////////////////////////////////////////////////////////
+    // ADDED FOR CAMERA!!!
+
+    public void addJewelFinder(final LinearOpModeJewelCamera context) {
+      runOnUiThread (new Runnable(){
+        @Override
+        public void run(){
+          FrameLayout previewLayout= (FrameLayout) findViewById(R.id.previewLayout);
+          JewelFinder box = new JewelFinder(FtcRobotControllerActivity.this);
+          context.jewel = box;
+          previewLayout.removeAllViews();
+          previewLayout.addView(context.jewel);
+        }
+      });
+    }
+
+    public void initPreview(final Camera camera, final OpModeCamera context, final Camera.PreviewCallback previewCallback) {
+      runOnUiThread(new Runnable() {
+        @Override
+        public void run() {
+          context.preview = new CameraPreview(FtcRobotControllerActivity.this, camera, previewCallback);
+          FrameLayout previewLayout = (FrameLayout) findViewById(R.id.previewLayout);
+          previewLayout.addView(context.preview);
+        }
+      });
+    }
+
+    // poor coding style here.  Shouldn't have to duplicate these routines for regular and linear OpModes.
+    public void initPreviewLinear(final Camera camera, final LinearOpModeCamera context, final Camera.PreviewCallback previewCallback) {
+      runOnUiThread(new Runnable() {
+        @Override
+        public void run() {
+          context.preview = new CameraPreview(FtcRobotControllerActivity.this, camera, previewCallback);
+          FrameLayout previewLayout = (FrameLayout) findViewById(R.id.previewLayout);
+          previewLayout.addView(context.preview);
+        }
+      });
+    }
+
+
+    public void removePreview(final OpModeCamera context) {
+      runOnUiThread(new Runnable() {
+        @Override
+        public void run() {
+          FrameLayout previewLayout = (FrameLayout) findViewById(R.id.previewLayout);
+          previewLayout.removeAllViews();
+        }
+      });
+    }
+
+    public void removePreviewLinear(final LinearOpModeCamera context) {
+      runOnUiThread(new Runnable() {
+        @Override
+        public void run() {
+          FrameLayout previewLayout = (FrameLayout) findViewById(R.id.previewLayout);
+          previewLayout.removeAllViews();
+        }
+      });
+    }
+
+    // END CAMERA ADD!!!
+    //////////////////////////////////////////////
   protected class RobotRestarter implements Restarter {
 
     public void requestRestart() {
@@ -311,7 +311,7 @@ public class FtcRobotControllerActivity extends Activity
         RobotLog.vv(TAG, "disabling Dragonboard and exiting robot controller");
         DragonboardLynxDragonboardIsPresentPin.getInstance().setState(false);
         AppUtil.getInstance().finishRootActivityAndExitApp();
-      }
+        }
       else {
         // Double-sure check that we can talk to the DB over the serial TTY
         DragonboardLynxDragonboardIsPresentPin.getInstance().setState(true);
@@ -566,8 +566,8 @@ public class FtcRobotControllerActivity extends Activity
       } else {
         Intent programmingModeIntent = new Intent(AppUtil.getDefContext(), ProgrammingModeActivity.class);
         programmingModeIntent.putExtra(
-                LaunchActivityConstantsList.PROGRAMMING_MODE_ACTIVITY_PROGRAMMING_WEB_HANDLERS,
-                new LocalByRefIntentExtraHolder(programmingWebHandlers));
+            LaunchActivityConstantsList.PROGRAMMING_MODE_ACTIVITY_PROGRAMMING_WEB_HANDLERS,
+            new LocalByRefIntentExtraHolder(programmingWebHandlers));
         startActivity(programmingModeIntent);
       }
       return true;
@@ -599,7 +599,7 @@ public class FtcRobotControllerActivity extends Activity
       startActivityForResult(intentConfigure, RequestCode.CONFIGURE_ROBOT_CONTROLLER.ordinal());
     }
     else if (id == R.id.action_settings) {
-      // historical: this once erroneously used FTC_CONFIGURE_REQUEST_CODE_ROBOT_CONTROLLER
+	  // historical: this once erroneously used FTC_CONFIGURE_REQUEST_CODE_ROBOT_CONTROLLER
       Intent settingsIntent = new Intent(AppUtil.getDefContext(), FtcRobotControllerSettingsActivity.class);
       startActivityForResult(settingsIntent, RequestCode.SETTINGS_ROBOT_CONTROLLER.ordinal());
       return true;
@@ -614,7 +614,7 @@ public class FtcRobotControllerActivity extends Activity
       return true;
     }
 
-    return super.onOptionsItemSelected(item);
+   return super.onOptionsItemSelected(item);
   }
 
   @Override
