@@ -169,6 +169,9 @@ public class FtcRobotControllerActivity extends Activity
   protected WifiMuteStateMachine wifiMuteStateMachine;
   protected MotionDetection motionDetection;
 
+  public static final int COLOR_BLUE = 0x5533ccff;
+  public static final int COLOR_GREEN = 0x5500ff00;
+  public static final int COLOR_PINK= 0x55ff3399;
 
     /////////////////////////////////////////////////////////
     // ADDED FOR CAMERA!!!
@@ -178,7 +181,7 @@ public class FtcRobotControllerActivity extends Activity
         @Override
         public void run(){
           FrameLayout previewLayout= (FrameLayout) findViewById(R.id.previewLayout);
-          JewelFinder box = new JewelFinder(FtcRobotControllerActivity.this);
+          JewelFinder box = new JewelFinder(FtcRobotControllerActivity.this, COLOR_BLUE);
           context.jewel = box;
           previewLayout.removeAllViews();
           previewLayout.addView(context.jewel);
