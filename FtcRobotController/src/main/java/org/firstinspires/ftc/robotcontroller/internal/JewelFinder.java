@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.robotcontroller.internal;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.util.AttributeSet;
@@ -12,30 +13,31 @@ import android.widget.TextView;
 /**
  * Created by butterss21317 on 11/14/2017.
  */
-
+@SuppressLint("DefaultLocale")
 public class JewelFinder extends TextView implements View.OnTouchListener {
     private int pWidth;
     private int pHeight;
 
     private float dx, dy;
 
+    // Pct is = to box percentage location.
     public int boxLeftXPct = 0;
     public int boxRightXPct = 20;
     public int boxTopYPct = 0;
     public int boxBotYPct = 20;
 
-    public JewelFinder(Context context) {
-        this(context, null);
+    public JewelFinder(Context context, int color) {
+        this(context, null, color);
     }
 
-    public JewelFinder(Context context, AttributeSet attrs) {
-        this(context, attrs, 0);
+    public JewelFinder(Context context, AttributeSet attrs, int color) {
+        this(context, attrs,  0, color );
     }
 
-    public JewelFinder(Context context, AttributeSet attrs, int defStyle) {
+    public JewelFinder(Context context, AttributeSet attrs, int defStyle, int color) {
         super(context, attrs, defStyle);
-        this.setBackgroundColor(0x55FF2500);
-        this.setLayoutParams(new FrameLayout.LayoutParams(175,175));
+        this.setBackgroundColor( color);
+        this.setLayoutParams(new FrameLayout.LayoutParams(100,100));
         this.setOnTouchListener(this);
     }
 
