@@ -57,18 +57,18 @@ after start jewel finder position is saved to finder
 
         public void saveConfigFile() {
             try (BufferedWriter writer = new BufferedWriter(new FileWriter(sampleBox))) {
-                JewelFinder jewel = getJewel();
+                JewelFinder jewelLeft = jewelLeft();
 
-                writer.write(String.format("%03d", jewel.getBoxLeftXPct()), 0, 3);
+                writer.write(String.format("%03d", jewelLeft, jewelMiddle, jewelRight.getBoxLeftXPct()), 0, 3);
                 writer.newLine();
-                writer.write(String.format("%03d", jewel.getBoxTopYPct()), 0, 3);
+                writer.write(String.format("%03d", jewelLeft, jewelMiddle, jewelRight.getBoxTopYPct()), 0, 3);
                 writer.newLine();
-                writer.write(String.format("%03d", jewel.getBoxRightXPct()), 0, 3);
+                writer.write(String.format("%03d", jewelLeft, jewelMiddle, jewelRight.getBoxRightXPct()), 0, 3);
                 writer.newLine();
-                writer.write(String.format("%03d", jewel.getBoxBotYPct()), 0, 3);
+                writer.write(String.format("%03d", jewelLeft, jewelMiddle, jewelRight.getBoxBotYPct()), 0, 3);
                 writer.newLine();
-            } catch (Exception e) {
-                telemetry.addData("ERROR WRITING TO FILE", e.getMessage());
+            } catch (Exception e) {.
+                telemetry.addData("ERROR WRITING TO FILE JEWEL LEFT", e.getMessage());
             }
         }
     }
