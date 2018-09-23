@@ -18,11 +18,29 @@ public class weekendBotTeleOp extends OpMode {
 
     public void loop() {
 
-        double leftPower = -gamepad1.left_stick_y;
-        double rightPower = -gamepad1.right_stick_y;
+        double leftPower = gamepad1.left_stick_y;
+        double rightPower = gamepad1.right_stick_y;
 
         robot.left.setPower(leftPower);
         robot.right.setPower(rightPower);
-    }
 
+        if (gamepad2.right_trigger > .02) {
+            robot.shoulder.setPower(gamepad2.right_trigger);
+        } else if (gamepad2.left_trigger > .02) {
+            robot.shoulder.setPower(-gamepad2.left_trigger);
+        }
+
+        if (gamepad2.right_bumper) {
+            robot.elbow.setPower(.25);
+        } else if (gamepad2.right_bumper) {
+            robot.elbow.setPower(-.25);
+        }
+
+        if (gamepad2.a) {
+            robot.pedipalps.setPower(.25);
+        } else if (gamepad2.b) {
+            robot.pedipalps.setPower(-.25);
+        }
+
+    }
 }

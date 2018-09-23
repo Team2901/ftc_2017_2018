@@ -14,11 +14,18 @@ public class weekendBot {
     public  DcMotor left;
     public DcMotor right;
 
+    public DcMotor shoulder;
+    public DcMotor elbow;
+    public DcMotor pedipalps;
+
     public void init(HardwareMap ahwMap) {
         hardwareMap = ahwMap;
 
         left = hardwareMap.dcMotor.get("left");
         right = hardwareMap.dcMotor.get("right");
+        shoulder = hardwareMap.dcMotor.get("shoulder");
+        elbow = hardwareMap.dcMotor.get("elbow");
+        pedipalps = hardwareMap.dcMotor.get("pedipalps");
 
         left.setDirection(DcMotorSimple.Direction.REVERSE);
         right.setDirection(DcMotorSimple.Direction.FORWARD);
