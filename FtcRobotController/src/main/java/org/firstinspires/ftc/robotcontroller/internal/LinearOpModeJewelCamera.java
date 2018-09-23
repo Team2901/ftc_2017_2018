@@ -18,8 +18,9 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 public class LinearOpModeJewelCamera extends LinearOpModeCamera {
 
 
-  // protected JewelFinder jewel;
+  protected JewelFinder jewel;
   protected JewelFinder jewelLeft;
+
   public JewelFinder jewelLeft(){
     int jewelLeft = FtcRobotControllerActivity.COLOR_BLUE;
     return jewelLeft();
@@ -37,7 +38,7 @@ public class LinearOpModeJewelCamera extends LinearOpModeCamera {
 
 
 
- // public JewelFinder getJewel() {
- //   return jewel;
- // }
+  public JewelFinder getJewel() {
+    return jewel;
+  }
 }

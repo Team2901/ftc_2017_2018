@@ -67,7 +67,7 @@ after start jewel finder position is saved to finder
                 writer.newLine();
                 writer.write(String.format("%03d", jewelLeft, jewelMiddle, jewelRight.getBoxBotYPct()), 0, 3);
                 writer.newLine();
-            } catch (Exception e) {.
+            } catch (Exception e) {
                 telemetry.addData("ERROR WRITING TO FILE JEWEL LEFT", e.getMessage());
             }
         }
