@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.Autonomous;
+package org.firstinspires.ftc.teamcode.Utility;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -22,7 +22,7 @@ import java.io.IOException;
  * Created by butterss21317 on 9/26/2017.
  */
 
-@Autonomous(name="BitmapTest", group="Concept")
+@Autonomous(name="BitmapTest2", group="Concept")
 public class BitmapTest extends LinearOpModeJewelCamera {
     String filePath = "Pictures";
     String imageName = "TestImage.JPEG";
