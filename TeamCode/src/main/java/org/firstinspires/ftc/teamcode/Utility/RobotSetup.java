@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.Autonomous;
+package org.firstinspires.ftc.teamcode.Utility;
 
 import android.os.Environment;
 
@@ -23,7 +23,7 @@ import java.io.FileWriter;
 /**
  * Created by gallagherb20503 on 1/10/2018.
  */
-@Autonomous(name = "RobotSetup")
+@Autonomous(name = "RobotSetup2")
 public class RobotSetup extends LinearOpModeJewelCamera {
     VuforiaLocalizer vuforia;
     File sd = Environment.getExternalStorageDirectory();
