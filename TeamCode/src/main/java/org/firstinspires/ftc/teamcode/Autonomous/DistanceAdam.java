@@ -36,6 +36,17 @@ public class DistanceAdam extends LinearOpMode
             }
             telemetry.addData("inches", "%.2f", distanceSensor.getDistance(DistanceUnit.INCH));
             telemetry.update();
+
+            if(distanceBoi >= 24)
+            {
+                leftMotor.setPower(1);
+                rightMotor.setPower(1);
+            }
+            else if (distanceBoi < 24)
+            {
+                leftMotor.setPower(-1);
+                rightMotor.setPower(-1);
+            }
         }
     }
 }
