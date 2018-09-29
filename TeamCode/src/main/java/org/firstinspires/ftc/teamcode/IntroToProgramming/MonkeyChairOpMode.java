@@ -1,9 +1,7 @@
-package org.firstinspires.ftc.teamcode.Autonomous;
+package org.firstinspires.ftc.teamcode.IntroToProgramming;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-
-import org.firstinspires.ftc.teamcode.Hardware.SonarRobotThing;
 
 @Autonomous(name="MonkeyChairOpMode")
 public class MonkeyChairOpMode extends LinearOpMode{

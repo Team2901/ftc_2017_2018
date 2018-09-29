@@ -29,19 +29,14 @@
 
 package org.firstinspires.ftc.teamcode.BaseSampleCode;
 
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.util.Range;
-
-import org.firstinspires.ftc.teamcode.Hardware.HardwareDxm;
 
 
 @TeleOp(name="Mechanum Drive" , group = "TeleOp")
 public class Mechanum_Only extends OpMode {
 
-    HardwareDxm robot           = new HardwareDxm();
+    MechanumHardware robot           = new MechanumHardware();
 
     public void init() {
         robot.init(hardwareMap);
