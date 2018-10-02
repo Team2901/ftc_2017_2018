@@ -69,6 +69,8 @@ after start jewel finder position is saved to finder
                 writer.newLine();
             } catch (Exception e) {
                 telemetry.addData("ERROR WRITING TO FILE JEWEL LEFT", e.getMessage());
+                telemetry.addData ("ERROR WRITING TO FILE JEWEL RIGHT", e.getMessage());
+                telemetry.addData("ERROR WRITING TO FILE JEWEL MIDDLE", e.getMessage());
             }
         }
     }
