@@ -1,5 +1,5 @@
 
-package org.firstinspires.ftc.teamcode.Autonomous;
+package org.firstinspires.ftc.teamcode.IntroToProgramming;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -16,7 +16,8 @@ public class CodeBotDistanceSensorTestYAWN extends LinearOpMode {
     DcMotor leftMotor;
     DcMotor rightMotor;
 
-    @Override public void runOpMode() {
+    @Override
+    public void runOpMode() {
 
         rangeSensor = hardwareMap.get(DistanceSensor.class, "sensor_range");
         leftMotor = hardwareMap.get(DcMotor.class, "leftMotor");
@@ -28,15 +29,19 @@ public class CodeBotDistanceSensorTestYAWN extends LinearOpMode {
         while (opModeIsActive()) {
 
             double distance = rangeSensor.getDistance(DistanceUnit.INCH);
-            if(distance <= 12){
+            if (distance >= 22 && distance <= 26) {
                 leftMotor.setPower(0);
                 rightMotor.setPower(0);
+            } else if (distance > 26) {
+                leftMotor.setPower(.5);
+                rightMotor.setPower(-.5);
             } else {
-                leftMotor.setPower(1);
-                rightMotor.setPower(-1);
+                leftMotor.setPower(-.5);
+                rightMotor.setPower(.54);
             }
-            telemetry.addData("inch","%.2f inch", rangeSensor.getDistance(DistanceUnit.INCH));
+            telemetry.addData("inch", "%.2f inch", rangeSensor.getDistance(DistanceUnit.INCH));
             telemetry.update();
+
         }
     }
 }

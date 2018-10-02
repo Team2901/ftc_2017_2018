@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.Hardware;
+package org.firstinspires.ftc.teamcode.BaseSampleCode;
 
         import com.qualcomm.robotcore.hardware.DcMotor;
         import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -11,7 +11,7 @@ package org.firstinspires.ftc.teamcode.Hardware;
 /*
 PSA DXM stands for Deus Ex Machina
  */
-public class HardwareDxm {
+public class MechanumHardware {
 /*
 I created this naming system as the letter f or b meaning front or back because
 with machanum wheels all 4 wheels need to be motorized
@@ -91,7 +91,7 @@ with machanum wheels all 4 wheels need to be motorized
         bRight.setTargetPosition((int) (1140 * mult));
         fRight.setTargetPosition((int) (1140 * mult));
 
-        move(speed, 0);
+
 
         while (bLeft.isBusy()) ;
 
@@ -112,8 +112,6 @@ with machanum wheels all 4 wheels need to be motorized
         fLeft.setTargetPosition((int) (-1140 * mult));
         bRight.setTargetPosition((int) (-1140 * mult));
         fRight.setTargetPosition((int) (-1140 * mult));
-
-        move(speed, Math.PI);
 
         while (bLeft.isBusy()) ;
 
@@ -182,46 +180,4 @@ with machanum wheels all 4 wheels need to be motorized
         while (bLeft.isBusy()) ;
     }
 
-    public void move(double speed, double angle) {
-
-        double pFL = (speed * (Math.sin((angle) + ((Math.PI) / 4))));
-        double pFR = (speed * (Math.cos((angle) + ((Math.PI) / 4))));
-        double pBL = (speed * (Math.cos((angle) + ((Math.PI) / 4))));
-        double pBR = (speed * (Math.sin((angle) + ((Math.PI) / 4))));
-
-        fLeft.setPower(pFL);
-        fRight.setPower(pFR);
-        bLeft.setPower(pBL);
-        bRight.setPower(pBR);
     }
-
-    public void openTop() {
-        tLeftPincer.setPosition(.9);
-        tRightPincer.setPosition(0);
-    }
-
-    public void openBottom() {
-        bLeftPincer.setPosition(0);
-        bRightPincer.setPosition(0);
-    }
-
-    public void open(){
-        openTop();
-        openBottom();
-    }
-
-    public void releaseBottom(){
-        bLeftPincer.setPosition(bLeftPincer.getPosition()-.1);
-        bRightPincer.setPosition(bRightPincer.getPosition()-.1);
-    }
-
-    public void releaseTop(){
-        tLeftPincer.setPosition(tLeftPincer.getPosition()-.005);
-        tRightPincer.setPosition(tRightPincer.getPosition()-.005);
-    }
-
-     public void release(){
-        releaseTop();
-        releaseBottom();
-    }
-}
