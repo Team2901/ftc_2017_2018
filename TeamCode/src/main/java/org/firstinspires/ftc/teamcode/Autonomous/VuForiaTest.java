@@ -7,6 +7,7 @@ import com.vuforia.Vuforia;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
+import org.firstinspires.ftc.robotcore.external.matrices.VectorF;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
@@ -36,7 +37,7 @@ public class VuForiaTest extends LinearOpMode {
         blueTrackable.setName("blue");
 
 
-        OpenGLMatrix bluePosition = getMatrix(0,-90,-90,(float)1828.8, 0, (float)152.4);
+        OpenGLMatrix bluePosition = getMatrix(90,0,-90,(float)1828.8, 0, (float)152.4);
 
         blueTrackable.setLocation(bluePosition);
 
@@ -44,18 +45,48 @@ public class VuForiaTest extends LinearOpMode {
 
         roverRuckus.activate();
 
+        OpenGLMatrix lastKnown = null;
+
         while (opModeIsActive()){
 
-            if (((VuforiaTrackableDefaultListener)blueTrackable.getListener()).isVisible()){
-                telemetry.addData("visible" , "");
-                OpenGLMatrix robotLocationTransform = ((VuforiaTrackableDefaultListener)
-                        blueTrackable.getListener()).getUpdatedRobotLocation();
+            OpenGLMatrix robotLocationTransform = ((VuforiaTrackableDefaultListener)
+                    blueTrackable.getListener()).getUpdatedRobotLocation();
 
-                telemetry.addData("Pos (in)", robotLocationTransform);
+            if (robotLocationTransform != null) {
+                VectorF translation = robotLocationTransform.getTranslation();
+
+                Orientation orientation = Orientation.getOrientation(robotLocationTransform,
+                        AxesReference.EXTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES);
+
+                float x = (translation.get(0));
+                float y = (translation.get(1));
+                float z = (translation.get(2));
+                float angle = orientation.thirdAngle;
+
+                telemetry.addData("X" ,  "%.2f", x);
+                telemetry.addData("Y" ,  "%.2f", y);
+                telemetry.addData("Z" ,  "%.2f", z);
+                telemetry.addData("Angle" ,  "%.2f", angle);
+             lastKnown = robotLocationTransform;
+            }else if (lastKnown != null){
+                VectorF translation2 = lastKnown.getTranslation();
+
+                Orientation orientation = Orientation.getOrientation(lastKnown,
+                        AxesReference.EXTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES);
+
+                float x = (translation2.get(0));
+                float y = (translation2.get(1));
+                float z = (translation2.get(2));
+                float angle = orientation.thirdAngle;
+
+                telemetry.addData("X" ,  "%.2f", x);
+                telemetry.addData("Y" ,  "%.2f", y);
+                telemetry.addData("Z" ,  "%.2f", z);
+                telemetry.addData("Angle" ,  "%.2f", angle);
 
             }
-
             telemetry.update();
+
 
         }
 

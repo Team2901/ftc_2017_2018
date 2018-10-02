@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode.IntroToProgramming;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-@Autonomous(name="MonkeyChairOpMode")
+@Autonomous(name="MonkeyChairOpMode2")
 public class MonkeyChairOpMode extends LinearOpMode{
  public SonarRobotThing sonarRobotThing=new SonarRobotThing();
     @Override

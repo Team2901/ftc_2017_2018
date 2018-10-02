@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.hardware.DistanceSensor;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 
-@Autonomous(name = "CodeBotDistanceSensorTestYAWN", group = "Sensor")
+@Autonomous(name = "CodeBotDistanceSensorTestYAWN2", group = "Sensor")
 public class CodeBotDistanceSensorTestYAWN extends LinearOpMode {
 
     DistanceSensor rangeSensor;

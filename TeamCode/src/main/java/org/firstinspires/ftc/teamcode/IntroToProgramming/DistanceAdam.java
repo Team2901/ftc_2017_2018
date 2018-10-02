@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.hardware.DistanceSensor;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
-@Autonomous(name = "DistanceAdam", group = "Concept")
+@Autonomous(name = "DistanceAdam2", group = "Concept")
 public class DistanceAdam extends LinearOpMode
 {
     DistanceSensor distanceSensor;
