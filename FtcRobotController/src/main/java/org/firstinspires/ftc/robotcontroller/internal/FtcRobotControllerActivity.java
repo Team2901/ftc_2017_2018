@@ -181,10 +181,19 @@ public class FtcRobotControllerActivity extends Activity
         @Override
         public void run(){
           FrameLayout previewLayout= (FrameLayout) findViewById(R.id.previewLayout);
-          JewelFinder box = new JewelFinder(FtcRobotControllerActivity.this, COLOR_BLUE);
-          context.jewel = box;
+          JewelFinder box1 = new JewelFinder(FtcRobotControllerActivity.this, COLOR_BLUE);
+          context.jewelLeft = box1;
+
+          JewelFinder box2 = new JewelFinder( FtcRobotControllerActivity.this, COLOR_GREEN);
+          context.jewelMiddle = box2;
+
+          JewelFinder box3 = new JewelFinder(FtcRobotControllerActivity.this, COLOR_PINK);
+          context.jewelRight = box3;
+
           previewLayout.removeAllViews();
-          previewLayout.addView(context.jewel);
+          previewLayout.addView(context.jewelLeft);
+          previewLayout.addView(context.jewelMiddle);
+          previewLayout.addView(context.jewelRight);
         }
       });
     }
