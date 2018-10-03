@@ -17,13 +17,16 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 
-@Autonomous (name = "vuforiaTest")
+@Autonomous (name = "VuForiaTest")
 public class VuForiaTest extends LinearOpMode {
 
     VuforiaLocalizer vuforia;
 
+    public final double MM_TO_INCHES = 0.0393701;
+
     @Override
-    public void runOpMode() throws InterruptedException {
+    public void runOpMode() {
+
 
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
@@ -37,7 +40,7 @@ public class VuForiaTest extends LinearOpMode {
         blueTrackable.setName("blue");
 
 
-        OpenGLMatrix bluePosition = getMatrix(90,0,-90,(float)1828.8, 0, (float)152.4);
+        OpenGLMatrix bluePosition = getMatrix(90, 0, -90, (float) 1828.8, 0, (float) 152.4);
 
         blueTrackable.setLocation(bluePosition);
 
@@ -45,58 +48,38 @@ public class VuForiaTest extends LinearOpMode {
 
         roverRuckus.activate();
 
-        OpenGLMatrix lastKnown = null;
+        OpenGLMatrix location = null;
 
-        while (opModeIsActive()){
-
-            OpenGLMatrix robotLocationTransform = ((VuforiaTrackableDefaultListener)
+        while (location == null){
+            location = ((VuforiaTrackableDefaultListener)
                     blueTrackable.getListener()).getUpdatedRobotLocation();
 
-            if (robotLocationTransform != null) {
-                VectorF translation = robotLocationTransform.getTranslation();
-
-                Orientation orientation = Orientation.getOrientation(robotLocationTransform,
-                        AxesReference.EXTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES);
-
-                float x = (translation.get(0));
-                float y = (translation.get(1));
-                float z = (translation.get(2));
-                float angle = orientation.thirdAngle;
-
-                telemetry.addData("X" ,  "%.2f", x);
-                telemetry.addData("Y" ,  "%.2f", y);
-                telemetry.addData("Z" ,  "%.2f", z);
-                telemetry.addData("Angle" ,  "%.2f", angle);
-             lastKnown = robotLocationTransform;
-            }else if (lastKnown != null){
-                VectorF translation2 = lastKnown.getTranslation();
-
-                Orientation orientation = Orientation.getOrientation(lastKnown,
-                        AxesReference.EXTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES);
-
-                float x = (translation2.get(0));
-                float y = (translation2.get(1));
-                float z = (translation2.get(2));
-                float angle = orientation.thirdAngle;
-
-                telemetry.addData("X" ,  "%.2f", x);
-                telemetry.addData("Y" ,  "%.2f", y);
-                telemetry.addData("Z" ,  "%.2f", z);
-                telemetry.addData("Angle" ,  "%.2f", angle);
-
-            }
-            telemetry.update();
-
-
+            idle();
         }
 
-    }
+        VectorF translation = location.getTranslation();
 
+        Orientation orientation = Orientation.getOrientation(location,
+                AxesReference.EXTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES);
+
+        double x = (translation.get(0) * MM_TO_INCHES);
+        double y = (translation.get(1) * MM_TO_INCHES);
+        double z = (translation.get(2) * MM_TO_INCHES);
+        float angle = orientation.thirdAngle;
+
+        telemetry.addData("X" ,  "%.2f", x);
+        telemetry.addData("Y" ,  "%.2f", y);
+        telemetry.addData("Z" ,  "%.2f", z);
+        telemetry.addData("Angle" ,  "%.2f", angle);
+        telemetry.update();
+
+        while (opModeIsActive()){idle();}
+    }
 
     public OpenGLMatrix getMatrix(float ax, float ay, float az, float dx, float dy, float dz) {
 
-    return OpenGLMatrix.translation(dx, dy, dz).multiplied
-            (Orientation.getRotationMatrix(AxesReference.EXTRINSIC,
-                    AxesOrder.XYZ, AngleUnit.DEGREES, ax,ay,ax));
+        return OpenGLMatrix.translation(dx, dy, dz).multiplied
+                (Orientation.getRotationMatrix(AxesReference.EXTRINSIC,
+                        AxesOrder.XYZ, AngleUnit.DEGREES, ax, ay, ax));
     }
 }
