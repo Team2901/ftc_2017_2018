@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.hardware.DistanceSensor;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 
-@Autonomous(name = "CodeBotDistanceSensorTestYAWN2", group = "Sensor")
+@Autonomous(name = "CodeBotDistanceSensorTestYAWN", group = "Sensor")
 public class CodeBotDistanceSensorTestYAWN extends LinearOpMode {
 
     DistanceSensor rangeSensor;
@@ -29,15 +29,18 @@ public class CodeBotDistanceSensorTestYAWN extends LinearOpMode {
         while (opModeIsActive()) {
 
             double distance = rangeSensor.getDistance(DistanceUnit.INCH);
-            if (distance >= 22 && distance <= 26) {
+            if (distance == 24) {
                 leftMotor.setPower(0);
                 rightMotor.setPower(0);
-            } else if (distance > 26) {
-                leftMotor.setPower(.5);
-                rightMotor.setPower(-.5);
+            } else if (distance < 26) {
+                leftMotor.setPower((distance * (1/24)) - 1);
+                rightMotor.setPower(-1 * ((distance * (1/24)) - 1));
+            } else if (distance > 50 || distance == DistanceSensor.distanceOutOfRange) {
+                leftMotor.setPower(1);
+                rightMotor.setPower(-1);
             } else {
-                leftMotor.setPower(-.5);
-                rightMotor.setPower(.54);
+                leftMotor.setPower(-1 * (distance - 24)*(1/26));
+                rightMotor.setPower((distance - 24)*(1/26));
             }
             telemetry.addData("inch", "%.2f inch", rangeSensor.getDistance(DistanceUnit.INCH));
             telemetry.update();
