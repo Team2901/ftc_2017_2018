@@ -180,13 +180,13 @@ public class FtcRobotControllerActivity extends Activity
         public void run(){
           FrameLayout previewLayout= (FrameLayout) findViewById(R.id.previewLayout);
           JewelFinder box1 = new JewelFinder(FtcRobotControllerActivity.this, COLOR_BLUE);
-          context.jewelLeft = box1;
+          context.jewelRight = box1;
 
           JewelFinder box2 = new JewelFinder( FtcRobotControllerActivity.this, COLOR_GREEN);
           context.jewelMiddle = box2;
 
           JewelFinder box3 = new JewelFinder(FtcRobotControllerActivity.this, COLOR_PINK);
-          context.jewelRight = box3;
+          context.jewelLeft = box3;
 
           previewLayout.removeAllViews();
           previewLayout.addView(context.jewelLeft);

@@ -25,7 +25,9 @@ import java.io.FileWriter;
 public class SetUpCodePosition1 extends LinearOpModeJewelCamera {
         VuforiaLocalizer vuforia;
         File sd = Environment.getExternalStorageDirectory();
-        File sampleBox = new File(sd + "/team", "sampleBox.txt");
+        File jewelConfigLeft  = new File(sd + "/team", "jewelConfig.Left.txt");
+        File jewelConfigMiddle = new File ( sd + "/team", "jewelConfig.Middle.txt");
+        File jewelConfigRight = new File ( sd + "/team", "jewelConfig.Right.txt");
 
 
 
@@ -56,21 +58,52 @@ after start jewel finder position is saved to finder
         }
 
         public void saveConfigFile() {
-            try (BufferedWriter writer = new BufferedWriter(new FileWriter(sampleBox))) {
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(jewelConfigLeft))) {
                 JewelFinder jewelLeft = jewelLeft();
 
-                writer.write(String.format("%03d", jewelLeft, jewelMiddle, jewelRight.getBoxLeftXPct()), 0, 3);
+                writer.write(String.format("%03d", jewelLeft.getBoxLeftXPct()), 0, 3);
                 writer.newLine();
-                writer.write(String.format("%03d", jewelLeft, jewelMiddle, jewelRight.getBoxTopYPct()), 0, 3);
+                writer.write(String.format("%03d", jewelLeft.getBoxTopYPct()), 0, 3);
                 writer.newLine();
-                writer.write(String.format("%03d", jewelLeft, jewelMiddle, jewelRight.getBoxRightXPct()), 0, 3);
+                writer.write(String.format("%03d", jewelLeft.getBoxRightXPct()), 0, 3);
                 writer.newLine();
-                writer.write(String.format("%03d", jewelLeft, jewelMiddle, jewelRight.getBoxBotYPct()), 0, 3);
+                writer.write(String.format("%03d", jewelLeft.getBoxBotYPct()), 0, 3);
                 writer.newLine();
             } catch (Exception e) {
                 telemetry.addData("ERROR WRITING TO FILE JEWEL LEFT", e.getMessage());
-                telemetry.addData ("ERROR WRITING TO FILE JEWEL RIGHT", e.getMessage());
+                telemetry.update();
+            }
+
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(jewelConfigMiddle))) {
+                JewelFinder jewelMiddle = jewelMiddle();
+
+                writer.write(String.format("%03d", jewelMiddle.getBoxLeftXPct()), 0, 3);
+                writer.newLine();
+                writer.write(String.format("%03d", jewelMiddle.getBoxTopYPct()), 0, 3);
+                writer.newLine();
+                writer.write(String.format("%03d", jewelMiddle.getBoxRightXPct()), 0, 3);
+                writer.newLine();
+                writer.write(String.format("%03d", jewelMiddle.getBoxBotYPct()), 0, 3);
+                writer.newLine();
+            } catch (Exception e) {
                 telemetry.addData("ERROR WRITING TO FILE JEWEL MIDDLE", e.getMessage());
+                telemetry.update();
+            }
+
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(jewelConfigRight))) {
+                JewelFinder jewelRight = jewelRight();
+
+                writer.write(String.format("%03d", jewelRight.getBoxLeftXPct()), 0, 3);
+                writer.newLine();
+                writer.write(String.format("%03d", jewelRight.getBoxTopYPct()), 0, 3);
+                writer.newLine();
+                writer.write(String.format("%03d", jewelRight.getBoxRightXPct()), 0, 3);
+                writer.newLine();
+                writer.write(String.format("%03d", jewelRight.getBoxBotYPct()), 0, 3);
+                writer.newLine();
+            } catch (Exception e) {
+                telemetry.addData("ERROR WRITING TO FILE JEWEL RIGHT", e.getMessage());
+                telemetry.update();
             }
         }
     }
