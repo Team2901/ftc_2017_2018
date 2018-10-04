@@ -17,12 +17,15 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 
+
 @Autonomous (name = "VuForiaTest")
 public class VuForiaTest extends LinearOpMode {
 
     VuforiaLocalizer vuforia;
 
     public final double MM_TO_INCHES = 0.0393701;
+    public final double FIELD_RADIUS = 1828.8;
+
 
     public OpenGLMatrix phoneLocation = getMatrix(0, 0, -90, 0, 0 ,0);
 
@@ -38,13 +41,30 @@ public class VuForiaTest extends LinearOpMode {
         vuforia.setFrameQueueCapacity(1);
         Vuforia.setFrameFormat(PIXEL_FORMAT.RGB565, true);
         VuforiaTrackables roverRuckus = this.vuforia.loadTrackablesFromAsset("RoverRuckus");
+
         VuforiaTrackable blueTrackable = roverRuckus.get(0);
+        VuforiaTrackable redTrackable = roverRuckus.get(1);
+        VuforiaTrackable frontTrackable = roverRuckus.get(2);
+        VuforiaTrackable backTrackable = roverRuckus.get(3);
+
         blueTrackable.setName("blue");
+        redTrackable.setName("red");
+        frontTrackable.setName("front");
+        backTrackable.setName("back");
 
 
-        OpenGLMatrix blueTrackablePosition = getMatrix(90, 0, -90, (float) 1828.8, 0, (float) 152.4);
+
+
+        OpenGLMatrix blueTrackablePosition = getMatrix(90, 0, -90, (float) FIELD_RADIUS, 0, (float) 152.4);
+        OpenGLMatrix redTrackablePosition = getMatrix(90, 0, 90 ,(float) -FIELD_RADIUS,0 ,(float) 152.4 );
+        OpenGLMatrix frontTrackablePosition = getMatrix(90,  0, 0, 0 , (float)-FIELD_RADIUS , (float) 152.4);
+        OpenGLMatrix backTrackablePosition = getMatrix(90, 0, 180, 0, (float) -FIELD_RADIUS , (float) 152.4);
+
 
         blueTrackable.setLocation(blueTrackablePosition);
+        redTrackable.setLocation(redTrackablePosition);
+        frontTrackable.setLocation(frontTrackablePosition);
+        backTrackable.setLocation(backTrackablePosition);
 
         ((VuforiaTrackableDefaultListener) blueTrackable.getListener()).setPhoneInformation(phoneLocation, parameters.cameraDirection);
 
@@ -85,5 +105,9 @@ public class VuForiaTest extends LinearOpMode {
         return OpenGLMatrix.translation(dx, dy, dz).multiplied
                 (Orientation.getRotationMatrix(AxesReference.EXTRINSIC,
                         AxesOrder.XYZ, AngleUnit.DEGREES, ax, ay, az));
+    }
+
+    public OpenGLMatrix getLocation (){
+        
     }
 }

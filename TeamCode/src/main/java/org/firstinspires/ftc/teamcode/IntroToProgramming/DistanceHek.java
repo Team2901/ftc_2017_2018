@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.Autonomous;
+package org.firstinspires.ftc.teamcode.IntroToProgramming;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.hardware.DistanceSensor;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
-@Autonomous(name="DistanceHek", group="Concept")
+@Autonomous(name="DistanceHek2", group="Concept")
 public class DistanceHek extends LinearOpMode {
     DistanceSensor distanceSensor;
     DcMotor leftMotor;
