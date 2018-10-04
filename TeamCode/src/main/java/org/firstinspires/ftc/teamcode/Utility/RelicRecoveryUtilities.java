@@ -270,4 +270,12 @@ This allows only one problem spot to remain
 
         return rgbImage;
     }
+
+    public void getBabyBitmaps (Bitmap bitmap, int sampleLeftXPct, int sampleTopYPct, int sampleRightXPct, int sampleBotYPct)
+    {
+
+    }
+
+
+
 }

@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.Autonomous;
 
 import android.annotation.SuppressLint;
+import android.graphics.Bitmap;
 import android.os.Environment;
 
 import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cRangeSensor;
@@ -29,6 +30,11 @@ public class SetUpCode2019 extends LinearOpModeJewelCamera {
         String jewelConfigLeft  = "jewelConfigLeft.txt";
         String jewelConfigMiddle = "jewelConfigMiddle.txt";
         String jewelConfigRight =  "jewelConfigRight.txt";
+        String jewelBitmap = "jewelBitmap.png";
+        String jewelBitmapLeft = "jewelBitmapLeft.png";
+        String jewelBitmapMiddle = "jewelBitmapMiddle.png";
+        String jewelBitmapRight = "jewelBitmapRight.png";
+
 
 
 
@@ -55,6 +61,14 @@ after start jewel finder position is saved to finder
             waitForStart();
 
             saveConfigFile();
+            Bitmap bitmap =  RelicRecoveryUtilities.getVuforiaImage(vuforia);
+            try {
+                RelicRecoveryUtilities.saveBitmap(jewelBitmap, bitmap);
+            } catch (Exception e) {
+                telemetry.addData("ERROR WRITING TO FILE JEWEL BITMAP", e.getMessage());
+                telemetry.update();
+            }
+
 
         }
 
