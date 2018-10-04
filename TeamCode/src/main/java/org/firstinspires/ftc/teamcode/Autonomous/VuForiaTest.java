@@ -24,6 +24,8 @@ public class VuForiaTest extends LinearOpMode {
 
     public final double MM_TO_INCHES = 0.0393701;
 
+    public OpenGLMatrix phoneLocation = getMatrix(0, 0, -90, 0, 0 ,0);
+
     @Override
     public void runOpMode() {
 
@@ -40,9 +42,11 @@ public class VuForiaTest extends LinearOpMode {
         blueTrackable.setName("blue");
 
 
-        OpenGLMatrix bluePosition = getMatrix(90, 0, -90, (float) 1828.8, 0, (float) 152.4);
+        OpenGLMatrix blueTrackablePosition = getMatrix(90, 0, -90, (float) 1828.8, 0, (float) 152.4);
 
-        blueTrackable.setLocation(bluePosition);
+        blueTrackable.setLocation(blueTrackablePosition);
+
+        ((VuforiaTrackableDefaultListener) blueTrackable.getListener()).setPhoneInformation(phoneLocation, parameters.cameraDirection);
 
         waitForStart();
 
@@ -80,6 +84,6 @@ public class VuForiaTest extends LinearOpMode {
 
         return OpenGLMatrix.translation(dx, dy, dz).multiplied
                 (Orientation.getRotationMatrix(AxesReference.EXTRINSIC,
-                        AxesOrder.XYZ, AngleUnit.DEGREES, ax, ay, ax));
+                        AxesOrder.XYZ, AngleUnit.DEGREES, ax, ay, az));
     }
 }
