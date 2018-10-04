@@ -34,7 +34,7 @@ import java.util.List;
 public class RelicRecoveryUtilities {
 
     public static void writeConfigFile(String filename, List<? extends Object> config) throws IOException {
-        final File teamDir = new File(Environment.getExternalStorageDirectory(), "team");
+        final File teamDir = new File(Environment.getExternalStorageDirectory(), "Team");
 
         boolean newDir = teamDir.mkdirs();
 
