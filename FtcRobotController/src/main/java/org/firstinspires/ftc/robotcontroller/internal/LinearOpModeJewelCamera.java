@@ -19,21 +19,18 @@ public class LinearOpModeJewelCamera extends LinearOpModeCamera {
 
 
   protected JewelFinder jewel;
-  protected JewelFinder jewelLeft;
+  public JewelFinder jewelLeft;
 
   public JewelFinder jewelLeft(){
-    int jewelLeft = FtcRobotControllerActivity.COLOR_BLUE;
-    return jewelLeft();
+    return jewelLeft;
   }
-  protected JewelFinder jewelMiddle;
+  public JewelFinder jewelMiddle;
   public JewelFinder jewelMiddle(){
-    int jewelMiddle = FtcRobotControllerActivity.COLOR_GREEN;
-    return jewelMiddle();
+    return jewelMiddle;
   }
-  protected JewelFinder jewelRight;
+  public JewelFinder jewelRight;
   public JewelFinder jewelRight(){
-    int jewelRight = FtcRobotControllerActivity.COLOR_PINK;
-    return jewelRight();
+    return jewelRight;
   }
 
 

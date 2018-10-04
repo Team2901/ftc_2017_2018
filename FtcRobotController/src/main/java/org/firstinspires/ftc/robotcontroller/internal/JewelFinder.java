@@ -10,6 +10,9 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by butterss21317 on 11/14/2017.
  */
@@ -137,5 +140,15 @@ public class JewelFinder extends TextView implements View.OnTouchListener {
 
     public int getBoxBotYPct() {
         return boxBotYPct;
+    }
+
+    public List<Integer> getBoxPct()
+    {
+       List<Integer> configValues = new ArrayList<>();
+       configValues.add(boxLeftXPct);
+       configValues.add(boxTopYPct);
+       configValues.add(boxRightXPct);
+       configValues.add(boxBotYPct);
+       return configValues;
     }
 }
