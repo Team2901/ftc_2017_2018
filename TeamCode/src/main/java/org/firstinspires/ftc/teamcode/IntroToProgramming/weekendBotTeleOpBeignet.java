@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.Hardware.weekendBot;
 
-@TeleOp(name="WeekendBotBeignet")
+@TeleOp(name="WeekendBotBeign5et")
 
 public class weekendBotTeleOpBeignet extends OpMode {
     weekendBot robot = new weekendBot();
