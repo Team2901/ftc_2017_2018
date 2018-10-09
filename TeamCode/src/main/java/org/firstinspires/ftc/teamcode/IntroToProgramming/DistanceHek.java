@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.Autonomous;
+package org.firstinspires.ftc.teamcode.IntroToProgramming;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.hardware.DistanceSensor;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
-@Autonomous(name="DistanceHek", group="Concept")
+@Autonomous(name="DistanceHek2", group="Concept")
 public class DistanceHek extends LinearOpMode {
     DistanceSensor distanceSensor;
     DcMotor leftMotor;
@@ -22,8 +22,8 @@ public class DistanceHek extends LinearOpMode {
         while (opModeIsActive()) {
             double distanceBoi=distanceSensor.getDistance(DistanceUnit.INCH);
             if(distanceBoi<=24){
-                leftMotor.setPower(00000000000000000000000000000000000000000000000000000000);
-                rightMotor.setPower(00000000000000000000000000000000000000000000000000000000);
+                leftMotor.setPower(0);
+                rightMotor.setPower(0);
             } else {
                 leftMotor.setPower(1);
                 rightMotor.setPower(1);
