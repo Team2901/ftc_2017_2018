@@ -30,6 +30,12 @@ public class DistanceHek extends LinearOpMode {
             }
             telemetry.addData("inches", "%.2f", distanceSensor.getDistance(DistanceUnit.INCH));
             telemetry.update();
+
+
+
+
+
+
         }
     }
 }
