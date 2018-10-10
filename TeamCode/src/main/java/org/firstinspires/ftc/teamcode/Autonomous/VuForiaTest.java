@@ -55,7 +55,7 @@ public class VuForiaTest extends LinearOpMode {
 
         OpenGLMatrix blueTrackablePosition = getMatrix(90, 0, -90, (float) FIELD_RADIUS, 0, (float) 152.4);
         OpenGLMatrix redTrackablePosition = getMatrix(90, 0, 90, (float) -FIELD_RADIUS, 0, (float) 152.4);
-        OpenGLMatrix frontTrackablePosition = getMatrix(90, 0, 0, 0, (float) -FIELD_RADIUS, (float) 152.4);
+        OpenGLMatrix frontTrackablePosition = getMatrix(90, 0, 0, 0, (float) FIELD_RADIUS, (float) 152.4);
         OpenGLMatrix backTrackablePosition = getMatrix(90, 0, 180, 0, (float) -FIELD_RADIUS, (float) 152.4);
 
 
@@ -64,7 +64,7 @@ public class VuForiaTest extends LinearOpMode {
         front.setLocation(frontTrackablePosition);
         back.setLocation(backTrackablePosition);
 
-        ((VuforiaTrackableDefaultListener) blue.getListener()).setPhoneInformation(phoneLocation, parameters.cameraDirection);
+       ((VuforiaTrackableDefaultListener) blue.getListener()).setPhoneInformation(phoneLocation, parameters.cameraDirection);
 
         waitForStart();
 
@@ -72,12 +72,7 @@ public class VuForiaTest extends LinearOpMode {
 
         OpenGLMatrix location = null;
 
-        while (location == null) {
-            location = ((VuforiaTrackableDefaultListener)
-                    blue.getListener()).getUpdatedRobotLocation();
-
-            idle();
-        }
+        location = getLocation(blue , red , front , back);
 
         VectorF translation = location.getTranslation();
 
@@ -134,7 +129,7 @@ public class VuForiaTest extends LinearOpMode {
             } else if (frontLocation != null) {
                 location = frontLocation;
             }
-
+            idle();
         }
         return location;
     }
