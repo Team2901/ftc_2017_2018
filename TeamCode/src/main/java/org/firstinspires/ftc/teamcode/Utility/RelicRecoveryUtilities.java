@@ -14,6 +14,7 @@ import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.vuforia.Image;
 import com.vuforia.PIXEL_FORMAT;
 
+import org.firstinspires.ftc.robotcontroller.internal.JewelFinder;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
@@ -271,11 +272,21 @@ This allows only one problem spot to remain
         return rgbImage;
     }
 
-    public void getBabyBitmaps (Bitmap bitmap, int sampleLeftXPct, int sampleTopYPct, int sampleRightXPct, int sampleBotYPct)
+    public static Bitmap getBabyBitmap (Bitmap bitmap, int sampleLeftXPct, int sampleTopYPct, int sampleRightXPct, int sampleBotYPct)
     {
+       int startXPx = (int)((sampleLeftXPct/100.0) * bitmap.getWidth());
+       int startYPx = (int)((sampleTopYPct/100.0) * bitmap.getHeight());
+       int endXPx = (int)((sampleRightXPct/100.0) * bitmap.getHeight());
+       int endYPx = (int)((sampleBotYPct/100.0) * bitmap.getWidth());
+       int width = endXPx - startXPx;
+       int height = endYPx - startYPx;
 
+       return Bitmap.createBitmap(bitmap, startXPx, startYPx, width, height);
     }
 
+    public static Bitmap getBabyBitmap(Bitmap bitmap, JewelFinder jewel) {
+       return getBabyBitmap(bitmap, jewel.boxLeftXPct, jewel.boxTopYPct, jewel.boxRightXPct, jewel.boxBotYPct);
+    }
 
 
 }
