@@ -19,5 +19,13 @@ public class RoverRuckusBotTeleOp extends OpMode {
         double rightMotor = -gamepad1.right_stick_y;
         robot.left.setPower(leftMotor);
         robot.right.setPower(rightMotor);
+
+        if (gamepad1.left_trigger > .02) {
+            robot.lift.setPower(1);
+        } else if (gamepad1.left_bumper) {
+            robot.lift.setPower(-1);
+        } else {
+            robot.lift.setPower(0);
+        }
     }
 }
