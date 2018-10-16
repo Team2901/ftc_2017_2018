@@ -67,7 +67,6 @@ after start jewel finder position is saved to finder
                 Bitmap leftBabyBitmap = RelicRecoveryUtilities.getBabyBitmap (bitmap,this.jewelLeft);
                 Bitmap middleBabyBitmap = RelicRecoveryUtilities.getBabyBitmap(bitmap,this.jewelMiddle);
                 Bitmap rightBabyBitmap = RelicRecoveryUtilities.getBabyBitmap(bitmap,this.jewelRight);
-
                 RelicRecoveryUtilities.saveBitmap(jewelBitmapLeft, leftBabyBitmap);
                 RelicRecoveryUtilities.saveBitmap(jewelBitmapMiddle,middleBabyBitmap);
                 RelicRecoveryUtilities.saveBitmap(jewelBitmapRight, rightBabyBitmap);
