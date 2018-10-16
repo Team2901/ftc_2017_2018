@@ -288,5 +288,13 @@ This allows only one problem spot to remain
        return getBabyBitmap(bitmap, jewel.boxLeftXPct, jewel.boxTopYPct, jewel.boxRightXPct, jewel.boxBotYPct);
     }
 
+   public static int saveColorToFile(){
+   
+
+        //return getColorCount;
+   }
+
+    //getColorCount
+
 
 }
