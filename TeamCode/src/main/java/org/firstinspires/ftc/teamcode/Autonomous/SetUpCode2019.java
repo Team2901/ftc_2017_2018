@@ -64,6 +64,14 @@ after start jewel finder position is saved to finder
             Bitmap bitmap =  RelicRecoveryUtilities.getVuforiaImage(vuforia);
             try {
                 RelicRecoveryUtilities.saveBitmap(jewelBitmap, bitmap);
+                Bitmap leftBabyBitmap = RelicRecoveryUtilities.getBabyBitmap (bitmap,this.jewelLeft);
+                Bitmap middleBabyBitmap = RelicRecoveryUtilities.getBabyBitmap(bitmap,this.jewelMiddle);
+                Bitmap rightBabyBitmap = RelicRecoveryUtilities.getBabyBitmap(bitmap,this.jewelRight);
+
+                RelicRecoveryUtilities.saveBitmap(jewelBitmapLeft, leftBabyBitmap);
+                RelicRecoveryUtilities.saveBitmap(jewelBitmapMiddle,middleBabyBitmap);
+                RelicRecoveryUtilities.saveBitmap(jewelBitmapRight, rightBabyBitmap);
+
             } catch (Exception e) {
                 telemetry.addData("ERROR WRITING TO FILE JEWEL BITMAP", e.getMessage());
                 telemetry.update();
@@ -78,6 +86,7 @@ after start jewel finder position is saved to finder
 
                 JewelFinder jewelLeft = jewelLeft();
                 RelicRecoveryUtilities.writeConfigFile(jewelConfigLeft,jewelLeft.getBoxPct() );
+
             } catch (Exception e) {
                 telemetry.addData("ERROR WRITING TO FILE JEWEL LEFT", e.getMessage());
                 telemetry.update();
@@ -101,6 +110,7 @@ after start jewel finder position is saved to finder
                 telemetry.addData("ERROR WRITING TO FILE JEWEL RIGHT", e.getMessage());
                 telemetry.update();
             }
+
         }
     }
 

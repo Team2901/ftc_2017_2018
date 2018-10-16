@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.TeleOp;
+package org.firstinspires.ftc.teamcode.IntroToProgramming;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.Hardware.weekendBot;
 
-@TeleOp(name="WeekendBotBeignet")
+@TeleOp(name="WeekendBotBeign5et")
 
 public class weekendBotTeleOpBeignet extends OpMode {
     weekendBot robot = new weekendBot();
