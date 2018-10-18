@@ -12,10 +12,10 @@ public class RobotRuckusEncoderAdam extends LinearOpMode {
     DcMotor leftMotor;
 
     static final double     COUNTS_PER_MOTOR_REV    = 1440 ;
-    static final double     DRIVE_GEAR_RATIO    = 0.5 ;
+    static final double     DRIVE_GEAR_RATIO    = 2.0 ;
     static final double     WHEEL_DIAMETER_INCHES   = 4.0 ;
     static final double     DRIVE_SPEED             = 0.6;
-    static final int        DESIRED_ENCODER_COUNTS  = (int)(60 * (WHEEL_DIAMETER_INCHES * 3.1415) * DRIVE_GEAR_RATIO * COUNTS_PER_MOTOR_REV);
+    static final int        DESIRED_ENCODER_COUNTS  = (int)(60 * (1/(WHEEL_DIAMETER_INCHES * 3.1415)) * DRIVE_GEAR_RATIO * COUNTS_PER_MOTOR_REV);
 
     @Override
     public void runOpMode() {
