@@ -29,15 +29,21 @@ public class AdamDistanceSensorTest extends LinearOpMode {
         while (opModeIsActive()) {
 
             double distance = rangeSensor.getDistance(DistanceUnit.INCH);
-            if (distance == 24) {
+            if (distance >= 11 && distance <= 13) {
                 leftMotor.setPower(0);
                 rightMotor.setPower(0);
+                telemetry.addData("leftPower", "0");
+                telemetry.addData("rightPower", "0");
             } else if (distance > 50 || distance == DistanceSensor.distanceOutOfRange) {
-                leftMotor.setPower(1);
-                rightMotor.setPower(-1);
+                leftMotor.setPower(-1 * (distance - 12) * (1.0/26));
+                rightMotor.setPower((distance - 12) * (1.0/26));
+                telemetry.addData("leftPower", (distance - 24) * (1.0/26));
+                telemetry.addData("rightPower", -1 * (distance - 24) * (1.0/26));
             } else {
-                leftMotor.setPower(-1 * (distance - 24) * (1/26));
-                rightMotor.setPower((distance - 24) * (1/26));
+                leftMotor.setPower((distance - 12) * (1.0/26));
+                rightMotor.setPower(-1 * (distance - 12) * (1.0/26));
+                telemetry.addData("leftPower", -1 * (distance - 12) * (1.0/26));
+                telemetry.addData("rightPower", (distance - 12) * (1.0/26));
             }
             telemetry.addData("inch", "%.2f inch", rangeSensor.getDistance(DistanceUnit.INCH));
             telemetry.update();
