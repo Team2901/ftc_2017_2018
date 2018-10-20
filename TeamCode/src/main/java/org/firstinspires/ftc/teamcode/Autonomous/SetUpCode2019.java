@@ -71,6 +71,11 @@ after start jewel finder position is saved to finder
                 RelicRecoveryUtilities.saveBitmap(jewelBitmapMiddle,middleBabyBitmap);
                 RelicRecoveryUtilities.saveBitmap(jewelBitmapRight, rightBabyBitmap);
 
+                RelicRecoveryUtilities.saveHueFile("jewelHuesLeft.txt", leftBabyBitmap);
+                RelicRecoveryUtilities.saveHueFile("jewelsHuesMiddle.txt", middleBabyBitmap);
+                RelicRecoveryUtilities.saveHueFile("jewelHuesRight.txt", rightBabyBitmap);
+                RelicRecoveryUtilities.saveHueFile("jewelHuesBig.txt", bitmap);
+
             } catch (Exception e) {
                 telemetry.addData("ERROR WRITING TO FILE JEWEL BITMAP", e.getMessage());
                 telemetry.update();
@@ -111,6 +116,8 @@ after start jewel finder position is saved to finder
             }
 
         }
+
+
     }
 
 

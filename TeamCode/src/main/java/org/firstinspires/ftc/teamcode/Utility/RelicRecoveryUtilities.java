@@ -289,9 +289,26 @@ This allows only one problem spot to remain
     }
 
 
-   public void saveHueFile(String jewelHues, Bitmap bitmap) {
+   public static void saveHueFile(String jewelHues, Bitmap bitmap) throws IOException{
+        int [] colorCounts = getColorCounts(bitmap );
 
-        
+
+       final File teamDir = new File(Environment.getExternalStorageDirectory(), "Team");
+
+       boolean newDir = teamDir.mkdirs();
+
+       final File file = new File(teamDir, jewelHues);
+
+       try (BufferedWriter writer = new BufferedWriter (new FileWriter(file))){
+
+
+           for (int i=0; i<colorCounts.length; i++) {
+               writer.write(i);
+               writer.newLine();
+           }
+
+       }
+
 
         //Bitmap readBitmap()
 
