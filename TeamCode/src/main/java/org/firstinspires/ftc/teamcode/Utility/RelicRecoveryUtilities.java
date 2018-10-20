@@ -276,8 +276,8 @@ This allows only one problem spot to remain
     {
        int startXPx = (int)((sampleLeftXPct/100.0) * bitmap.getWidth());
        int startYPx = (int)((sampleTopYPct/100.0) * bitmap.getHeight());
-       int endXPx = (int)((sampleRightXPct/100.0) * bitmap.getHeight());
-       int endYPx = (int)((sampleBotYPct/100.0) * bitmap.getWidth());
+       int endXPx = (int)((sampleRightXPct/100.0) * bitmap.getWidth());
+       int endYPx = (int)((sampleBotYPct/100.0) * bitmap.getHeight());
        int width = endXPx - startXPx;
        int height = endYPx - startYPx;
 
