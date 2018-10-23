@@ -42,8 +42,8 @@ public class RobotRuckusEncoderAdam extends LinearOpMode {
         leftMotor.setPower(DRIVE_SPEED);
         while(leftMotor.isBusy() && rightMotor.isBusy())
         {
-            telemetry.addData("encoder counts", "% counts on right motor", rightMotor.getCurrentPosition());
-            telemetry.addData("encoder counts", "% counts on right motor", leftMotor.getCurrentPosition());
+            telemetry.addData("encoder counts", "%d counts on right motor", rightMotor.getCurrentPosition());
+            telemetry.addData("encoder counts", "%d counts on right motor", leftMotor.getCurrentPosition());
             telemetry.update();
             //idle();
         }

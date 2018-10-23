@@ -4,7 +4,7 @@ import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.os.Environment;
 
-import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cRangeSensor;
+//import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cRangeSensor;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.vuforia.PIXEL_FORMAT;
 import com.vuforia.Vuforia;
@@ -67,9 +67,15 @@ after start jewel finder position is saved to finder
                 Bitmap leftBabyBitmap = RelicRecoveryUtilities.getBabyBitmap (bitmap,this.jewelLeft);
                 Bitmap middleBabyBitmap = RelicRecoveryUtilities.getBabyBitmap(bitmap,this.jewelMiddle);
                 Bitmap rightBabyBitmap = RelicRecoveryUtilities.getBabyBitmap(bitmap,this.jewelRight);
+
                 RelicRecoveryUtilities.saveBitmap(jewelBitmapLeft, leftBabyBitmap);
                 RelicRecoveryUtilities.saveBitmap(jewelBitmapMiddle,middleBabyBitmap);
                 RelicRecoveryUtilities.saveBitmap(jewelBitmapRight, rightBabyBitmap);
+
+                RelicRecoveryUtilities.saveHueFile("jewelHuesLeft.txt", leftBabyBitmap);
+                RelicRecoveryUtilities.saveHueFile("jewelsHuesMiddle.txt", middleBabyBitmap);
+                RelicRecoveryUtilities.saveHueFile("jewelHuesRight.txt", rightBabyBitmap);
+                RelicRecoveryUtilities.saveHueFile("jewelHuesBig.txt", bitmap);
 
             } catch (Exception e) {
                 telemetry.addData("ERROR WRITING TO FILE JEWEL BITMAP", e.getMessage());
@@ -111,6 +117,8 @@ after start jewel finder position is saved to finder
             }
 
         }
+
+
     }
 
 

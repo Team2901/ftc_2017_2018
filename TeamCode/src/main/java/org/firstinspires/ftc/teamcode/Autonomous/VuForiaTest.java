@@ -27,7 +27,7 @@ public class VuForiaTest extends LinearOpMode {
     public final double FIELD_RADIUS = 1828.8;
 
 
-    public OpenGLMatrix phoneLocation = getMatrix(0, 0, -90, 0, 0, 0);
+    public OpenGLMatrix phoneLocation = getMatrix(0, -90, 0, 0, 0, 0);
 
     @Override
     public void runOpMode() {
@@ -37,7 +37,7 @@ public class VuForiaTest extends LinearOpMode {
         VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
         parameters.vuforiaLicenseKey = "AW/DxXD/////AAAAGYJtW/yP3kG0pVGawWtQZngsJNFQ8kp1Md8CaP2NP72Q0on4mGKPLt/lsSnMnUkCFNymrXXOjs0eHMDTvijWRIixEe/sJ4KHEVf1fhf0kqUB29+dZEvh4qeI7tlTU6pIy/MLW0a/t9cpqMksBRFqXIrhtR/vw7ZnErMTZrJNNXqmbecBnRhDfLncklzgH2wAkGmQDn0JSP7scEczgrggcmerXy3v6flLDh1/Tt2QZ8l/bTcEJtthE82i8/8p0NuDDhUyatFK1sZSSebykRz5A4PDUkw+jMTV28iUytrr1QLiQBwaTX7ikl71a1XkBHacnxrqyY07x9QfabtJf/PYNFiU17m/l9DB6Io7DPnnIaFP";
         parameters.cameraDirection = VuforiaLocalizer.CameraDirection.BACK;
-        this.vuforia = ClassFactory.createVuforiaLocalizer(parameters);
+        this.vuforia = ClassFactory.getInstance().createVuforia(parameters);
         vuforia.setFrameQueueCapacity(1);
         Vuforia.setFrameFormat(PIXEL_FORMAT.RGB565, true);
         VuforiaTrackables roverRuckus = this.vuforia.loadTrackablesFromAsset("RoverRuckus");
@@ -54,8 +54,8 @@ public class VuForiaTest extends LinearOpMode {
 
 
         OpenGLMatrix blueTrackablePosition = getMatrix(90, 0, -90, (float) FIELD_RADIUS, 0, (float) 152.4);
-        OpenGLMatrix redTrackablePosition = getMatrix(90, 0, 90, (float) -FIELD_RADIUS, 0, (float) 152.4);
         OpenGLMatrix frontTrackablePosition = getMatrix(90, 0, 0, 0, (float) FIELD_RADIUS, (float) 152.4);
+        OpenGLMatrix redTrackablePosition = getMatrix(90, 0, 90, (float) -FIELD_RADIUS, 0, (float) 152.4);
         OpenGLMatrix backTrackablePosition = getMatrix(90, 0, 180, 0, (float) -FIELD_RADIUS, (float) 152.4);
 
 
@@ -64,33 +64,33 @@ public class VuForiaTest extends LinearOpMode {
         front.setLocation(frontTrackablePosition);
         back.setLocation(backTrackablePosition);
 
-       ((VuforiaTrackableDefaultListener) blue.getListener()).setPhoneInformation(phoneLocation, parameters.cameraDirection);
+        ((VuforiaTrackableDefaultListener) blue.getListener()).setPhoneInformation(phoneLocation, parameters.cameraDirection);
 
         waitForStart();
 
         roverRuckus.activate();
 
         OpenGLMatrix location = null;
-
-        location = getLocation(blue , red , front , back);
-
-        VectorF translation = location.getTranslation();
-
-        Orientation orientation = Orientation.getOrientation(location,
-                AxesReference.EXTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES);
-
-        double x = (translation.get(0) * MM_TO_INCHES);
-        double y = (translation.get(1) * MM_TO_INCHES);
-        double z = (translation.get(2) * MM_TO_INCHES);
-        float angle = orientation.thirdAngle;
-
-        telemetry.addData("X", "%.2f", x);
-        telemetry.addData("Y", "%.2f", y);
-        telemetry.addData("Z", "%.2f", z);
-        telemetry.addData("Angle", "%.2f", angle);
-        telemetry.update();
-
         while (opModeIsActive()) {
+            location = getLocation(blue, red, front, back);
+
+            VectorF translation = location.getTranslation();
+
+            Orientation orientation = Orientation.getOrientation(location,
+                    AxesReference.EXTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES);
+
+            double x = (translation.get(0) * MM_TO_INCHES);
+            double y = (translation.get(1) * MM_TO_INCHES);
+            double z = (translation.get(2) * MM_TO_INCHES);
+            float angle = orientation.thirdAngle;
+
+            telemetry.addData("X", "%.2f", x);
+            telemetry.addData("Y", "%.2f", y);
+            telemetry.addData("Z", "%.2f", z);
+            telemetry.addData("Angle", "%.2f", angle);
+            telemetry.update();
+
+
             idle();
         }
     }
