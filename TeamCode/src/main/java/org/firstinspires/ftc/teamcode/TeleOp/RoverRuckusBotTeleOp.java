@@ -27,5 +27,13 @@ public class RoverRuckusBotTeleOp extends OpMode {
         } else {
             robot.lift.setPower(0);
         }
+
+        if (gamepad1.x) {
+            robot.latch.setPosition(0);
+        } else if(gamepad1.b) {
+            robot.latch.setPosition(1);
+        } else if (gamepad1.a) {
+            robot.latch.setPosition(.5);
+        }
     }
 }
