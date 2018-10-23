@@ -2,6 +2,8 @@ package org.firstinspires.ftc.teamcode.Autonomous;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+
+import org.firstinspires.ftc.teamcode.Hardware.CoachBotHardware;
 import org.firstinspires.ftc.teamcode.Presentation.PresentationBotHardware;
 
 @Autonomous (name = "VuNavTest")
@@ -14,7 +16,7 @@ public class VuNavTest extends LinearOpMode {
             DRIVE_GEAR_RATIO * COUNTS_PER_MOTOR_REV;
 
 
-    PresentationBotHardware robot = new PresentationBotHardware();
+    CoachBotHardware robot = new CoachBotHardware();
 
     double xStart = 24;
     double yStart = 24;
@@ -38,6 +40,9 @@ public class VuNavTest extends LinearOpMode {
 
         double angle = robot.getAngle();
 
+        telemetry.addData("angle To Goal" , angleGoal);
+        telemetry.update();
+
         waitForStart();
 
         while (Math.abs(angleGoal - angle) < 1) {
@@ -45,7 +50,15 @@ public class VuNavTest extends LinearOpMode {
 
             robot.leftMotor.setPower(-getPower(angle, angleGoal));
             robot.rightMotor.setPower(getPower(angle, angleGoal));
+
+            telemetry.addData("Goal Angle" , angleGoal);
+            telemetry.addData("angleGoal-angle " , angleGoal-angle);
+            telemetry.addData("Power" , getPower(angle, angleGoal));
+            telemetry.update();
         }
+
+        robot.leftMotor.setPower(0);
+        robot.rightMotor.setPower(0);
 
         double distanceToGoal = Math.sqrt((Math.pow(yDiff, 2) * Math.pow(xDiff, 2)));
 
