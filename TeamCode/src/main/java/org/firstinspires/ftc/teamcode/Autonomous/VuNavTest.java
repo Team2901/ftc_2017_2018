@@ -36,9 +36,10 @@ public class VuNavTest extends LinearOpMode {
         double xDiff = xGoal - xStart;
         double yDiff = yGoal - yStart;
 
-        double angleGoal = Math.atan2(yDiff, xDiff) + offset;
+        double angleGoal = Math.atan2(yDiff, xDiff) - offset;
 
         double angle = robot.getAngle();
+
 
         telemetry.addData("angle To Goal" , angleGoal);
         telemetry.update();
@@ -61,6 +62,9 @@ public class VuNavTest extends LinearOpMode {
         robot.rightMotor.setPower(0);
 
         double distanceToGoal = Math.sqrt((Math.pow(yDiff, 2) * Math.pow(xDiff, 2)));
+
+        telemetry.addData("distance to goal" , distanceToGoal);
+        telemetry.update();
 
         int encodersToGoal = (int) (INCHES_TO_ENCODERCOUNTS * distanceToGoal);
 
