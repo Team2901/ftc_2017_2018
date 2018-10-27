@@ -40,6 +40,7 @@ public class CoachBotHardware{
     public BNO055IMU imu;
     public IntegratingGyroscope gyroscope;
     public DistanceSensor distanceSensor;
+    public double offset = 0;
 
 
     private ElapsedTime period = new ElapsedTime();
@@ -61,6 +62,10 @@ public class CoachBotHardware{
 
         leftMotor.setPower(0);
         rightMotor.setPower(0);
+
+        leftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
 
         leftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         rightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -87,7 +92,7 @@ public class CoachBotHardware{
 
     public double getAngle() {
         Orientation orientation = gyroscope.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
-        return orientation.firstAngle;
+        return orientation.firstAngle + offset;
 
     }
 }

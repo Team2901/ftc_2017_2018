@@ -1,17 +1,13 @@
 package org.firstinspires.ftc.teamcode.Presentation;
+
 import android.util.Log;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.logging.Logger;
 
 @Autonomous(name = "PresentationTurnatWall")
 public class PresentationTurnAtWall extends LinearOpMode {

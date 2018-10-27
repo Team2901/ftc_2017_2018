@@ -2,18 +2,18 @@ package org.firstinspires.ftc.teamcode.Autonomous;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.teamcode.Hardware.CoachBotHardware;
-import org.firstinspires.ftc.teamcode.Presentation.PresentationBotHardware;
 
 @Autonomous (name = "VuNavTest")
 public class VuNavTest extends LinearOpMode {
 
-    static final double     COUNTS_PER_MOTOR_REV    = 1120 ;
-    static final double     DRIVE_GEAR_RATIO        = 0.5 ;
-    static final double     WHEEL_DIAMETER_INCHES   = 4.0 ;
-    static final double        INCHES_TO_ENCODERCOUNTS  =  (WHEEL_DIAMETER_INCHES * 3.1415) *
-            DRIVE_GEAR_RATIO * COUNTS_PER_MOTOR_REV;
+    static final double COUNTS_PER_MOTOR_REV = 1120;
+    static final double MOTORREV_PER_WHEELREV = 2;
+    static final double WHEEL_DIAMETER_INCHES = 4.0;
+    static final double INCHES_TO_ENCODERCOUNTS = (1 / (WHEEL_DIAMETER_INCHES * 3.1415)) *
+            MOTORREV_PER_WHEELREV * COUNTS_PER_MOTOR_REV;
 
 
     CoachBotHardware robot = new CoachBotHardware();
@@ -29,59 +29,19 @@ public class VuNavTest extends LinearOpMode {
     public void runOpMode() {
         robot.init(hardwareMap);
 
-        double angleImu = robot.getAngle();
-
-        double offset = angleStart - angleImu;
-
-        double xDiff = xGoal - xStart;
-        double yDiff = yGoal - yStart;
-
-        double angleGoal = Math.atan2(yDiff, xDiff) - offset;
-
-        double angle = robot.getAngle();
-
-
-        telemetry.addData("angle To Goal" , angleGoal);
-        telemetry.update();
-
         waitForStart();
 
-        while (Math.abs(angleGoal - angle) < 1) {
-            angle = robot.getAngle();
 
-            robot.leftMotor.setPower(-getPower(angle, angleGoal));
-            robot.rightMotor.setPower(getPower(angle, angleGoal));
 
-            telemetry.addData("Goal Angle" , angleGoal);
-            telemetry.addData("angleGoal-angle " , angleGoal-angle);
-            telemetry.addData("Power" , getPower(angle, angleGoal));
-            telemetry.update();
-        }
+        goToPosition(xStart , yStart, xGoal , yGoal , angleStart);
 
-        robot.leftMotor.setPower(0);
-        robot.rightMotor.setPower(0);
-
-        double distanceToGoal = Math.sqrt((Math.pow(yDiff, 2) * Math.pow(xDiff, 2)));
-
-        telemetry.addData("distance to goal" , distanceToGoal);
-        telemetry.update();
-
-        int encodersToGoal = (int) (INCHES_TO_ENCODERCOUNTS * distanceToGoal);
-
-        robot.leftMotor.setTargetPosition(encodersToGoal);
-        robot.rightMotor.setTargetPosition(encodersToGoal);
-
-        robot.leftMotor.setPower(.5);
-        robot.rightMotor.setPower(.5);
-
-        while (robot.leftMotor.isBusy()) {
+        while (opModeIsActive()) {
             idle();
         }
     }
 
 
-
-    double getPower(double currentPosition , double goal) {
+    double getPower(double currentPosition, double goal) {
        /*
         If under halfway to the goal, have the robot speed up by .01 for every angle until it is
         over halfway there
@@ -94,5 +54,67 @@ public class VuNavTest extends LinearOpMode {
 // Starts to slow down by .01 per angle closer to the goal.
             return (.01 * (goal - currentPosition + (Math.signum(currentPosition) * .075)));
         }
+    }
+
+    public void goToPosition(double startX, double startY, double goalX, double goalY, double angleVu) {
+        double angleImu = robot.getAngle();
+
+        robot.offset = angleVu - angleImu;
+
+        double xDiff = goalX - startX;
+        double yDiff = goalY - startY;
+
+        double angleGoal = Math.atan2(yDiff, xDiff);
+
+        angleImu = robot.getAngle();
+
+        while (Math.abs(angleGoal - angleImu) > 1) {
+            angleImu = robot.getAngle();
+
+            robot.leftMotor.setPower(-getPower(angleImu, angleGoal));
+            robot.rightMotor.setPower(getPower(angleImu, angleGoal));
+
+            telemetry.addData("Goal Angle", angleGoal);
+            telemetry.addData("angleGoal-angle ", angleGoal - angleImu);
+            telemetry.addData("Power", getPower(angleImu, angleGoal));
+            telemetry.update();
+            idle();
+        }
+
+        robot.leftMotor.setPower(0);
+        robot.rightMotor.setPower(0);
+
+        double distanceToGoal = Math.sqrt((Math.pow(yDiff, 2) + Math.pow(xDiff, 2)));
+
+        int encodersToGoal = (int) (INCHES_TO_ENCODERCOUNTS * distanceToGoal);
+
+        telemetry.addData("distance to goal", distanceToGoal);
+        telemetry.addData("encoders to goal", encodersToGoal);
+        telemetry.update();
+
+        robot.leftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.rightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.leftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.rightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        robot.leftMotor.setTargetPosition(encodersToGoal);
+        robot.rightMotor.setTargetPosition(encodersToGoal);
+
+        robot.leftMotor.setPower(.75);
+        robot.rightMotor.setPower(.75);
+
+        while (robot.leftMotor.isBusy()) {
+            telemetry.addData("left Counts", robot.leftMotor.getCurrentPosition());
+            telemetry.addData("right Counts", robot.rightMotor.getCurrentPosition());
+            telemetry.addData("distance to goal", distanceToGoal);
+            telemetry.addData("encoders to goal", encodersToGoal);
+            telemetry.update();
+
+            idle();
+        }
+
+        robot.leftMotor.setPower(0);
+        robot.rightMotor.setPower(0);
+
     }
 }
