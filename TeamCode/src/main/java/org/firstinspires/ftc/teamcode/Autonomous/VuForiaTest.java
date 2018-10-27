@@ -24,10 +24,11 @@ public class VuForiaTest extends LinearOpMode {
     VuforiaLocalizer vuforia;
 
     public final double MM_TO_INCHES = 0.0393701;
+    public final double INCHES_TO_MM = 25.4;
     public final double FIELD_RADIUS = 1828.8;
 
 
-    public OpenGLMatrix phoneLocation = getMatrix(0, -90, 0, 0, 0, 0);
+    public OpenGLMatrix phoneLocation = getMatrix(90, -0, -90, 0, 0, 0);
 
     @Override
     public void runOpMode() {
