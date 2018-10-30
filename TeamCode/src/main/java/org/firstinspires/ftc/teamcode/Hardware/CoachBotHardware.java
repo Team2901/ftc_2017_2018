@@ -42,6 +42,7 @@ public class CoachBotHardware{
     public IntegratingGyroscope gyroscope;
     public DistanceSensor distanceSensor;
     public double offset = 0;
+    public DcMotor lift;
 
 
     private ElapsedTime period = new ElapsedTime();
@@ -54,6 +55,7 @@ public class CoachBotHardware{
         // Define and Initialize Motors
         leftMotor = hwMap.dcMotor.get("left_drive");
         rightMotor = hwMap.dcMotor.get("right_drive");
+        lift = hwMap.dcMotor.get("lift");
 
         leftMotor.setDirection(DcMotor.Direction.FORWARD);
         rightMotor.setDirection(DcMotor.Direction.REVERSE);
