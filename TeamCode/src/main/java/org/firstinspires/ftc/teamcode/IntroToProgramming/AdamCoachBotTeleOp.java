@@ -20,12 +20,22 @@ public class AdamCoachBotTeleOp extends OpMode {
         robot.leftMotor.setPower(leftMotor);
         robot.rightMotor.setPower(rightMotor);
 
+
         if(gamepad1.left_trigger > .02){
-            robot.lift.setPower(1);
+            if(robot.lift.getCurrentPosition() <= 5000) {
+                robot.lift.setPower(-1);
+            } else {
+                robot.lift.setPower(0);
+            }
         } else if (gamepad1.left_bumper){
-            robot.lift.setPower(-1);
+            if(robot.lift.getCurrentPosition() > 0) {
+                robot.lift.setPower(1);
+            } else {
+                robot.lift.setPower(0);
+            }
         } else {
             robot.lift.setPower(0);
         }
+        telemetry.addData("lift position", robot.lift.getCurrentPosition());
     }
 }
