@@ -137,7 +137,7 @@ public class VuNavTest extends LinearOpMode {
             return (.01 * (goal - currentPosition + (Math.signum(currentPosition) * .075)));
         }
     }
-
+//Only use once per class and ALWAYS FOR VUFORIA
     public void goToPosition(double startX, double startY, double goalX, double goalY, double angleVu) {
         double angleImu = robot.getAngle();
 
@@ -146,7 +146,7 @@ public class VuNavTest extends LinearOpMode {
         double xDiff = goalX - startX;
         double yDiff = goalY - startY;
 
-        double angleGoal = Math.atan2(yDiff, xDiff);
+        double angleGoal = Math.atan2(yDiff, xDiff) * (180/Math.PI);
 
         angleImu = robot.getAngle();
 
