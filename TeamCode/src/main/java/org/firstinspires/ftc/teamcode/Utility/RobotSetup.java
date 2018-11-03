@@ -4,6 +4,7 @@ import android.os.Environment;
 
 import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cRangeSensor;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.vuforia.PIXEL_FORMAT;
 import com.vuforia.Vuforia;
 
@@ -24,6 +25,7 @@ import java.io.FileWriter;
  * Created by gallagherb20503 on 1/10/2018.
  */
 @Autonomous(name = "RobotSetup2")
+@Disabled
 public class RobotSetup extends LinearOpModeJewelCamera {
     VuforiaLocalizer vuforia;
     File sd = Environment.getExternalStorageDirectory();

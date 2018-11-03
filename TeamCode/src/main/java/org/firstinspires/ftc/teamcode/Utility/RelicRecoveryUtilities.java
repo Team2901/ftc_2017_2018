@@ -303,7 +303,8 @@ This allows only one problem spot to remain
 
 
            for (int i=0; i<colorCounts.length; i++) {
-               writer.write(i);
+               int colorCount = colorCounts[i];
+               writer.write(String.valueOf(colorCount));
                writer.newLine();
            }
 
@@ -355,9 +356,9 @@ This allows only one problem spot to remain
         double xPercent = (bitmap.getWidth()) / 100.0;
         double yPercent = (bitmap.getHeight()) / 100.0;
 
-        for (int x = 0; x < bitmap.getWidth(); x++) { // replace 200 with x pixel size value
-            for (int y = 0; y < bitmap.getHeight(); y++) {
-                int color = bitmap.getPixel((int) (x * xPercent), (int) (y * yPercent));
+        for (int x = 0; x < bitmap.getWidth(); x = x+20) { // replace 200 with x pixel size value
+            for (int y = 0; y < bitmap.getHeight(); y = y+20) {
+                int color = bitmap.getPixel( x, y );
 
                 int red = Color.red(color);
                 int green = Color.green(color);

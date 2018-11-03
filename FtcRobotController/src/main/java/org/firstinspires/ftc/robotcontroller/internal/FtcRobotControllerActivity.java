@@ -188,7 +188,6 @@ public class FtcRobotControllerActivity extends Activity
           JewelFinder box3 = new JewelFinder(FtcRobotControllerActivity.this, COLOR_PINK);
           context.jewelLeft = box3;
 
-          previewLayout.removeAllViews();
           previewLayout.addView(context.jewelLeft);
           previewLayout.addView(context.jewelMiddle);
           previewLayout.addView(context.jewelRight);
@@ -196,6 +195,16 @@ public class FtcRobotControllerActivity extends Activity
       });
     }
 
+    public void removeJewelFinder (final LinearOpModeJewelCamera context) {
+        runOnUiThread (new Runnable() {
+            @Override
+            public void run() {
+                FrameLayout previewLayout = (FrameLayout) findViewById(R.id.previewLayout);
+                previewLayout.removeAllViews();
+
+            }
+        });
+    }
     public void initPreview(final Camera camera, final OpModeCamera context, final Camera.PreviewCallback previewCallback) {
         runOnUiThread(new Runnable() {
             @Override

@@ -47,7 +47,9 @@ after start jewel finder position is saved to finder
 
         @Override
         public void runOpMode() throws InterruptedException {
-            ((FtcRobotControllerActivity) hardwareMap.appContext).addJewelFinder(this);
+            final FtcRobotControllerActivity activity =(FtcRobotControllerActivity )hardwareMap.appContext;
+            activity.removeJewelFinder(this);
+            activity.addJewelFinder(this);
 
 
             int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
@@ -81,6 +83,7 @@ after start jewel finder position is saved to finder
                 telemetry.addData("ERROR WRITING TO FILE JEWEL BITMAP", e.getMessage());
                 telemetry.update();
             }
+            activity .removeJewelFinder(this);
 
 
         }
