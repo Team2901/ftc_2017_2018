@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.Autonomous;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.vuforia.PIXEL_FORMAT;
 import com.vuforia.Vuforia;
 
@@ -115,7 +116,7 @@ public class VuForiaTestWebcam extends LinearOpMode {
         OpenGLMatrix backLocation = null;
         OpenGLMatrix frontLocation = null;
 
-        while (location == null) {
+        while (location == null && opModeIsActive()) {
             blueLocation = ((VuforiaTrackableDefaultListener)
                     blue.getListener()).getUpdatedRobotLocation();
             redLocation = ((VuforiaTrackableDefaultListener)

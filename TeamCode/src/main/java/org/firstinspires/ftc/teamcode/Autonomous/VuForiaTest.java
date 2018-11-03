@@ -114,7 +114,7 @@ public class VuForiaTest extends LinearOpMode {
         OpenGLMatrix backLocation = null;
         OpenGLMatrix frontLocation = null;
 
-        while (location == null) {
+        while (location == null && opModeIsActive()) {
             blueLocation = ((VuforiaTrackableDefaultListener)
                     blue.getListener()).getUpdatedRobotLocation();
             redLocation = ((VuforiaTrackableDefaultListener)
