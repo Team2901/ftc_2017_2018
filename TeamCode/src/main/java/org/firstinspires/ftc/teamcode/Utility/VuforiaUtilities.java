@@ -3,7 +3,12 @@ package org.firstinspires.ftc.teamcode.Utility;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
+
 
 public class VuforiaUtilities {
     public final static String VUFORIA_KEY = "AQQpWjP/////AAABmWf3iVzlb0FUp3bUlTfyu04cg6nObJiyAcRVvd" +
@@ -28,4 +33,39 @@ public class VuforiaUtilities {
         return parameters;
     }
 
+
+
+    public void setUpTrackables(){
+
+        VuforiaTrackables roverRuckus = this.vuforia.loadTrackablesFromAsset("RoverRuckus");
+
+
+        VuforiaTrackable blue = roverRuckus.get(0);
+        VuforiaTrackable red = roverRuckus.get(1);
+        VuforiaTrackable front = roverRuckus.get(2);
+        VuforiaTrackable back = roverRuckus.get(3);
+
+        blue.setName("blue");
+        red.setName("red");
+        front.setName("front");
+        back.setName("back");
+
+
+        OpenGLMatrix blueTrackablePosition = getMatrix(90, 0, -90, (float) FIELD_RADIUS, 0, (float) 152.4);
+        OpenGLMatrix frontTrackablePosition = getMatrix(90, 0, 0, 0, (float) FIELD_RADIUS, (float) 152.4);
+        OpenGLMatrix redTrackablePosition = getMatrix(90, 0, 90, (float) -FIELD_RADIUS, 0, (float) 152.4);
+        OpenGLMatrix backTrackablePosition = getMatrix(90, 0, 180, 0, (float) -FIELD_RADIUS, (float) 152.4);
+
+
+        blue.setLocation(blueTrackablePosition);
+        red.setLocation(redTrackablePosition);
+        front.setLocation(frontTrackablePosition);
+        back.setLocation(backTrackablePosition);
+
+        ((VuforiaTrackableDefaultListener) blue.getListener()).setPhoneInformation(phoneLocation, parameters.cameraDirection);
+        ((VuforiaTrackableDefaultListener) red.getListener()).setPhoneInformation(phoneLocation, parameters.cameraDirection);
+        ((VuforiaTrackableDefaultListener) front.getListener()).setPhoneInformation(phoneLocation, parameters.cameraDirection);
+        ((VuforiaTrackableDefaultListener) back.getListener()).setPhoneInformation(phoneLocation, parameters.cameraDirection);
+
+    }
 }
