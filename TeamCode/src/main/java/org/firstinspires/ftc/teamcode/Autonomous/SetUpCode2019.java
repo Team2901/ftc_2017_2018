@@ -79,6 +79,12 @@ after start jewel finder position is saved to finder
                 RelicRecoveryUtilities.saveHueFile("jewelHuesRight.txt", rightBabyBitmap);
                 RelicRecoveryUtilities.saveHueFile("jewelHuesBig.txt", bitmap);
 
+                int leftHueTotal= RelicRecoveryUtilities.determineColor(leftBabyBitmap, 20, 45);
+                int middleHueTotal= RelicRecoveryUtilities.determineColor(middleBabyBitmap, 20, 45);
+                int rightHueTotal= RelicRecoveryUtilities.determineColor(rightBabyBitmap, 20, 45);
+
+
+
             } catch (Exception e) {
                 telemetry.addData("ERROR WRITING TO FILE JEWEL BITMAP", e.getMessage());
                 telemetry.update();

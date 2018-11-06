@@ -49,7 +49,17 @@ public class RelicRecoveryUtilities {
         }
     }
 
-    public static List<String> readConfigFile (String filename) throws IOException {
+    public static void writeConfigFile(String filename, List[] config) throws IOException
+    {
+        final File teamDir = new File(Environment.getExternalStorageDirectory(), "Team");
+        boolean newDir = teamDir.mkdirs();
+        final File file = new File(teamDir, filename);
+
+
+
+    }
+
+        public static List<String> readConfigFile (String filename) throws IOException {
         final File teamDir = new File(Environment.getExternalStorageDirectory(), "team");
 
         boolean newDir = teamDir.mkdirs();
@@ -288,7 +298,6 @@ This allows only one problem spot to remain
        return getBabyBitmap(bitmap, jewel.boxLeftXPct, jewel.boxTopYPct, jewel.boxRightXPct, jewel.boxBotYPct);
     }
 
-
    public static void saveHueFile(String jewelHues, Bitmap bitmap) throws IOException{
         int [] colorCounts = getColorCounts(bitmap );
 
@@ -320,36 +329,6 @@ This allows only one problem spot to remain
 
    }
 
-    public static int[] getColorCounts(Bitmap bitmap,
-                                    int sampleLeftXPct, int sampleTopYPct,
-                                    int sampleRightXPct, int sampleBotYPct) {
-        //int colorCount = 0;
-        int[] colorCounts = new int[360];
-
-        double xPercent = (bitmap.getWidth()) / 100.0;
-        double yPercent = (bitmap.getHeight()) / 100.0;
-
-        for (int x = sampleLeftXPct; x < sampleRightXPct; x++) { // replace 200 with x pixel size value
-            for (int y = sampleTopYPct; y < sampleBotYPct; y++) {
-                int color = bitmap.getPixel((int) (x * xPercent), (int) (y * yPercent));
-
-                int red = Color.red(color);
-                int green = Color.green(color);
-                int blue = Color.blue(color);
-
-                double[] HBV = RelicRecoveryUtilities.RGBtoHSV(red, green, blue);
-                int hue = (int) HBV[0];
-
-                int hueCount = colorCounts[hue];
-                hueCount++;
-
-                colorCounts[hue] = hueCount;
-            }
-        }
-
-        return colorCounts;
-    }
-
     public static int[] getColorCounts (Bitmap bitmap){
         int[] colorCounts = new int [360];
 
@@ -377,5 +356,31 @@ This allows only one problem spot to remain
         return colorCounts;
     }
 
+    public static int determineColor (Bitmap bitmap, int minHue, int maxHue)
+    {
+
+        int total = 0;
+
+
+        for (int x = 0; x < bitmap.getWidth(); x = x+20) { // replace 200 with x pixel size value
+            for (int y = 0; y < bitmap.getHeight(); y = y+20) {
+                int color = bitmap.getPixel( x, y );
+
+                int red = Color.red(color);
+                int green = Color.green(color);
+                int blue = Color.blue(color);
+
+                double[] HBV = RelicRecoveryUtilities.RGBtoHSV(red, green, blue);
+                int hue = (int) HBV[0];
+                if (minHue<= hue && hue <= maxHue)
+                {
+                    total ++;
+                }
+            }
+        }
+
+        return total;
+
+    }
 
 }
