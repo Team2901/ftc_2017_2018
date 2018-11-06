@@ -69,7 +69,8 @@ public class VuNavTest extends LinearOpMode {
         roverRuckus.activate();
         OpenGLMatrix location = null;
         while (location == null) {
-            location = getLocation(blue, red, front, back);
+          //It doesn't work Gillian you need to fix it.
+            //  location = getLocation(blue, red, front, back);
 
             VectorF translation = location.getTranslation();
 

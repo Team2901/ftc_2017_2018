@@ -35,9 +35,7 @@ public class VuForiaTest extends LinearOpMode {
     public void runOpMode() {
 
         VuforiaLocalizer.Parameters parameters = VuforiaUtilities.getBackCameraParameters(hardwareMap);
-        this.vuforia = ClassFactory.getInstance().createVuforia(parameters);
-        vuforia.setFrameQueueCapacity(1);
-        Vuforia.setFrameFormat(PIXEL_FORMAT.RGB565, true);
+        vuforia = VuforiaUtilities.getVuforia(parameters);
         VuforiaTrackables roverRuckus = this.vuforia.loadTrackablesFromAsset("RoverRuckus");
 
         VuforiaTrackable blue = roverRuckus.get(0);
