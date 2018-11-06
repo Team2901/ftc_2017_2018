@@ -19,7 +19,6 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefau
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 import org.firstinspires.ftc.teamcode.Hardware.CoachBotHardware;
 import org.firstinspires.ftc.teamcode.Hardware.RoverRuckusBotHardware;
-import org.firstinspires.ftc.teamcode.Utility.VuforiaUtilities;
 
 @Autonomous (name = "VuNavTest")
 public class VuNavTest extends LinearOpMode {
@@ -30,14 +29,14 @@ public class VuNavTest extends LinearOpMode {
     //measured may not be exact
     public static final double INCHES_PER_ROTATION = 7.75;
 
-    static final double INCHES_TO_ENCODERCOUNTS = ((1/INCHES_PER_ROTATION)*ENCODER_COUNTS_PER_REV);
-            VuforiaLocalizer vuforia;
+    static final double INCHES_TO_ENCODERCOUNTS = ((1 / INCHES_PER_ROTATION) * ENCODER_COUNTS_PER_REV);
+    VuforiaLocalizer vuforia;
     public final double MM_TO_INCHES = 0.0393701;
     public final double INCHES_TO_MM = 25.4;
     public final double FIELD_RADIUS = 1828.8;
 
 
-    public OpenGLMatrix phoneLocation = getMatrix(90, 0, -90, 0, (float)(-6*INCHES_TO_MM), 0);
+    public OpenGLMatrix phoneLocation = getMatrix(90, 0, -90, 0, (float) (-6 * INCHES_TO_MM), 0);
 
 
     double x;
@@ -55,39 +54,15 @@ public class VuNavTest extends LinearOpMode {
 
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
-        parameters.vuforiaLicenseKey = VuforiaUtilities.VUFORIA_KEY;
+        parameters.vuforiaLicenseKey = "AQQpWjP/////AAABmWf3iVzlb0FUp3bUlTfyu04cg6nObJiyAcRVvdXnI9UGwJLT8PeUmQnawxjoZEpxQX4SACGC67Ix1pI2PTCBBrPOug9cDMLwL3g2TKSlKCfpMru3ooxbXaZ9ulWIc0rzWGCzLfmYN1mijxVwJPELqB2klhfU4FJMNGAZsHbkUJQqtCYhd5+psmXGukR9DUVFPFlAk/SJrpyCuLPZYgcqlOgqhvHH4PCFQqwHFpTKqnF/cgsNbrhiEpGhh6eWq2vvY+pP+/E8BxzM65XzIgKgUj2Uce6nYsD4oCTOpsmLywPxTExDflqSYtkfC+rLL8j601v3TsFI26x/UlE+YZg1UQkQo/eJI5aTEDL6ypVAmuZe";
         parameters.cameraDirection = VuforiaLocalizer.CameraDirection.BACK;
         this.vuforia = ClassFactory.getInstance().createVuforia(parameters);
         vuforia.setFrameQueueCapacity(1);
         Vuforia.setFrameFormat(PIXEL_FORMAT.RGB565, true);
+
+
         VuforiaTrackables roverRuckus = this.vuforia.loadTrackablesFromAsset("RoverRuckus");
 
-        VuforiaTrackable blue = roverRuckus.get(0);
-        VuforiaTrackable red = roverRuckus.get(1);
-        VuforiaTrackable front = roverRuckus.get(2);
-        VuforiaTrackable back = roverRuckus.get(3);
-
-        blue.setName("blue");
-        red.setName("red");
-        front.setName("front");
-        back.setName("back");
-
-
-        OpenGLMatrix blueTrackablePosition = getMatrix(90, 0, -90, (float) FIELD_RADIUS, 0, (float) 152.4);
-        OpenGLMatrix frontTrackablePosition = getMatrix(90, 0, 0, 0, (float) FIELD_RADIUS, (float) 152.4);
-        OpenGLMatrix redTrackablePosition = getMatrix(90, 0, 90, (float) -FIELD_RADIUS, 0, (float) 152.4);
-        OpenGLMatrix backTrackablePosition = getMatrix(90, 0, 180, 0, (float) -FIELD_RADIUS, (float) 152.4);
-
-
-        blue.setLocation(blueTrackablePosition);
-        red.setLocation(redTrackablePosition);
-        front.setLocation(frontTrackablePosition);
-        back.setLocation(backTrackablePosition);
-
-        ((VuforiaTrackableDefaultListener) blue.getListener()).setPhoneInformation(phoneLocation, parameters.cameraDirection);
-        ((VuforiaTrackableDefaultListener) red.getListener()).setPhoneInformation(phoneLocation, parameters.cameraDirection);
-        ((VuforiaTrackableDefaultListener) front.getListener()).setPhoneInformation(phoneLocation, parameters.cameraDirection);
-        ((VuforiaTrackableDefaultListener) back.getListener()).setPhoneInformation(phoneLocation, parameters.cameraDirection);
 
         waitForStart();
 
@@ -101,10 +76,10 @@ public class VuNavTest extends LinearOpMode {
             Orientation orientation = Orientation.getOrientation(location,
                     AxesReference.EXTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES);
 
-             x = (translation.get(0) * MM_TO_INCHES);
-             y = (translation.get(1) * MM_TO_INCHES);
-             z = (translation.get(2) * MM_TO_INCHES);
-             angleVu = orientation.thirdAngle;
+            x = (translation.get(0) * MM_TO_INCHES);
+            y = (translation.get(1) * MM_TO_INCHES);
+            z = (translation.get(2) * MM_TO_INCHES);
+            angleVu = orientation.thirdAngle;
 
             telemetry.addData("X", "%.2f", x);
             telemetry.addData("Y", "%.2f", y);
@@ -139,7 +114,8 @@ public class VuNavTest extends LinearOpMode {
             return (.01 * (goal - currentPosition + (Math.signum(currentPosition) * .075)));
         }
     }
-//Only use once per class and ALWAYS FOR VUFORIA
+
+    //Only use once per class and ALWAYS FOR VUFORIA
     public void goToPosition(double startX, double startY, double goalX, double goalY, double angleVu) {
         double angleImu = robot.getAngle();
 
@@ -148,7 +124,7 @@ public class VuNavTest extends LinearOpMode {
         double xDiff = goalX - startX;
         double yDiff = goalY - startY;
 
-        double angleGoal = Math.atan2(yDiff, xDiff) * (180/Math.PI);
+        double angleGoal = Math.atan2(yDiff, xDiff) * (180 / Math.PI);
 
         angleImu = robot.getAngle();
 
@@ -241,7 +217,4 @@ public class VuNavTest extends LinearOpMode {
         return location;
     }
 
-    public void setOffset(double angleImu){
-        robot.offset = angleVu - angleImu;
-    }
 }
