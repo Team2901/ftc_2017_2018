@@ -240,4 +240,8 @@ public class VuNavTest extends LinearOpMode {
         }
         return location;
     }
+
+    public void setOffset(double angleImu){
+        robot.offset = angleVu - angleImu;
+    }
 }
