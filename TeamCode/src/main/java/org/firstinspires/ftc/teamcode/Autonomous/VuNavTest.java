@@ -40,7 +40,6 @@ public class VuNavTest extends LinearOpMode {
     public OpenGLMatrix phoneLocation = getMatrix(90, 0, -90, 0, (float)(-6*INCHES_TO_MM), 0);
 
 
-
     double x;
     double y;
     double z;
