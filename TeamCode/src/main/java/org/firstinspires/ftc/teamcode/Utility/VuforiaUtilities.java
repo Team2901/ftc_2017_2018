@@ -4,13 +4,33 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
+import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 
 
+
 public class VuforiaUtilities {
+
+    public static VuforiaLocalizer vuforia;
+    public static VuforiaLocalizer.Parameters parameters;
+    public static VuforiaTrackable blue;
+    public static VuforiaTrackable red;
+    public static VuforiaTrackable front;
+    public static VuforiaTrackable back;
+
+    public static final double MM_TO_INCHES = 0.0393701;
+    public static final double INCHES_TO_MM = 25.4;
+    public static final double FIELD_RADIUS = 1828.8;
+
+    public static OpenGLMatrix phoneLocation = getMatrix(90, -0, -90, 0, 0, 0);
+
+
     public final static String VUFORIA_KEY = "AQQpWjP/////AAABmWf3iVzlb0FUp3bUlTfyu04cg6nObJiyAcRVvd" +
             "XnI9UGwJLT8PeUmQnawxjoZEpxQX4SACGC67Ix1pI2PTCBBrPOug9cDMLwL3g2TKSlKCfpMru3ooxbXaZ9ulWIc0" +
             "rzWGCzLfmYN1mijxVwJPELqB2klhfU4FJMNGAZsHbkUJQqtCYhd5+psmXGukR9DUVFPFlAk/SJrpyCuLPZYgcql" +
@@ -34,16 +54,15 @@ public class VuforiaUtilities {
     }
 
 
+    public static void setUpTrackables() {
 
-    public void setUpTrackables(){
-
-        VuforiaTrackables roverRuckus = this.vuforia.loadTrackablesFromAsset("RoverRuckus");
+        VuforiaTrackables roverRuckus = vuforia.loadTrackablesFromAsset("RoverRuckus");
 
 
-        VuforiaTrackable blue = roverRuckus.get(0);
-        VuforiaTrackable red = roverRuckus.get(1);
-        VuforiaTrackable front = roverRuckus.get(2);
-        VuforiaTrackable back = roverRuckus.get(3);
+        blue = roverRuckus.get(0);
+        red = roverRuckus.get(1);
+        front = roverRuckus.get(2);
+        back = roverRuckus.get(3);
 
         blue.setName("blue");
         red.setName("red");
@@ -67,5 +86,44 @@ public class VuforiaUtilities {
         ((VuforiaTrackableDefaultListener) front.getListener()).setPhoneInformation(phoneLocation, parameters.cameraDirection);
         ((VuforiaTrackableDefaultListener) back.getListener()).setPhoneInformation(phoneLocation, parameters.cameraDirection);
 
+    }
+
+    public static OpenGLMatrix getMatrix(float ax, float ay, float az, float dx, float dy, float dz) {
+
+        return OpenGLMatrix.translation(dx, dy, dz).multiplied
+                (Orientation.getRotationMatrix(AxesReference.EXTRINSIC,
+                        AxesOrder.XYZ, AngleUnit.DEGREES, ax, ay, az));
+    }
+
+    public static OpenGLMatrix getLocation(VuforiaTrackable blue, VuforiaTrackable red,
+                                           VuforiaTrackable front, VuforiaTrackable back) {
+        OpenGLMatrix location = null;
+        OpenGLMatrix blueLocation = null;
+        OpenGLMatrix redLocation = null;
+        OpenGLMatrix backLocation = null;
+        OpenGLMatrix frontLocation = null;
+
+        while (location == null) {
+            blueLocation = ((VuforiaTrackableDefaultListener)
+                    blue.getListener()).getUpdatedRobotLocation();
+            redLocation = ((VuforiaTrackableDefaultListener)
+                    red.getListener()).getUpdatedRobotLocation();
+            backLocation = ((VuforiaTrackableDefaultListener)
+                    back.getListener()).getUpdatedRobotLocation();
+            frontLocation = ((VuforiaTrackableDefaultListener)
+                    front.getListener()).getUpdatedRobotLocation();
+
+            if (blueLocation != null) {
+                location = blueLocation;
+            } else if (redLocation != null) {
+                location = redLocation;
+            } else if (backLocation != null) {
+                location = backLocation;
+            } else if (frontLocation != null) {
+                location = frontLocation;
+            }
+
+        }
+        return location;
     }
 }
