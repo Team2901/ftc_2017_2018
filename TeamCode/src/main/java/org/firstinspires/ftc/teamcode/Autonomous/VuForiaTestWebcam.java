@@ -2,10 +2,12 @@ package org.firstinspires.ftc.teamcode.Autonomous;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.vuforia.PIXEL_FORMAT;
 import com.vuforia.Vuforia;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
 import org.firstinspires.ftc.robotcore.external.matrices.VectorF;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
@@ -19,8 +21,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 import org.firstinspires.ftc.teamcode.Utility.VuforiaUtilities;
 
 
-@Autonomous (name = "VuForiaTest")
-public class VuForiaTest extends LinearOpMode {
+@Autonomous (name = "VuForiaTestWebcam")
+public class VuForiaTestWebcam extends LinearOpMode {
 
     VuforiaLocalizer vuforia;
 
@@ -30,11 +32,12 @@ public class VuForiaTest extends LinearOpMode {
 
 
     public OpenGLMatrix phoneLocation = getMatrix(90, -0, -90, 0, 0, 0);
-
+    WebcamName webcam;
     @Override
     public void runOpMode() {
 
-        VuforiaLocalizer.Parameters parameters = VuforiaUtilities.getBackCameraParameters(hardwareMap);
+        webcam = hardwareMap.get(WebcamName.class, "webcam");
+        VuforiaLocalizer.Parameters parameters = VuforiaUtilities.getWebcamParameters(hardwareMap, webcam);
         this.vuforia = ClassFactory.getInstance().createVuforia(parameters);
         vuforia.setFrameQueueCapacity(1);
         Vuforia.setFrameFormat(PIXEL_FORMAT.RGB565, true);

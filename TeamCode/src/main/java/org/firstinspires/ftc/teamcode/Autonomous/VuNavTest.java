@@ -18,25 +18,26 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 import org.firstinspires.ftc.teamcode.Hardware.CoachBotHardware;
+import org.firstinspires.ftc.teamcode.Hardware.RoverRuckusBotHardware;
 
 @Autonomous (name = "VuNavTest")
 public class VuNavTest extends LinearOpMode {
 
-    static final double COUNTS_PER_MOTOR_REV = 1120;
-    static final double MOTORREV_PER_WHEELREV = 2;
-    static final double WHEEL_DIAMETER_INCHES = 4.0;
-    static final double INCHES_TO_ENCODERCOUNTS = (1 / (WHEEL_DIAMETER_INCHES * 3.1415)) *
-            MOTORREV_PER_WHEELREV * COUNTS_PER_MOTOR_REV;
+    RoverRuckusBotHardware robot = new RoverRuckusBotHardware();
+    //for never rest 40s
+    public static final double ENCODER_COUNTS_PER_REV = 1120;
+    //measured may not be exact
+    public static final double INCHES_PER_ROTATION = 7.75;
+
+    static final double INCHES_TO_ENCODERCOUNTS = ((1 / INCHES_PER_ROTATION) * ENCODER_COUNTS_PER_REV);
     VuforiaLocalizer vuforia;
     public final double MM_TO_INCHES = 0.0393701;
     public final double INCHES_TO_MM = 25.4;
     public final double FIELD_RADIUS = 1828.8;
 
 
-    public OpenGLMatrix phoneLocation = getMatrix(90, 0, -90, 0, (float)(4*INCHES_TO_MM), 0);
+    public OpenGLMatrix phoneLocation = getMatrix(90, 0, -90, 0, (float) (-6 * INCHES_TO_MM), 0);
 
-
-    CoachBotHardware robot = new CoachBotHardware();
 
     double x;
     double y;
@@ -53,39 +54,15 @@ public class VuNavTest extends LinearOpMode {
 
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
-        parameters.vuforiaLicenseKey = "AW/DxXD/////AAAAGYJtW/yP3kG0pVGawWtQZngsJNFQ8kp1Md8CaP2NP72Q0on4mGKPLt/lsSnMnUkCFNymrXXOjs0eHMDTvijWRIixEe/sJ4KHEVf1fhf0kqUB29+dZEvh4qeI7tlTU6pIy/MLW0a/t9cpqMksBRFqXIrhtR/vw7ZnErMTZrJNNXqmbecBnRhDfLncklzgH2wAkGmQDn0JSP7scEczgrggcmerXy3v6flLDh1/Tt2QZ8l/bTcEJtthE82i8/8p0NuDDhUyatFK1sZSSebykRz5A4PDUkw+jMTV28iUytrr1QLiQBwaTX7ikl71a1XkBHacnxrqyY07x9QfabtJf/PYNFiU17m/l9DB6Io7DPnnIaFP";
+        parameters.vuforiaLicenseKey = "AQQpWjP/////AAABmWf3iVzlb0FUp3bUlTfyu04cg6nObJiyAcRVvdXnI9UGwJLT8PeUmQnawxjoZEpxQX4SACGC67Ix1pI2PTCBBrPOug9cDMLwL3g2TKSlKCfpMru3ooxbXaZ9ulWIc0rzWGCzLfmYN1mijxVwJPELqB2klhfU4FJMNGAZsHbkUJQqtCYhd5+psmXGukR9DUVFPFlAk/SJrpyCuLPZYgcqlOgqhvHH4PCFQqwHFpTKqnF/cgsNbrhiEpGhh6eWq2vvY+pP+/E8BxzM65XzIgKgUj2Uce6nYsD4oCTOpsmLywPxTExDflqSYtkfC+rLL8j601v3TsFI26x/UlE+YZg1UQkQo/eJI5aTEDL6ypVAmuZe";
         parameters.cameraDirection = VuforiaLocalizer.CameraDirection.BACK;
         this.vuforia = ClassFactory.getInstance().createVuforia(parameters);
         vuforia.setFrameQueueCapacity(1);
         Vuforia.setFrameFormat(PIXEL_FORMAT.RGB565, true);
+
+
         VuforiaTrackables roverRuckus = this.vuforia.loadTrackablesFromAsset("RoverRuckus");
 
-        VuforiaTrackable blue = roverRuckus.get(0);
-        VuforiaTrackable red = roverRuckus.get(1);
-        VuforiaTrackable front = roverRuckus.get(2);
-        VuforiaTrackable back = roverRuckus.get(3);
-
-        blue.setName("blue");
-        red.setName("red");
-        front.setName("front");
-        back.setName("back");
-
-
-        OpenGLMatrix blueTrackablePosition = getMatrix(90, 0, -90, (float) FIELD_RADIUS, 0, (float) 152.4);
-        OpenGLMatrix frontTrackablePosition = getMatrix(90, 0, 0, 0, (float) FIELD_RADIUS, (float) 152.4);
-        OpenGLMatrix redTrackablePosition = getMatrix(90, 0, 90, (float) -FIELD_RADIUS, 0, (float) 152.4);
-        OpenGLMatrix backTrackablePosition = getMatrix(90, 0, 180, 0, (float) -FIELD_RADIUS, (float) 152.4);
-
-
-        blue.setLocation(blueTrackablePosition);
-        red.setLocation(redTrackablePosition);
-        front.setLocation(frontTrackablePosition);
-        back.setLocation(backTrackablePosition);
-
-        ((VuforiaTrackableDefaultListener) blue.getListener()).setPhoneInformation(phoneLocation, parameters.cameraDirection);
-        ((VuforiaTrackableDefaultListener) red.getListener()).setPhoneInformation(phoneLocation, parameters.cameraDirection);
-        ((VuforiaTrackableDefaultListener) front.getListener()).setPhoneInformation(phoneLocation, parameters.cameraDirection);
-        ((VuforiaTrackableDefaultListener) back.getListener()).setPhoneInformation(phoneLocation, parameters.cameraDirection);
 
         waitForStart();
 
@@ -99,10 +76,10 @@ public class VuNavTest extends LinearOpMode {
             Orientation orientation = Orientation.getOrientation(location,
                     AxesReference.EXTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES);
 
-             x = (translation.get(0) * MM_TO_INCHES);
-             y = (translation.get(1) * MM_TO_INCHES);
-             z = (translation.get(2) * MM_TO_INCHES);
-             angleVu = orientation.thirdAngle;
+            x = (translation.get(0) * MM_TO_INCHES);
+            y = (translation.get(1) * MM_TO_INCHES);
+            z = (translation.get(2) * MM_TO_INCHES);
+            angleVu = orientation.thirdAngle;
 
             telemetry.addData("X", "%.2f", x);
             telemetry.addData("Y", "%.2f", y);
@@ -137,7 +114,8 @@ public class VuNavTest extends LinearOpMode {
             return (.01 * (goal - currentPosition + (Math.signum(currentPosition) * .075)));
         }
     }
-//Only use once per class and ALWAYS FOR VUFORIA
+
+    //Only use once per class and ALWAYS FOR VUFORIA
     public void goToPosition(double startX, double startY, double goalX, double goalY, double angleVu) {
         double angleImu = robot.getAngle();
 
@@ -146,15 +124,15 @@ public class VuNavTest extends LinearOpMode {
         double xDiff = goalX - startX;
         double yDiff = goalY - startY;
 
-        double angleGoal = Math.atan2(yDiff, xDiff) * (180/Math.PI);
+        double angleGoal = Math.atan2(yDiff, xDiff) * (180 / Math.PI);
 
         angleImu = robot.getAngle();
 
         while (Math.abs(angleGoal - angleImu) > 1) {
             angleImu = robot.getAngle();
 
-            robot.leftMotor.setPower(-getPower(angleImu, angleGoal));
-            robot.rightMotor.setPower(getPower(angleImu, angleGoal));
+            robot.left.setPower(-getPower(angleImu, angleGoal));
+            robot.right.setPower(getPower(angleImu, angleGoal));
 
             telemetry.addData("Goal Angle", angleGoal);
             telemetry.addData("angleGoal-angle ", angleGoal - angleImu);
@@ -163,8 +141,8 @@ public class VuNavTest extends LinearOpMode {
             idle();
         }
 
-        robot.leftMotor.setPower(0);
-        robot.rightMotor.setPower(0);
+        robot.left.setPower(0);
+        robot.right.setPower(0);
 
         double distanceToGoal = Math.sqrt((Math.pow(yDiff, 2) + Math.pow(xDiff, 2)));
 
@@ -174,20 +152,20 @@ public class VuNavTest extends LinearOpMode {
         telemetry.addData("encoders to goal", encodersToGoal);
         telemetry.update();
 
-        robot.leftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.rightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.leftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.rightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.left.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.right.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.left.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.right.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        robot.leftMotor.setTargetPosition(encodersToGoal);
-        robot.rightMotor.setTargetPosition(encodersToGoal);
+        robot.left.setTargetPosition(encodersToGoal);
+        robot.right.setTargetPosition(encodersToGoal);
 
-        robot.leftMotor.setPower(.75);
-        robot.rightMotor.setPower(.75);
+        robot.left.setPower(.75);
+        robot.right.setPower(.75);
 
-        while (robot.leftMotor.isBusy()) {
-            telemetry.addData("left Counts", robot.leftMotor.getCurrentPosition());
-            telemetry.addData("right Counts", robot.rightMotor.getCurrentPosition());
+        while (robot.left.isBusy()) {
+            telemetry.addData("left Counts", robot.left.getCurrentPosition());
+            telemetry.addData("right Counts", robot.right.getCurrentPosition());
             telemetry.addData("distance to goal", distanceToGoal);
             telemetry.addData("encoders to goal", encodersToGoal);
             telemetry.update();
@@ -195,8 +173,8 @@ public class VuNavTest extends LinearOpMode {
             idle();
         }
 
-        robot.leftMotor.setPower(0);
-        robot.rightMotor.setPower(0);
+        robot.left.setPower(0);
+        robot.right.setPower(0);
 
     }
 
@@ -238,4 +216,5 @@ public class VuNavTest extends LinearOpMode {
         }
         return location;
     }
+
 }
