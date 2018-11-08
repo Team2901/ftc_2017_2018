@@ -33,8 +33,10 @@ public class VuNavTest extends LinearOpMode {
     public final double INCHES_TO_MM = 25.4;
     public final double FIELD_RADIUS = 1828.8;
 
-
-
+    VuforiaTrackables blue;
+    VuforiaTrackables red;
+    VuforiaTrackables front ;
+    VuforiaTrackables back;
     double x;
     double y;
     double z;
@@ -65,8 +67,7 @@ public class VuNavTest extends LinearOpMode {
         roverRuckus.activate();
         OpenGLMatrix location = null;
         while (location == null) {
-            location = VuforiaUtilities.getLocation(VuforiaUtilities.blue, VuforiaUtilities.red,
-                    VuforiaUtilities.front, VuforiaUtilities.back);
+            location = null; // VuforiaUtilities.getLocation(blue, red, front, back);
 
             VectorF translation = location.getTranslation();
 

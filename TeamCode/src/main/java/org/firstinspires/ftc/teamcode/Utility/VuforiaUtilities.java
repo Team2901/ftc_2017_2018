@@ -16,16 +16,14 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 
+import java.util.ArrayList;
 
 
 public class VuforiaUtilities {
 
     public static VuforiaLocalizer vuforia;
     public static VuforiaLocalizer.Parameters parameters;
-    public static VuforiaTrackable blue;
-    public static VuforiaTrackable red;
-    public static VuforiaTrackable front;
-    public static VuforiaTrackable back;
+
 
     public static final double MM_TO_INCHES = 0.0393701;
     public static final double INCHES_TO_MM = 25.4;
@@ -63,10 +61,13 @@ public class VuforiaUtilities {
         return vuforia;
     }
 
-    public static void setUpTrackables() {
+    public static ArrayList<VuforiaTrackable> setUpTrackables() {
 
         VuforiaTrackables roverRuckus = vuforia.loadTrackablesFromAsset("RoverRuckus");
-
+        VuforiaTrackable blue;
+        VuforiaTrackable red;
+        VuforiaTrackable front;
+        VuforiaTrackable back;
 
         blue = roverRuckus.get(0);
         red = roverRuckus.get(1);
@@ -95,6 +96,9 @@ public class VuforiaUtilities {
         ((VuforiaTrackableDefaultListener) front.getListener()).setPhoneInformation(phoneLocation, parameters.cameraDirection);
         ((VuforiaTrackableDefaultListener) back.getListener()).setPhoneInformation(phoneLocation, parameters.cameraDirection);
 
+
+
+        return (ArrayList<VuforiaTrackable>)(roverRuckus);
     }
 
     public static OpenGLMatrix getMatrix(float ax, float ay, float az, float dx, float dy, float dz) {
