@@ -20,13 +20,25 @@ public class RoverRuckusBotTeleOp extends OpMode {
         robot.left.setPower(leftMotor);
         robot.right.setPower(rightMotor);
 
-        if (gamepad1.left_trigger > .02) {
-            robot.lift.setPower(1);
-        } else if (gamepad1.left_bumper) {
-            robot.lift.setPower(-1);
+        if(gamepad1.left_trigger > .02){
+            if(robot.lift.getCurrentPosition() <= 27000 || gamepad1.y) {
+                robot.lift.setPower(1);
+            } else {
+                robot.lift.setPower(0);
+                telemetry.addData("hit the limit", "!");
+            }
+            //Arm goes down
+        } else if (gamepad1.left_bumper){
+            if(robot.lift.getCurrentPosition() >= 0 || gamepad1.y) {
+                robot.lift.setPower(-1);
+            } else {
+                robot.lift.setPower(0);
+                telemetry.addData("hit the limit", "!!");
+            }
         } else {
             robot.lift.setPower(0);
         }
+        telemetry.addData("lift position", robot.lift.getCurrentPosition());
 
         if (gamepad1.x) {
             robot.latch.setPosition(0);
