@@ -14,11 +14,9 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
-import org.firstinspires.ftc.teamcode.Hardware.CoachBotHardware;
 import org.firstinspires.ftc.teamcode.Hardware.RoverRuckusBotHardware;
+import org.firstinspires.ftc.teamcode.Utility.VuforiaUtilities;
 
 @Autonomous (name = "VuNavTest")
 public class VuNavTest extends LinearOpMode {
@@ -35,8 +33,6 @@ public class VuNavTest extends LinearOpMode {
     public final double INCHES_TO_MM = 25.4;
     public final double FIELD_RADIUS = 1828.8;
 
-
-    public OpenGLMatrix phoneLocation = getMatrix(90, 0, -90, 0, (float) (-6 * INCHES_TO_MM), 0);
 
 
     double x;
@@ -69,8 +65,8 @@ public class VuNavTest extends LinearOpMode {
         roverRuckus.activate();
         OpenGLMatrix location = null;
         while (location == null) {
-          //It doesn't work Gillian you need to fix it.
-            //  location = getLocation(blue, red, front, back);
+            location = VuforiaUtilities.getLocation(VuforiaUtilities.blue, VuforiaUtilities.red,
+                    VuforiaUtilities.front, VuforiaUtilities.back);
 
             VectorF translation = location.getTranslation();
 
@@ -178,44 +174,5 @@ public class VuNavTest extends LinearOpMode {
         robot.right.setPower(0);
 
     }
-
-    public OpenGLMatrix getMatrix(float ax, float ay, float az, float dx, float dy, float dz) {
-
-        return OpenGLMatrix.translation(dx, dy, dz).multiplied
-                (Orientation.getRotationMatrix(AxesReference.EXTRINSIC,
-                        AxesOrder.XYZ, AngleUnit.DEGREES, ax, ay, az));
-    }
-
-    public OpenGLMatrix getLocation(VuforiaTrackable blue, VuforiaTrackable red,
-                                    VuforiaTrackable front, VuforiaTrackable back) {
-        OpenGLMatrix location = null;
-        OpenGLMatrix blueLocation = null;
-        OpenGLMatrix redLocation = null;
-        OpenGLMatrix backLocation = null;
-        OpenGLMatrix frontLocation = null;
-
-        while (location == null) {
-            blueLocation = ((VuforiaTrackableDefaultListener)
-                    blue.getListener()).getUpdatedRobotLocation();
-            redLocation = ((VuforiaTrackableDefaultListener)
-                    red.getListener()).getUpdatedRobotLocation();
-            backLocation = ((VuforiaTrackableDefaultListener)
-                    back.getListener()).getUpdatedRobotLocation();
-            frontLocation = ((VuforiaTrackableDefaultListener)
-                    front.getListener()).getUpdatedRobotLocation();
-
-            if (blueLocation != null) {
-                location = blueLocation;
-            } else if (redLocation != null) {
-                location = redLocation;
-            } else if (backLocation != null) {
-                location = backLocation;
-            } else if (frontLocation != null) {
-                location = frontLocation;
-            }
-            idle();
-        }
-        return location;
-    }
-
 }
+
