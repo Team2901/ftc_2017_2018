@@ -36,11 +36,11 @@ public class ClawbotTeleOp extends OpMode {
             power(-.75, -.75);
         } else if (gamepad1.dpad_left) {
             power(-.75, .75);
-        } else if (gamepad1.dpad_right) {
-            power(.75, -.75);
+            } else if (gamepad1.dpad_right) {
+                power(.75, -.75);
         } else {
-            left = -gamepad1.left_stick_y;
-            right = -gamepad1.right_stick_y;
+            left = gamepad1.left_stick_y;
+            right = gamepad1.right_stick_y;
             robot.leftMotor.setPower(-left);
             robot.rightMotor.setPower(-right);
         }
