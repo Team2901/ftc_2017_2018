@@ -58,7 +58,7 @@ public class VuNavTest extends LinearOpMode {
 
         VuforiaTrackables roverRuckus = this.vuforia.loadTrackablesFromAsset("RoverRuckus");
 
-        VuforiaTrackables trackables =   VuforiaUtilities.setUpTrackables( vuforia , parameters);
+        VuforiaTrackables trackables = VuforiaUtilities.setUpTrackables( vuforia , parameters);
         blue = trackables.get(0);
         red = trackables.get(1);
         front = trackables.get(2);

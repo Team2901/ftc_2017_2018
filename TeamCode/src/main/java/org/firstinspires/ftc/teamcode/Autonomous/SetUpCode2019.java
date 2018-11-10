@@ -36,9 +36,9 @@ public class SetUpCode2019 extends LinearOpModeJewelCamera {
         String jewelBitmapMiddle = "jewelBitmapMiddle.png";
         String jewelBitmapRight = "jewelBitmapRight.png";
 
-
-
-
+ //left
+ //middle
+ //right
 
 /*
 add jewel finder to screen

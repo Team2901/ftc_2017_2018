@@ -22,6 +22,7 @@ public class RoverRuckusBotHardware {
     public DcMotor right;
     public DcMotor lift;
     public Servo latch;
+    public Servo marker;
 
     public BNO055IMU imu;
     public IntegratingGyroscope gyroscope;
@@ -56,7 +57,9 @@ public class RoverRuckusBotHardware {
         lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         latch = hardwareMap.servo.get("latch");
+        marker = hardwareMap.servo.get("marker");
         latch.setPosition(0);
+        marker.setPosition(0);
 
         imu = ahwMap.get(BNO055IMU.class, "imu");
         gyroscope = (IntegratingGyroscope) imu;

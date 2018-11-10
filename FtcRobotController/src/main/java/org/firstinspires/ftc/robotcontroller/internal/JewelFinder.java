@@ -29,19 +29,21 @@ public class JewelFinder extends TextView implements View.OnTouchListener {
     public int boxTopYPct = 0;
     public int boxBotYPct = 20;
 
-    public JewelFinder(Context context, int color) {
-        this(context, null, color);
+    public JewelFinder(Context context, int color, String location) {
+        this(context, null, color, location);
     }
 
-    public JewelFinder(Context context, AttributeSet attrs, int color) {
-        this(context, attrs,  0, color );
+    public JewelFinder(Context context, AttributeSet attrs, int color, String location) {
+        this(context, attrs,  0, color, location );
     }
 
-    public JewelFinder(Context context, AttributeSet attrs, int defStyle, int color) {
+    public JewelFinder(Context context, AttributeSet attrs, int defStyle, int color, String location) {
         super(context, attrs, defStyle);
         this.setBackgroundColor( color);
-        this.setLayoutParams(new FrameLayout.LayoutParams(100,100));
+        //CHANGE THIS TO CHANGE SIZE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        this.setLayoutParams(new FrameLayout.LayoutParams(75,75));
         this.setOnTouchListener(this);
+        this.setText(location);
     }
 
     @Override
@@ -86,7 +88,8 @@ public class JewelFinder extends TextView implements View.OnTouchListener {
             boxTopYPct = (int) ((y/pHeight)*100);
             boxBotYPct = (int) (((y + this.getHeight())/pHeight)*100);
 
-            this.setText(String.format("%.1f %.1f", x, y));
+
+
 
             v.animate()
                     .x(x)
