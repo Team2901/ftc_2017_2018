@@ -4,10 +4,18 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 import org.firstinspires.ftc.teamcode.Hardware.RoverRuckusBotHardware;
+import org.firstinspires.ftc.teamcode.Utility.VuforiaUtilities;
+
 @Autonomous(name = "RoverRuckusAutonomous")
 public class RoverRuckusAutonomous extends LinearOpMode {
     RoverRuckusBotHardware robot = new RoverRuckusBotHardware();
+    VuforiaLocalizer vuforia;
+    WebcamName webcam;
+    VuforiaTrackables trackables;
     public static final int TARGET_POSITION = 1;
     public String initialPosition = "depot";
 
@@ -16,27 +24,28 @@ public class RoverRuckusAutonomous extends LinearOpMode {
         //step -2: initialize hardware
         robot.init(hardwareMap);
         // step -1: initialize vuforia
-
+        initVuforia();
         //step 0: locate cheddar
-
+        locateGoldJewel();
         //step 1: drop down from lander
         dropFromLander();
         //step 2: do vuforia to determine position
-
+        determinePosition();
         //step 3: go to the cheddar pivot point
-
+        goToPivotPoint();
         //step 4:turn to face depot point
-
+        faceDepotPoint();
         //step 5: gooooo
-
-        //step 6: stop
-
+        goToDepot();
         //step 7: do corner action(if depot: drop team marker/if crater: park)
-
+        doCornerAction();
     }
 
     public void initVuforia() {
-        //TODO Bennett
+        VuforiaLocalizer.Parameters parameters = VuforiaUtilities.getWebcamParameters(hardwareMap, webcam);
+        vuforia = VuforiaUtilities.getVuforia(parameters);
+        trackables = VuforiaUtilities.setUpTrackables( vuforia , parameters);
+
     }
 
     public void locateGoldJewel() {
