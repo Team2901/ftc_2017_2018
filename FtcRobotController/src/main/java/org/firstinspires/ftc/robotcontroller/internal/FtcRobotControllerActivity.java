@@ -55,6 +55,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
@@ -172,27 +173,46 @@ public class FtcRobotControllerActivity extends Activity
     public static final int COLOR_PINK= 0x55ff3399;
 
     /////////////////////////////////////////////////////////
+
+    public void setupPreviewLayout(final int cameraMonitorViewIdParent){
+        final View parentView = findViewById(cameraMonitorViewIdParent);
+        final View cameraView = ((ViewGroup) parentView).getChildAt(0);
+        final int cWidth = cameraView.getWidth();
+        final int cHeight = cameraView.getHeight();
+        setupPreviewLayout(cWidth, cHeight);
+    }
     // ADDED FOR CAMERA!!!
-
+    public void setupPreviewLayout(final int cameraWidth, final int cameraHeight){
+        runOnUiThread (new Runnable(){
+            @Override
+            public void run(){
+                FrameLayout previewLayout= (FrameLayout) findViewById(R.id.previewLayout);
+                ViewGroup.LayoutParams params = previewLayout.getLayoutParams();
+                params.width = cameraWidth;
+                params.height = cameraHeight;
+                previewLayout.setLayoutParams(params);
+            }
+        });
+    }
     public void addJewelFinder(final LinearOpModeJewelCamera context) {
-      runOnUiThread (new Runnable(){
-        @Override
-        public void run(){
-          FrameLayout previewLayout= (FrameLayout) findViewById(R.id.previewLayout);
-          JewelFinder box1 = new JewelFinder(FtcRobotControllerActivity.this, COLOR_BLUE, "R");
-          context.jewelRight = box1;
+        runOnUiThread (new Runnable(){
+            @Override
+            public void run(){
+                FrameLayout previewLayout= (FrameLayout) findViewById(R.id.previewLayout);
+                JewelFinder box1 = new JewelFinder(FtcRobotControllerActivity.this, COLOR_BLUE, "R");
+                context.jewelRight = box1;
 
-          JewelFinder box2 = new JewelFinder( FtcRobotControllerActivity.this, COLOR_GREEN, "M");
-          context.jewelMiddle = box2;
+                JewelFinder box2 = new JewelFinder( FtcRobotControllerActivity.this, COLOR_GREEN, "M");
+                context.jewelMiddle = box2;
 
-          JewelFinder box3 = new JewelFinder(FtcRobotControllerActivity.this, COLOR_PINK, "L");
-          context.jewelLeft = box3;
+                JewelFinder box3 = new JewelFinder(FtcRobotControllerActivity.this, COLOR_PINK, "L");
+                context.jewelLeft = box3;
 
-          previewLayout.addView(context.jewelLeft);
-          previewLayout.addView(context.jewelMiddle);
-          previewLayout.addView(context.jewelRight);
-        }
-      });
+                previewLayout.addView(context.jewelLeft);
+                previewLayout.addView(context.jewelMiddle);
+                previewLayout.addView(context.jewelRight);
+            }
+        });
     }
 
     public void removeJewelFinder (final LinearOpModeJewelCamera context) {
