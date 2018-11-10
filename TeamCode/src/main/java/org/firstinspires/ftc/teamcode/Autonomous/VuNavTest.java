@@ -7,6 +7,7 @@ import com.vuforia.PIXEL_FORMAT;
 import com.vuforia.Vuforia;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
 import org.firstinspires.ftc.robotcore.external.matrices.VectorF;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
@@ -14,9 +15,12 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 import org.firstinspires.ftc.teamcode.Hardware.RoverRuckusBotHardware;
 import org.firstinspires.ftc.teamcode.Utility.VuforiaUtilities;
+
+import java.util.ArrayList;
 
 @Autonomous (name = "VuNavTest")
 public class VuNavTest extends LinearOpMode {
@@ -33,10 +37,10 @@ public class VuNavTest extends LinearOpMode {
     public final double INCHES_TO_MM = 25.4;
     public final double FIELD_RADIUS = 1828.8;
 
-    VuforiaTrackables blue;
-    VuforiaTrackables red;
-    VuforiaTrackables front ;
-    VuforiaTrackables back;
+    VuforiaTrackable blue;
+    VuforiaTrackable red;
+    VuforiaTrackable front ;
+    VuforiaTrackable back;
     double x;
     double y;
     double z;
@@ -45,22 +49,25 @@ public class VuNavTest extends LinearOpMode {
     double xGoal = 24;
     double yGoal = 48;
 
+    WebcamName webcam;
+
     @Override
     public void runOpMode() {
         robot.init(hardwareMap);
 
 
-        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
-        VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
-        parameters.vuforiaLicenseKey = "AQQpWjP/////AAABmWf3iVzlb0FUp3bUlTfyu04cg6nObJiyAcRVvdXnI9UGwJLT8PeUmQnawxjoZEpxQX4SACGC67Ix1pI2PTCBBrPOug9cDMLwL3g2TKSlKCfpMru3ooxbXaZ9ulWIc0rzWGCzLfmYN1mijxVwJPELqB2klhfU4FJMNGAZsHbkUJQqtCYhd5+psmXGukR9DUVFPFlAk/SJrpyCuLPZYgcqlOgqhvHH4PCFQqwHFpTKqnF/cgsNbrhiEpGhh6eWq2vvY+pP+/E8BxzM65XzIgKgUj2Uce6nYsD4oCTOpsmLywPxTExDflqSYtkfC+rLL8j601v3TsFI26x/UlE+YZg1UQkQo/eJI5aTEDL6ypVAmuZe";
-        parameters.cameraDirection = VuforiaLocalizer.CameraDirection.BACK;
-        this.vuforia = ClassFactory.getInstance().createVuforia(parameters);
-        vuforia.setFrameQueueCapacity(1);
-        Vuforia.setFrameFormat(PIXEL_FORMAT.RGB565, true);
+        webcam = hardwareMap.get(WebcamName.class, "webcam");
+        VuforiaLocalizer.Parameters parameters = VuforiaUtilities.getWebcamParameters(hardwareMap, webcam);
+        vuforia = VuforiaUtilities.getVuforia(parameters);
 
 
         VuforiaTrackables roverRuckus = this.vuforia.loadTrackablesFromAsset("RoverRuckus");
 
+        VuforiaTrackables trackables =   VuforiaUtilities.setUpTrackables( vuforia , parameters);
+        blue = trackables.get(0);
+        red = trackables.get(1);
+        front = trackables.get(2);
+        back = trackables.get(3);
 
         waitForStart();
 

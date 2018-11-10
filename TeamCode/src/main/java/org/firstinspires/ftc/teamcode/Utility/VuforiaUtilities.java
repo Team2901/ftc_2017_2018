@@ -21,9 +21,6 @@ import java.util.ArrayList;
 
 public class VuforiaUtilities {
 
-    public static VuforiaLocalizer vuforia;
-    public static VuforiaLocalizer.Parameters parameters;
-
 
     public static final double MM_TO_INCHES = 0.0393701;
     public static final double INCHES_TO_MM = 25.4;
@@ -61,7 +58,7 @@ public class VuforiaUtilities {
         return vuforia;
     }
 
-    public static ArrayList<VuforiaTrackable> setUpTrackables() {
+    public static VuforiaTrackables setUpTrackables(VuforiaLocalizer vuforia ,VuforiaLocalizer.Parameters parameters ) {
 
         VuforiaTrackables roverRuckus = vuforia.loadTrackablesFromAsset("RoverRuckus");
         VuforiaTrackable blue;
@@ -98,7 +95,7 @@ public class VuforiaUtilities {
 
 
 
-        return (ArrayList<VuforiaTrackable>)(roverRuckus);
+        return roverRuckus;
     }
 
     public static OpenGLMatrix getMatrix(float ax, float ay, float az, float dx, float dy, float dz) {
