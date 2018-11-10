@@ -1,13 +1,18 @@
 package org.firstinspires.ftc.teamcode.Autonomous;
 
+import android.graphics.Bitmap;
+
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
+import org.firstinspires.ftc.robotcontroller.internal.FtcRobotControllerActivity;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 import org.firstinspires.ftc.teamcode.Hardware.RoverRuckusBotHardware;
+import org.firstinspires.ftc.teamcode.Utility.RelicRecoveryUtilities;
+import org.firstinspires.ftc.teamcode.Utility.RoverRuckusUtilities;
 import org.firstinspires.ftc.teamcode.Utility.VuforiaUtilities;
 
 @Autonomous(name = "RoverRuckusAutonomous")
@@ -18,6 +23,17 @@ public class RoverRuckusAutonomous extends LinearOpMode {
     VuforiaTrackables trackables;
     public static final int TARGET_POSITION = 1;
     public String initialPosition = "depot";
+    String jewelConfigLeft  = "jewelConfigLeft.txt";
+    String jewelConfigMiddle = "jewelConfigMiddle.txt";
+    String jewelConfigRight =  "jewelConfigRight.txt";
+    String jewelBitmap = "jewelBitmap.png";
+    String jewelBitmapLeft = "jewelBitmapLeft.png";
+    String jewelBitmapMiddle = "jewelBitmapMiddle.png";
+    String jewelBitmapRight = "jewelBitmapRight.png";
+    enum GoldPosition {
+
+        LEFT, MIDDLE, RIGHT;
+    }
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -30,7 +46,7 @@ public class RoverRuckusAutonomous extends LinearOpMode {
         //step 1: drop down from lander
         dropFromLander();
         //step 2: do vuforia to determine position
-        determinePosition();
+       GoldPosition position =  determinePosition();
         //step 3: go to the cheddar pivot point
         goToPivotPoint();
         //step 4:turn to face depot point
@@ -64,8 +80,32 @@ public class RoverRuckusAutonomous extends LinearOpMode {
         robot.lift.setMode(originalValue);
     }
 
-    public void determinePosition() {
-        //TODO Gillian
+    public GoldPosition determinePosition() {
+
+        Bitmap bitmap =  RelicRecoveryUtilities.getVuforiaImage(vuforia);
+        try {
+            RelicRecoveryUtilities.saveBitmap(jewelBitmap, bitmap);
+
+            RelicRecoveryUtilities.saveHueFile("jewelHuesBig.txt", bitmap);
+
+            int leftHueTotal = RoverRuckusUtilities.getJewelHueCount(bitmap, jewelConfigLeft, jewelBitmapLeft, "jewelHuesLeft.txt");
+            int middleHueTotal = RoverRuckusUtilities.getJewelHueCount(bitmap, jewelConfigMiddle, jewelBitmapMiddle, "jewelHuesMiddle.txt");
+            int rightHueTotal = RoverRuckusUtilities.getJewelHueCount(bitmap, jewelConfigRight, jewelBitmapRight, "jewelHuesRight.txt");
+
+            RelicRecoveryUtilities.totalYellowHues(leftHueTotal, middleHueTotal, rightHueTotal);
+            if(leftHueTotal > middleHueTotal && middleHueTotal > rightHueTotal){
+                return GoldPosition.LEFT;
+            } else if(rightHueTotal > middleHueTotal && rightHueTotal > leftHueTotal){
+                return GoldPosition.RIGHT;
+            } else{
+                return GoldPosition.MIDDLE;
+            }
+        } catch (Exception e) {
+            telemetry.addData("ERROR WRITING TO FILE JEWEL BITMAP", e.getMessage());
+            telemetry.update();
+            return GoldPosition.MIDDLE;
+        }
+
     }
 
     public void goToPivotPoint() {
