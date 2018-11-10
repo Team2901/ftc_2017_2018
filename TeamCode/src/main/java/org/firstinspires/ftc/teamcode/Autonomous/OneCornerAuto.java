@@ -6,12 +6,18 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
+import org.firstinspires.ftc.robotcore.external.matrices.VectorF;
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
+import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaBase;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 import org.firstinspires.ftc.teamcode.Hardware.RoverRuckusBotHardware;
 import org.firstinspires.ftc.teamcode.Presentation.PresentationBotHardware;
+import org.firstinspires.ftc.teamcode.Utility.PolarCoord;
 import org.firstinspires.ftc.teamcode.Utility.VuforiaUtilities;
 
 import java.util.ArrayList;
@@ -19,6 +25,14 @@ import java.util.ArrayList;
 
 @Autonomous (name = "OneCornerAuto")
 public class OneCornerAuto extends LinearOpMode {
+    enum StartPosition {
+        CRATER_BLUE, DEPOT_BLUE;
+    }
+
+    enum GoldPosition {
+
+        LEFT, MIDDLE, RIGHT;
+    }
 
     RoverRuckusBotHardware robot = new RoverRuckusBotHardware();
 
@@ -30,8 +44,13 @@ public class OneCornerAuto extends LinearOpMode {
     VuforiaTrackable front;
     VuforiaTrackable back;
 
-    String startPos = "blueCrater";
-    String goldPos = "right";
+    StartPosition startPos = StartPosition.CRATER_BLUE;
+    GoldPosition goldPos = GoldPosition.LEFT;
+
+    double x;
+    double y;
+    double z;
+    float angleVu;
 
     //for never rest 40s
     public static final double ENCODER_COUNTS_PER_REV = 1120;
@@ -44,12 +63,11 @@ public class OneCornerAuto extends LinearOpMode {
 
 
         webcam = hardwareMap.get(WebcamName.class, "webcam");
-        VuforiaLocalizer.Parameters parameters = VuforiaUtilities.getWebcamParameters(hardwareMap, webcam);
+        VuforiaLocalizer.Parameters parameters = VuforiaUtilities.getWebcamParameters(hardwareMap , webcam);
         vuforia = VuforiaUtilities.getVuforia(parameters);
 
 
-
-        VuforiaTrackables roverRuckus =  VuforiaUtilities.setUpTrackables( vuforia , parameters);
+        VuforiaTrackables roverRuckus = VuforiaUtilities.setUpTrackables(vuforia, parameters);
         blue = roverRuckus.get(0);
         red = roverRuckus.get(1);
         front = roverRuckus.get(2);
@@ -59,8 +77,53 @@ public class OneCornerAuto extends LinearOpMode {
 
         roverRuckus.activate();
 
-        OpenGLMatrix location = VuforiaUtilities.getLocation(blue,red,front,back);
+        OpenGLMatrix location = VuforiaUtilities.getLocation(blue, red, front, back);
 
+        VectorF translation = location.getTranslation();
+
+        Orientation orientation = Orientation.getOrientation(location,
+                AxesReference.EXTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES);
+
+        PolarCoord goal = getGoalPosition();
+
+        x = (translation.get(0) * VuforiaUtilities.MM_TO_INCHES);
+        y = (translation.get(1) * VuforiaUtilities.MM_TO_INCHES);
+        z = (translation.get(2) * VuforiaUtilities.MM_TO_INCHES);
+        angleVu = orientation.thirdAngle;
+
+        goToPosition(x,y, goal.x , goal.y ,angleVu);
+
+
+        double angleImu = robot.getAngle();
+
+        while (Math.abs(goal.theta - angleImu) > 1) {
+            angleImu = robot.getAngle();
+
+            robot.left.setPower(-getPower(angleImu, goal.theta));
+            robot.right.setPower(getPower(angleImu, goal.theta));
+
+            telemetry.addData("Goal Angle", goal.theta);
+            telemetry.addData("angleGoal-angle ", goal.theta - angleImu);
+            telemetry.addData("Power", getPower(angleImu, goal.theta));
+            telemetry.update();
+            idle();
+        }
+
+        double distance = Math.sqrt( Math.pow(goal.x-x,2) + Math.pow(goal.y-y,2)  );
+
+        robot.left.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.right.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        robot.left.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.right.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        robot.right.setTargetPosition((int)(distance*INCHES_TO_ENCODERCOUNTS));
+        robot.left.setTargetPosition((int)(distance*INCHES_TO_ENCODERCOUNTS));
+
+        robot.left.setPower(1);
+        robot.right.setPower(1);
+
+        while(robot.left.isBusy()){idle();}
 
     }
 
@@ -79,6 +142,7 @@ public class OneCornerAuto extends LinearOpMode {
             return (.01 * (goal - currentPosition + (Math.signum(currentPosition) * .075)));
         }
     }
+
     //Only use once per class and ALWAYS FOR VUFORIA
     public void goToPosition(double startX, double startY, double goalX, double goalY, double angleVu) {
         double angleImu = robot.getAngle();
@@ -140,5 +204,36 @@ public class OneCornerAuto extends LinearOpMode {
         robot.left.setPower(0);
         robot.right.setPower(0);
 
+    }
+
+    public PolarCoord getGoalPosition() {
+        if (startPos == StartPosition.CRATER_BLUE) {
+
+            switch (goldPos) {
+                case LEFT:
+                    return new PolarCoord(13.84636293
+                            , 44.13770318
+                            , 13.7994854);
+                case MIDDLE:
+                    return new PolarCoord(27.76471863, 27.76471863
+                            , 45);
+                case RIGHT:
+                    return new PolarCoord(44.13770318,13.84636293
+                            , 76.2005146);
+            }
+        } else {
+            switch (goldPos) {
+                case LEFT:
+                    return new PolarCoord(44.13770318 ,-13.84636293
+                            , -76.2005146);
+                case MIDDLE:
+                    return new PolarCoord(27.76471863, -27.76471863
+                            , -45);
+                case RIGHT:
+                    return new PolarCoord(13.84636293,-44.13770318
+                            , -13.7994854);
+            }
+        }
+        return new PolarCoord(0,0,0);
     }
 }
