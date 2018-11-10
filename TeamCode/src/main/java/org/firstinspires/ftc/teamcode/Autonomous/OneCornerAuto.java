@@ -60,10 +60,10 @@ public class OneCornerAuto extends LinearOpMode {
 
     @Override
     public void runOpMode() {
+        robot.init(hardwareMap);
 
-
-        webcam = hardwareMap.get(WebcamName.class, "webcam");
-        VuforiaLocalizer.Parameters parameters = VuforiaUtilities.getWebcamParameters(hardwareMap , webcam);
+       // webcam = hardwareMap.get(WebcamName.class, "webcam");
+        VuforiaLocalizer.Parameters parameters = VuforiaUtilities.getBackCameraParameters(hardwareMap);
         vuforia = VuforiaUtilities.getVuforia(parameters);
 
 
@@ -77,27 +77,42 @@ public class OneCornerAuto extends LinearOpMode {
 
         roverRuckus.activate();
 
-        OpenGLMatrix location = VuforiaUtilities.getLocation(blue, red, front, back);
+        //OpenGLMatrix location = VuforiaUtilities.getLocation(blue, red, front, back);
 
-        VectorF translation = location.getTranslation();
+       // VectorF translation = location.getTranslation();
 
-        Orientation orientation = Orientation.getOrientation(location,
-                AxesReference.EXTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES);
+     //   Orientation orientation = Orientation.getOrientation(location,
+       //         AxesReference.EXTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES);
 
-        PolarCoord goal = getGoalPosition();
+       PolarCoord goal = getGoalPosition();
 
-        x = (translation.get(0) * VuforiaUtilities.MM_TO_INCHES);
-        y = (translation.get(1) * VuforiaUtilities.MM_TO_INCHES);
-        z = (translation.get(2) * VuforiaUtilities.MM_TO_INCHES);
-        angleVu = orientation.thirdAngle;
+        x = 24;//(translation.get(0) * VuforiaUtilities.MM_TO_INCHES);
+        y = 24; //(translation.get(1) * VuforiaUtilities.MM_TO_INCHES);
+        z = 0;//(translation.get(2) * VuforiaUtilities.MM_TO_INCHES);
+        angleVu = 0; //orientation.thirdAngle;
+
+
+        telemetry.addData("X", "%.2f", x);
+        telemetry.addData("Y", "%.2f", y);
+        telemetry.addData("Z", "%.2f", z);
+        telemetry.addData("Angle", "%.2f", angleVu);
+        telemetry.update();
+
 
         goToPosition(x,y, goal.x , goal.y ,angleVu);
 
-
+        /*
         double angleImu = robot.getAngle();
+
+        robot.left.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.right.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
 
         while (Math.abs(goal.theta - angleImu) > 1) {
             angleImu = robot.getAngle();
+
+            robot.left.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            robot.right.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
             robot.left.setPower(-getPower(angleImu, goal.theta));
             robot.right.setPower(getPower(angleImu, goal.theta));
@@ -124,9 +139,8 @@ public class OneCornerAuto extends LinearOpMode {
         robot.right.setPower(1);
 
         while(robot.left.isBusy()){idle();}
-
+*/
     }
-
 
     double getPower(double currentPosition, double goal) {
        /*
@@ -136,10 +150,10 @@ public class OneCornerAuto extends LinearOpMode {
 
         if (currentPosition < goal / 2) {
 
-            return (.01 * currentPosition + (Math.signum(currentPosition) * .075));
+            return (.01 * currentPosition + (Math.signum(currentPosition) * .1));
         } else {
 // Starts to slow down by .01 per angle closer to the goal.
-            return (.01 * (goal - currentPosition + (Math.signum(currentPosition) * .075)));
+            return (.01 * (goal - currentPosition + (Math.signum(currentPosition) * .1)));
         }
     }
 
@@ -164,10 +178,12 @@ public class OneCornerAuto extends LinearOpMode {
 
             telemetry.addData("Goal Angle", angleGoal);
             telemetry.addData("angleGoal-angle ", angleGoal - angleImu);
+            telemetry.addData("angleImu" , angleImu);
             telemetry.addData("Power", getPower(angleImu, angleGoal));
             telemetry.update();
             idle();
         }
+
 
         robot.left.setPower(0);
         robot.right.setPower(0);
@@ -211,26 +227,28 @@ public class OneCornerAuto extends LinearOpMode {
 
             switch (goldPos) {
                 case LEFT:
-                    return new PolarCoord(13.84636293
-                            , 44.13770318
-                            , 13.7994854);
+                    return new PolarCoord(8.019544399,42.70655476
+                        , 13.7994854);
                 case MIDDLE:
-                    return new PolarCoord(27.76471863, 27.76471863
-                            , 45);
+                    return new PolarCoord(23.52207794 ,23.52207794
+                        , 45);
                 case RIGHT:
-                    return new PolarCoord(44.13770318,13.84636293
-                            , 76.2005146);
+                    return new PolarCoord(42.70655476 ,8.019544399
+                        , 76.2005146);
             }
         } else {
             switch (goldPos) {
                 case LEFT:
-                    return new PolarCoord(44.13770318 ,-13.84636293
+                    return new PolarCoord(42.70655476 ,-8.019544399
+
                             , -76.2005146);
                 case MIDDLE:
-                    return new PolarCoord(27.76471863, -27.76471863
+                    return new PolarCoord(23.52207794 ,-23.52207794
+
                             , -45);
                 case RIGHT:
-                    return new PolarCoord(13.84636293,-44.13770318
+                    return new PolarCoord(8.019544399,-42.70655476
+
                             , -13.7994854);
             }
         }

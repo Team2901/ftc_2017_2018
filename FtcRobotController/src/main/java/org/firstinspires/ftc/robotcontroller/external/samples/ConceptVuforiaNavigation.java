@@ -207,7 +207,9 @@ public class ConceptVuforiaNavigation extends LinearOpMode {
          * Initially the target is conceptually lying at the origin of the field's coordinate system
          * (the center of the field), facing up.
          *
-         * In this configuration, the target's coordinate system aligns with that of the field.
+         * In this configuration, the target's coordinate system aligns with that of the field
+         *
+         * .
          *
          * In a real situation we'd also account for the vertical (Z) offset of the target,
          * but for simplicity, we ignore that here; for a real robot, you'll want to fix that.

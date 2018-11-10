@@ -16,7 +16,6 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 
-import java.util.ArrayList;
 
 
 public class VuforiaUtilities {
@@ -26,8 +25,7 @@ public class VuforiaUtilities {
     public static final double INCHES_TO_MM = 25.4;
     public static final double FIELD_RADIUS = 1828.8;
 
-    public static OpenGLMatrix phoneLocation = getMatrix(90, -0, -90, 0, 0, 0);
-
+    public static OpenGLMatrix phoneLocation = getMatrix(90, -0, -90,  (int)(-6*INCHES_TO_MM), (int)(-1*INCHES_TO_MM),0);
 
     public final static String VUFORIA_KEY = "AQQpWjP/////AAABmWf3iVzlb0FUp3bUlTfyu04cg6nObJiyAcRVvd" +
             "XnI9UGwJLT8PeUmQnawxjoZEpxQX4SACGC67Ix1pI2PTCBBrPOug9cDMLwL3g2TKSlKCfpMru3ooxbXaZ9ulWIc0" +
