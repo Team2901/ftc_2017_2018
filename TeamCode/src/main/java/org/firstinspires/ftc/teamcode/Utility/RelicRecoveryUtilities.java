@@ -49,13 +49,42 @@ public class RelicRecoveryUtilities {
         }
     }
 
-    public static void writeConfigFile(String filename, List[] config) throws IOException
+    public static String totalYellowHues (int leftHueTotal, int middleHueTotal, int rightHueTotal) throws IOException
     {
         final File teamDir = new File(Environment.getExternalStorageDirectory(), "Team");
         boolean newDir = teamDir.mkdirs();
-        final File file = new File(teamDir, filename);
+        final File file = new File(teamDir, "YellowHueCounts.txt");
 
+        int winnerCount = 0;
+        String winnerLocation = "?";
+        if (winnerCount< leftHueTotal)
+        {
+            winnerCount= leftHueTotal;
+            winnerLocation = "L";
+        }
+        if (winnerCount < middleHueTotal)
+        {
+            winnerCount = middleHueTotal;
+            winnerLocation = "M";
+        }
+        if (winnerCount < rightHueTotal)
+        {
+            winnerCount= rightHueTotal;
+            winnerLocation = "R";
+        }
 
+        try (BufferedWriter writer = new BufferedWriter (new FileWriter(file)))
+        {
+          writer.write("Left Jewel Yellow count = " + leftHueTotal);
+          writer.newLine();
+          writer.write("Middle Jewel Yellow count = " + middleHueTotal);
+          writer.newLine();
+          writer.write( "Right Jewel Yellow count = " + rightHueTotal);
+          writer.newLine();
+          writer.write ("winner is " + winnerLocation);
+        }
+
+        return winnerLocation;
 
     }
 

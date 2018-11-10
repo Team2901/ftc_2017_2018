@@ -84,6 +84,8 @@ after start jewel finder position is saved to finder
                 int middleHueTotal= RelicRecoveryUtilities.determineColor(middleBabyBitmap, 20, 45);
                 int rightHueTotal= RelicRecoveryUtilities.determineColor(rightBabyBitmap, 20, 45);
 
+                RelicRecoveryUtilities.totalYellowHues(leftHueTotal, middleHueTotal, rightHueTotal);
+
 
 
             } catch (Exception e) {
