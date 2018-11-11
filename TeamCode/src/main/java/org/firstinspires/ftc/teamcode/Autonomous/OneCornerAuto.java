@@ -45,7 +45,7 @@ public class OneCornerAuto extends LinearOpMode {
     VuforiaTrackable back;
 
     StartPosition startPos = StartPosition.CRATER_BLUE;
-    GoldPosition goldPos = GoldPosition.LEFT;
+    GoldPosition goldPos = GoldPosition.MIDDLE;
 
     double x;
     double y;
@@ -101,7 +101,7 @@ public class OneCornerAuto extends LinearOpMode {
 
         goToPosition(x,y, goal.x , goal.y ,angleVu);
 
-        /*
+
         double angleImu = robot.getAngle();
 
         robot.left.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -124,7 +124,7 @@ public class OneCornerAuto extends LinearOpMode {
             idle();
         }
 
-        double distance = Math.sqrt( Math.pow(goal.x-x,2) + Math.pow(goal.y-y,2)  );
+        double distance = Math.sqrt( Math.pow(54-goal.x,2) + Math.pow(54-goal.y,2)  );
 
         robot.left.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.right.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -135,11 +135,15 @@ public class OneCornerAuto extends LinearOpMode {
         robot.right.setTargetPosition((int)(distance*INCHES_TO_ENCODERCOUNTS));
         robot.left.setTargetPosition((int)(distance*INCHES_TO_ENCODERCOUNTS));
 
+        telemetry.addData("distance to goal", distance);
+        telemetry.addData("encoders to goal", distance*INCHES_TO_ENCODERCOUNTS);
+        telemetry.update();
+
         robot.left.setPower(1);
         robot.right.setPower(1);
 
         while(robot.left.isBusy()){idle();}
-*/
+
     }
 
     double getPower(double currentPosition, double goal) {
