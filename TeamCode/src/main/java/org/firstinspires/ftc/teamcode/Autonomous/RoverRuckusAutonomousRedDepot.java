@@ -34,7 +34,7 @@ public class RoverRuckusAutonomousRedDepot extends LinearOpMode {
     VuforiaTrackable red;
     VuforiaTrackable front;
     VuforiaTrackable back;
-    public static final int TARGET_POSITION = 1120;
+    public static final int TARGET_POSITION = -1120;
     public String initialPosition = "depot";
     String jewelConfigLeft = "jewelConfigLeft.txt";
     String jewelConfigMiddle = "jewelConfigMiddle.txt";
@@ -69,18 +69,23 @@ public class RoverRuckusAutonomousRedDepot extends LinearOpMode {
         front = roverRuckus.get(2);
         back = roverRuckus.get(3);
         //step 0: locate cheddar
-        GoldPosition goldPosition = determineGoldPosition();
         waitForStart();
+        RoverRuckusAutonomousRedDepot.GoldPosition goldPosition = determineGoldPosition();
         //step 1: drop down from lander
         dropFromLander();
         //step 2: do vuforia to determine position
+        roverRuckus.activate();
         OpenGLMatrix location = VuforiaUtilities.getLocation(blue, red, front, back);
-
+        if (location == null){
+            location = VuforiaUtilities.getMatrix(0,0,135, -12,12,0);
+        }
         VectorF translation = location.getTranslation();
 
         Orientation orientation = Orientation.getOrientation(location,
                 AxesReference.EXTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES);
 
+        telemetry.addData("goldPosition" , goldPosition);
+        telemetry.update();
 
         x = (translation.get(0) * VuforiaUtilities.MM_TO_INCHES);
         y = (translation.get(1) * VuforiaUtilities.MM_TO_INCHES);
@@ -108,14 +113,18 @@ public class RoverRuckusAutonomousRedDepot extends LinearOpMode {
             robot.left.setPower(-getPower(angleImu, goal.theta));
             robot.right.setPower(getPower(angleImu, goal.theta));
 
+            telemetry.addData("goldPosition" , goldPosition);
             telemetry.addData("Goal Angle", goal.theta);
             telemetry.addData("angleGoal-angle ", goal.theta - angleImu);
             telemetry.addData("Power", getPower(angleImu, goal.theta));
             telemetry.update();
             idle();
         }
+
+        robot.left.setPower(0);
+        robot.right.setPower(0);
         //step 5: gooooo
-        double distance = Math.sqrt(Math.pow(-54 - goal.x, 2) + Math.pow(54 - goal.y, 2));
+        double distance = Math.sqrt(Math.pow(54 - goal.x, 2) + Math.pow(54 - goal.y, 2));
 
         robot.left.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.right.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -126,12 +135,17 @@ public class RoverRuckusAutonomousRedDepot extends LinearOpMode {
         robot.right.setTargetPosition((int) (distance * VuforiaUtilities.INCHES_TO_ENCODERCOUNTS));
         robot.left.setTargetPosition((int) (distance * VuforiaUtilities.INCHES_TO_ENCODERCOUNTS));
 
-        telemetry.addData("distance to goal", distance);
-        telemetry.addData("encoders to goal", distance * VuforiaUtilities.INCHES_TO_ENCODERCOUNTS);
-        telemetry.update();
 
-        robot.left.setPower(1);
-        robot.right.setPower(1);
+        while (robot.left.isBusy()) {
+            telemetry.addData("distance to goal", distance);
+            telemetry.addData("encoders to goal", distance * VuforiaUtilities.INCHES_TO_ENCODERCOUNTS);
+            telemetry.addData("encoders", robot.left.getCurrentPosition());
+            telemetry.update();
+
+
+            robot.left.setPower(1);
+            robot.right.setPower(1);
+        }
         //step 7: do corner action(if depot: drop team marker/if crater: park)
         doCornerAction();
     }
