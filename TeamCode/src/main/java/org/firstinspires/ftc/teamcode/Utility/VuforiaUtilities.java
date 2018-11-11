@@ -24,8 +24,14 @@ public class VuforiaUtilities {
     public static final double MM_TO_INCHES = 0.0393701;
     public static final double INCHES_TO_MM = 25.4;
     public static final double FIELD_RADIUS = 1828.8;
+    //for never rest 40s
+    public static final double ENCODER_COUNTS_PER_REV = 1120;
+    //measured may not be exact
+    public static final double INCHES_PER_ROTATION = 7.75;
+    public static final double INCHES_TO_ENCODERCOUNTS = ((1 / INCHES_PER_ROTATION) * ENCODER_COUNTS_PER_REV);
 
-    public static OpenGLMatrix phoneLocation = getMatrix(90, -0, -90,  (int)(-6*INCHES_TO_MM), (int)(-1*INCHES_TO_MM),0);
+
+    public static OpenGLMatrix phoneLocation = getMatrix(90, -0, -90,  (int)(-6*INCHES_TO_MM), (int)(1*INCHES_TO_MM),0);
 
     public final static String VUFORIA_KEY = "AQQpWjP/////AAABmWf3iVzlb0FUp3bUlTfyu04cg6nObJiyAcRVvd" +
             "XnI9UGwJLT8PeUmQnawxjoZEpxQX4SACGC67Ix1pI2PTCBBrPOug9cDMLwL3g2TKSlKCfpMru3ooxbXaZ9ulWIc0" +

@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.Autonomous;
 
+import android.graphics.Bitmap;
+
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -11,59 +13,52 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaBase;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 import org.firstinspires.ftc.teamcode.Hardware.RoverRuckusBotHardware;
-import org.firstinspires.ftc.teamcode.Presentation.PresentationBotHardware;
 import org.firstinspires.ftc.teamcode.Utility.PolarCoord;
+import org.firstinspires.ftc.teamcode.Utility.RelicRecoveryUtilities;
+import org.firstinspires.ftc.teamcode.Utility.RoverRuckusUtilities;
 import org.firstinspires.ftc.teamcode.Utility.VuforiaUtilities;
 
-import java.util.ArrayList;
 
-
-@Autonomous (name = "OneCornerAuto")
-public class OneCornerAuto extends LinearOpMode {
-    enum StartPosition {
-        CRATER_BLUE, DEPOT_BLUE;
-    }
-
-    enum GoldPosition {
-
-        LEFT, MIDDLE, RIGHT;
-    }
+@Autonomous(name = "RoverRuckusAutonomous Blue Depot")
+public class RoverRuckusAutonomousBlueDepot extends LinearOpMode {
 
     RoverRuckusBotHardware robot = new RoverRuckusBotHardware();
-
-    WebcamName webcam;
     VuforiaLocalizer vuforia;
-
+    WebcamName webcam;
+    VuforiaTrackables trackables;
     VuforiaTrackable blue;
     VuforiaTrackable red;
     VuforiaTrackable front;
     VuforiaTrackable back;
-
-    StartPosition startPos = StartPosition.CRATER_BLUE;
-    GoldPosition goldPos = GoldPosition.RIGHT;
-
-
+    public static final int TARGET_POSITION = 1120;
+    public String initialPosition = "depot";
+    String jewelConfigLeft = "jewelConfigLeft.txt";
+    String jewelConfigMiddle = "jewelConfigMiddle.txt";
+    String jewelConfigRight = "jewelConfigRight.txt";
+    String jewelBitmap = "jewelBitmap.png";
+    String jewelBitmapLeft = "jewelBitmapLeft.png";
+    String jewelBitmapMiddle = "jewelBitmapMiddle.png";
+    String jewelBitmapRight = "jewelBitmapRight.png";
     double x;
     double y;
     double z;
     float angleVu;
 
-    //for never rest 40s
-    public static final double ENCODER_COUNTS_PER_REV = 1120;
-    //measured may not be exact
-    public static final double INCHES_PER_ROTATION = 7.75;
-    static final double INCHES_TO_ENCODERCOUNTS = ((1 / INCHES_PER_ROTATION) * ENCODER_COUNTS_PER_REV);
+
+    enum GoldPosition {
+
+        LEFT, MIDDLE, RIGHT
+    }
 
     @Override
-    public void runOpMode() {
+    public void runOpMode() throws InterruptedException {
+        //step -2: initialize hardware
         robot.init(hardwareMap);
-
-        // webcam = hardwareMap.get(WebcamName.class, "webcam");
+        // step -1: initialize vuforia
         VuforiaLocalizer.Parameters parameters = VuforiaUtilities.getBackCameraParameters(hardwareMap);
         vuforia = VuforiaUtilities.getVuforia(parameters);
 
@@ -73,10 +68,12 @@ public class OneCornerAuto extends LinearOpMode {
         red = roverRuckus.get(1);
         front = roverRuckus.get(2);
         back = roverRuckus.get(3);
-
+        //step 0: locate cheddar
+        GoldPosition goldPosition = determineGoldPosition();
         waitForStart();
-
-        roverRuckus.activate();
+        //step 1: drop down from lander
+        dropFromLander();
+        //step 2: do vuforia to determine position
         OpenGLMatrix location = VuforiaUtilities.getLocation(blue, red, front, back);
 
         VectorF translation = location.getTranslation();
@@ -84,24 +81,18 @@ public class OneCornerAuto extends LinearOpMode {
         Orientation orientation = Orientation.getOrientation(location,
                 AxesReference.EXTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES);
 
-        PolarCoord goal = getGoalPosition();
 
-        x = 24;//(translation.get(0) * VuforiaUtilities.MM_TO_INCHES);
-        y = 24; //(translation.get(1) * VuforiaUtilities.MM_TO_INCHES);
-        z = 0;//(translation.get(2) * VuforiaUtilities.MM_TO_INCHES);
-        angleVu = 0; //orientation.thirdAngle;
-
-
-        telemetry.addData("X", "%.2f", x);
-        telemetry.addData("Y", "%.2f", y);
-        telemetry.addData("Z", "%.2f", z);
-        telemetry.addData("Angle", "%.2f", angleVu);
-        telemetry.update();
+        x = (translation.get(0) * VuforiaUtilities.MM_TO_INCHES);
+        y = (translation.get(1) * VuforiaUtilities.MM_TO_INCHES);
+        z = ((translation.get(2) * VuforiaUtilities.MM_TO_INCHES));
+        angleVu = orientation.thirdAngle;
 
 
+        //step 3: go to the cheddar pivot point
+        PolarCoord goal = getGoalPosition(goldPosition);
         goToPosition(x, y, goal.x, goal.y, angleVu);
 
-
+        //step 4:turn to face depot point
         double angleImu = robot.getAngle();
 
         robot.left.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -123,8 +114,8 @@ public class OneCornerAuto extends LinearOpMode {
             telemetry.update();
             idle();
         }
-
-        double distance = Math.sqrt(Math.pow(54 - goal.x, 2) + Math.pow(54 - goal.y, 2));
+        //step 5: gooooo
+        double distance = Math.sqrt(Math.pow(54 - goal.x, 2) + Math.pow(-54 - goal.y, 2));
 
         robot.left.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.right.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -132,20 +123,74 @@ public class OneCornerAuto extends LinearOpMode {
         robot.left.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.right.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        robot.right.setTargetPosition((int) (distance * INCHES_TO_ENCODERCOUNTS));
-        robot.left.setTargetPosition((int) (distance * INCHES_TO_ENCODERCOUNTS));
+        robot.right.setTargetPosition((int) (distance * VuforiaUtilities.INCHES_TO_ENCODERCOUNTS));
+        robot.left.setTargetPosition((int) (distance * VuforiaUtilities.INCHES_TO_ENCODERCOUNTS));
 
         telemetry.addData("distance to goal", distance);
-        telemetry.addData("encoders to goal", distance * INCHES_TO_ENCODERCOUNTS);
+        telemetry.addData("encoders to goal", distance * VuforiaUtilities.INCHES_TO_ENCODERCOUNTS);
         telemetry.update();
 
         robot.left.setPower(1);
         robot.right.setPower(1);
+        //step 7: do corner action(if depot: drop team marker/if crater: park)
+        doCornerAction();
+    }
 
-        while (robot.left.isBusy()) {
+
+    public void dropFromLander() {
+        DcMotor.RunMode originalValue = robot.lift.getMode();
+        robot.lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.lift.setTargetPosition(TARGET_POSITION);
+        robot.lift.setPower(1);
+        while (robot.lift.isBusy()) {
             idle();
         }
+        robot.lift.setMode(originalValue);
+    }
 
+    public GoldPosition determineGoldPosition() {
+
+        Bitmap bitmap = RelicRecoveryUtilities.getVuforiaImage(vuforia);
+        try {
+            RelicRecoveryUtilities.saveBitmap(jewelBitmap, bitmap);
+
+            RelicRecoveryUtilities.saveHueFile("jewelHuesBig.txt", bitmap);
+
+            int leftHueTotal = RoverRuckusUtilities.getJewelHueCount(bitmap, jewelConfigLeft, jewelBitmapLeft, "jewelHuesLeft.txt");
+            int middleHueTotal = RoverRuckusUtilities.getJewelHueCount(bitmap, jewelConfigMiddle, jewelBitmapMiddle, "jewelHuesMiddle.txt");
+            int rightHueTotal = RoverRuckusUtilities.getJewelHueCount(bitmap, jewelConfigRight, jewelBitmapRight, "jewelHuesRight.txt");
+
+            RelicRecoveryUtilities.totalYellowHues(leftHueTotal, middleHueTotal, rightHueTotal);
+            if (leftHueTotal > middleHueTotal && middleHueTotal > rightHueTotal) {
+                return GoldPosition.LEFT;
+            } else if (rightHueTotal > middleHueTotal && rightHueTotal > leftHueTotal) {
+                return GoldPosition.RIGHT;
+            } else {
+                return GoldPosition.MIDDLE;
+            }
+        } catch (Exception e) {
+            telemetry.addData("ERROR WRITING TO FILE JEWEL BITMAP", e.getMessage());
+            telemetry.update();
+            return GoldPosition.MIDDLE;
+        }
+
+    }
+
+    public void doCornerAction() {
+        if (initialPosition.equals("depot")) {
+            robot.marker.setPosition(1);
+        } else if (initialPosition.equals("crater")) {
+            ;
+        } else {
+            robot.left.setPower(1);
+            final double currentTime = time;
+            double targetTime = currentTime + 5;
+            while (targetTime < time) {
+                idle();
+            }
+            robot.left.setPower(0);
+        }
     }
 
     double getPower(double currentPosition, double goal) {
@@ -196,7 +241,7 @@ public class OneCornerAuto extends LinearOpMode {
 
         double distanceToGoal = Math.sqrt((Math.pow(yDiff, 2) + Math.pow(xDiff, 2)));
 
-        int encodersToGoal = (int) (INCHES_TO_ENCODERCOUNTS * distanceToGoal);
+        int encodersToGoal = (int) (VuforiaUtilities.INCHES_TO_ENCODERCOUNTS * distanceToGoal);
 
         telemetry.addData("distance to goal", distanceToGoal);
         telemetry.addData("encoders to goal", encodersToGoal);
@@ -228,36 +273,22 @@ public class OneCornerAuto extends LinearOpMode {
 
     }
 
-    public PolarCoord getGoalPosition() {
-        if (startPos == StartPosition.CRATER_BLUE) {
+    public PolarCoord getGoalPosition(GoldPosition goldPosition) {
 
-            switch (goldPos) {
-                case LEFT:
-                    return new PolarCoord(8.019544399, 42.70655476
-                            , 13.7994854);
-                case MIDDLE:
-                    return new PolarCoord(23.52207794, 23.52207794
-                            , 45);
-                case RIGHT:
-                    return new PolarCoord(42.70655476, 8.019544399
-                            , 76.2005146);
-            }
-        } else {
-            switch (goldPos) {
-                case LEFT:
-                    return new PolarCoord(42.70655476, -8.019544399
 
-                            , -76.2005146);
-                case MIDDLE:
-                    return new PolarCoord(23.52207794, -23.52207794
-
-                            , -45);
-                case RIGHT:
-                    return new PolarCoord(8.019544399, -42.70655476
-
-                            , -13.7994854);
-            }
+        switch (goldPosition) {
+            case LEFT:
+                return new PolarCoord(42.70655476, -8.019544399
+                        , -76.2005146);
+            case MIDDLE:
+                return new PolarCoord(23.52207794, -23.52207794
+                        , -45);
+            case RIGHT:
+                return new PolarCoord(8.019544399, -42.70655476
+                        , -13.7994854);
         }
+
+
         return new PolarCoord(0, 0, 0);
     }
 }
