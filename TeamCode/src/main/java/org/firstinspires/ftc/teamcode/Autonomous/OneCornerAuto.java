@@ -45,7 +45,8 @@ public class OneCornerAuto extends LinearOpMode {
     VuforiaTrackable back;
 
     StartPosition startPos = StartPosition.CRATER_BLUE;
-    GoldPosition goldPos = GoldPosition.MIDDLE;
+    GoldPosition goldPos = GoldPosition.RIGHT;
+
 
     double x;
     double y;
