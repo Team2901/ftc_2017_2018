@@ -1,12 +1,14 @@
 package org.firstinspires.ftc.teamcode.Presentation;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 
 @Autonomous(name = "Imu Demonstration")
+@Disabled
 public class ImuDemonstration extends LinearOpMode {
 
     PresentationBotHardware robot = new PresentationBotHardware();

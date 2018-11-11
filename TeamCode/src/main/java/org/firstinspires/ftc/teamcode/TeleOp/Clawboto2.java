@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.TeleOp;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.Range;
@@ -10,6 +11,7 @@ import org.firstinspires.ftc.teamcode.Hardware.ClawbotHardware;
  * Created by Kearneyg20428 on 2/7/2017.
  */
 @TeleOp(name="Clawboto2", group="TeleOp")
+@Disabled
 public class Clawboto2 extends OpMode {
 
     final double CLAW_SPEED = 0.05;

@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.Presentation;
 import android.util.Log;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -10,6 +11,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 @Autonomous(name = "PresentationTurnatWall")
+@Disabled
 public class PresentationTurnAtWall extends LinearOpMode {
 
     PresentationBotHardware robot = new PresentationBotHardware();
