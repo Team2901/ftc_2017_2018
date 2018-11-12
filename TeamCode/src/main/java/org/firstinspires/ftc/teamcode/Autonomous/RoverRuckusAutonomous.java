@@ -58,6 +58,7 @@ public class RoverRuckusAutonomous extends LinearOpMode {
     }
 
     public void initVuforia() {
+        webcam = hardwareMap.get(WebcamName.class, "webcam");
         VuforiaLocalizer.Parameters parameters = VuforiaUtilities.getWebcamParameters(hardwareMap, webcam);
         vuforia = VuforiaUtilities.getVuforia(parameters);
         trackables = VuforiaUtilities.setUpTrackables( vuforia , parameters);
