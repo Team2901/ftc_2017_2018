@@ -35,7 +35,7 @@ public class RoverRuckusAutonomousBlueCrater extends LinearOpMode {
     VuforiaTrackable front;
     VuforiaTrackable back;
     public static final int TARGET_POSITION = -1120;
-    public String initialPosition = "crater";
+    public StartPosition initialPosition = StartPosition.BLUE_CRATER;
     String jewelConfigLeft = "jewelConfigLeft.txt";
     String jewelConfigMiddle = "jewelConfigMiddle.txt";
     String jewelConfigRight = "jewelConfigRight.txt";
@@ -48,6 +48,9 @@ public class RoverRuckusAutonomousBlueCrater extends LinearOpMode {
     double z;
     float angleVu;
 
+    enum StartPosition {
+        RED_CRATER, RED_DEPOT, BLUE_CRATER, BLUE_DEPOT;
+    }
 
     enum GoldPosition {
 

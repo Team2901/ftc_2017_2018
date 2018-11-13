@@ -22,6 +22,10 @@ import org.firstinspires.ftc.teamcode.Utility.RelicRecoveryUtilities;
 import org.firstinspires.ftc.teamcode.Utility.RoverRuckusUtilities;
 import org.firstinspires.ftc.teamcode.Utility.VuforiaUtilities;
 
+import static org.firstinspires.ftc.teamcode.Autonomous.RoverRuckusAutonomousBlueDepot.StartPosition.BLUE_CRATER;
+import static org.firstinspires.ftc.teamcode.Autonomous.RoverRuckusAutonomousBlueDepot.StartPosition.BLUE_DEPOT;
+import static org.firstinspires.ftc.teamcode.Autonomous.RoverRuckusAutonomousBlueDepot.StartPosition.RED_DEPOT;
+
 
 @Autonomous(name = "RoverRuckusAutonomous Blue Depot")
 public class RoverRuckusAutonomousBlueDepot extends LinearOpMode {
@@ -35,7 +39,7 @@ public class RoverRuckusAutonomousBlueDepot extends LinearOpMode {
     VuforiaTrackable front;
     VuforiaTrackable back;
     public static final int TARGET_POSITION = -1120;
-    public String initialPosition = "depot";
+    public StartPosition initialPosition = BLUE_DEPOT;
     String jewelConfigLeft = "jewelConfigLeft.txt";
     String jewelConfigMiddle = "jewelConfigMiddle.txt";
     String jewelConfigRight = "jewelConfigRight.txt";
@@ -48,7 +52,9 @@ public class RoverRuckusAutonomousBlueDepot extends LinearOpMode {
     double z;
     float angleVu;
 
-
+    enum StartPosition {
+        RED_CRATER, RED_DEPOT, BLUE_CRATER, BLUE_DEPOT;
+    }
     enum GoldPosition {
 
         LEFT, MIDDLE, RIGHT
@@ -304,5 +310,24 @@ public class RoverRuckusAutonomousBlueDepot extends LinearOpMode {
 
 
         return new PolarCoord(0, 0, 0);
+    }
+
+    public double getDistance (StartPosition startPosition, PolarCoord goal)
+    {
+        double distance = 0.0;
+        if (startPosition == BLUE_DEPOT) {
+            distance = Math.sqrt(Math.pow(54 - goal.x, 2) + Math.pow(-54 - goal.y, 2));
+        }
+        else if (startPosition == BLUE_CRATER){
+            distance = Math.sqrt(Math.pow(54 - goal.x, 2) + Math.pow(54 - goal.y, 2));
+        }
+        else if (startPosition == RED_DEPOT){
+            distance = Math.sqrt(Math.pow(-54 - goal.x, 2) + Math.pow(54 - goal.y, 2));
+        }
+        else {
+            distance = Math.sqrt(Math.pow(-54 - goal.x, 2) + Math.pow(-54 - goal.y, 2));
+        }
+         return distance;
+
     }
 }

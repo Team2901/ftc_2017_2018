@@ -35,7 +35,7 @@ public class RoverRuckusAutonomousRedDepot extends LinearOpMode {
     VuforiaTrackable front;
     VuforiaTrackable back;
     public static final int TARGET_POSITION = -1120;
-    public String initialPosition = "depot";
+    public StartPosition initialPosition = StartPosition.RED_DEPOT;
     String jewelConfigLeft = "jewelConfigLeft.txt";
     String jewelConfigMiddle = "jewelConfigMiddle.txt";
     String jewelConfigRight = "jewelConfigRight.txt";
@@ -48,7 +48,9 @@ public class RoverRuckusAutonomousRedDepot extends LinearOpMode {
     double z;
     float angleVu;
 
-
+    enum StartPosition {
+        RED_CRATER, RED_DEPOT, BLUE_CRATER, BLUE_DEPOT;
+    }
     enum GoldPosition {
 
         LEFT, MIDDLE, RIGHT
@@ -124,7 +126,7 @@ public class RoverRuckusAutonomousRedDepot extends LinearOpMode {
         robot.left.setPower(0);
         robot.right.setPower(0);
         //step 5: gooooo
-        double distance = Math.sqrt(Math.pow(54 - goal.x, 2) + Math.pow(54 - goal.y, 2));
+        double distance = Math.sqrt(Math.pow(54 - goal.x, 2) + Math.pow(-54 - goal.y, 2));
 
         robot.left.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.right.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
