@@ -2,13 +2,12 @@ package org.firstinspires.ftc.teamcode.TeleOp;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.teamcode.Hardware.RoverRuckusBotHardware;
 
-@TeleOp(name="RoverRuckusBot")
+@TeleOp(name="RoverRuckusBotOverride")
 
-public class RoverRuckusBotTeleOp extends OpMode {
+public class RoverRuckusBotTeleOpWithOveride extends OpMode {
     RoverRuckusBotHardware robot = new RoverRuckusBotHardware();
     @Override
     public void init() {
@@ -22,13 +21,8 @@ public class RoverRuckusBotTeleOp extends OpMode {
         robot.left.setPower(leftMotor);
         robot.right.setPower(rightMotor);
 
-        if (gamepad1.y){
-            robot.lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            robot.lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-        }
         if(gamepad1.left_trigger > .02){
-            if(robot.lift.getCurrentPosition() <= 27000 || gamepad1.y ) {
+            if(robot.lift.getCurrentPosition() <= 27000 || gamepad1.y) {
                 robot.lift.setPower(1);
             } else {
                 robot.lift.setPower(0);
@@ -36,7 +30,7 @@ public class RoverRuckusBotTeleOp extends OpMode {
             }
             //Arm goes down
         } else if (gamepad1.left_bumper){
-            if(robot.lift.getCurrentPosition() >= 0  || gamepad1.y) {
+            if(robot.lift.getCurrentPosition() >= 0 || gamepad1.y) {
                 robot.lift.setPower(-1);
             } else {
                 robot.lift.setPower(0);
@@ -54,7 +48,6 @@ public class RoverRuckusBotTeleOp extends OpMode {
         } else if (gamepad1.a) {
             robot.latch.setPosition(.5);
             }
-
 
         telemetry.addData("leftMotor" , robot.left.getCurrentPosition());
         telemetry.addData("rightMotor" , robot.right.getCurrentPosition());
