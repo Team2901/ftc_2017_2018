@@ -171,6 +171,8 @@ public class FtcRobotControllerActivity extends Activity
     public static final int COLOR_BLUE = 0x5533ccff;
     public static final int COLOR_GREEN = 0x5500ff00;
     public static final int COLOR_PINK= 0x55ff3399;
+    public static final int COLOR_YELLOW = 0x55ffff00;
+    public static final int COLOR_WHITE = 0x55ffffff;
 
     /////////////////////////////////////////////////////////
 
