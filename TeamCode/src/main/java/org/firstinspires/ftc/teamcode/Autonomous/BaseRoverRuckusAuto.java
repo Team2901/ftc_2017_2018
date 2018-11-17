@@ -22,13 +22,13 @@ import org.firstinspires.ftc.teamcode.Utility.RelicRecoveryUtilities;
 import org.firstinspires.ftc.teamcode.Utility.RoverRuckusUtilities;
 import org.firstinspires.ftc.teamcode.Utility.VuforiaUtilities;
 
-import static org.firstinspires.ftc.teamcode.Autonomous.RoverRuckusAutonomousBlueDepot.StartPosition.BLUE_CRATER;
-import static org.firstinspires.ftc.teamcode.Autonomous.RoverRuckusAutonomousBlueDepot.StartPosition.BLUE_DEPOT;
-import static org.firstinspires.ftc.teamcode.Autonomous.RoverRuckusAutonomousBlueDepot.StartPosition.RED_DEPOT;
+import static org.firstinspires.ftc.teamcode.Autonomous.BaseRoverRuckusAuto.GoldPosition.*;
+import static org.firstinspires.ftc.teamcode.Autonomous.BaseRoverRuckusAuto.StartPosition.BLUE_CRATER;
+import static org.firstinspires.ftc.teamcode.Autonomous.BaseRoverRuckusAuto.StartPosition.BLUE_DEPOT;
+import static org.firstinspires.ftc.teamcode.Autonomous.BaseRoverRuckusAuto.StartPosition.RED_DEPOT;
 
 
-@Autonomous(name = "RoverRuckusAutonomous Blue Depot")
-public class RoverRuckusAutonomousBlueDepot extends LinearOpMode {
+public class BaseRoverRuckusAuto extends LinearOpMode {
 
     RoverRuckusBotHardware robot = new RoverRuckusBotHardware();
     VuforiaLocalizer vuforia;
@@ -65,6 +65,7 @@ public class RoverRuckusAutonomousBlueDepot extends LinearOpMode {
         //step -2: initialize hardware
         robot.init(hardwareMap);
         // step -1: initialize vuforia
+        /*
         VuforiaLocalizer.Parameters parameters = VuforiaUtilities.getBackCameraParameters(hardwareMap);
         vuforia = VuforiaUtilities.getVuforia(parameters);
 
@@ -74,16 +75,19 @@ public class RoverRuckusAutonomousBlueDepot extends LinearOpMode {
         red = roverRuckus.get(1);
         front = roverRuckus.get(2);
         back = roverRuckus.get(3);
+        */
         //step 0: locate cheddar
         waitForStart();
-        RoverRuckusAutonomousBlueDepot.GoldPosition goldPosition = determineGoldPosition();
+        BaseRoverRuckusAuto.GoldPosition goldPosition = RIGHT ;//determineGoldPosition();
         //step 1: drop down from lander
-         dropFromLander();
+         //dropFromLander();
         //step 2: do vuforia to determine position
-        roverRuckus.activate();
-        OpenGLMatrix location = VuforiaUtilities.getLocation(blue, red, front, back);
+        // roverRuckus.activate();
+        OpenGLMatrix location = null; //  VuforiaUtilities.getLocation(blue, red, front, back);
         if (location == null){
-            location = VuforiaUtilities.getMatrix(0,0,-45, 12,-12,0);
+            location = VuforiaUtilities.getMatrix(0,0,45,
+                    (float) (24/VuforiaUtilities.MM_TO_INCHES),
+                    (float) (24/VuforiaUtilities.MM_TO_INCHES),0);
         }
         VectorF translation = location.getTranslation();
 
@@ -100,8 +104,9 @@ public class RoverRuckusAutonomousBlueDepot extends LinearOpMode {
 
 
         //step 3: go to the cheddar pivot point
-        PolarCoord goal = getGoalPosition(goldPosition);
+        PolarCoord goal = getGoldenPostition(goldPosition, initialPosition);
         goToPosition(x, y, goal.x, goal.y, angleVu);
+
 
         //step 4:turn to face depot point
         double angleImu = robot.getAngle();
@@ -121,16 +126,20 @@ public class RoverRuckusAutonomousBlueDepot extends LinearOpMode {
 
             telemetry.addData("goldPosition" , goldPosition);
             telemetry.addData("Goal Angle", goal.theta);
+            telemetry.addData("Robot Angle ", angleImu);
+            telemetry.addData("offset Angle", robot.offset);
             telemetry.addData("angleGoal-angle ", goal.theta - angleImu);
             telemetry.addData("Power", getPower(angleImu, goal.theta));
             telemetry.update();
             idle();
         }
 
+
         robot.left.setPower(0);
         robot.right.setPower(0);
         //step 5: gooooo
-        double distance = Math.sqrt(Math.pow(54 - goal.x, 2) + Math.pow(-54 - goal.y, 2));
+
+        double distance = getDistance(initialPosition, goal);
 
         robot.left.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.right.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -154,10 +163,14 @@ public class RoverRuckusAutonomousBlueDepot extends LinearOpMode {
         }
         //step 7: do corner action(if depot: drop team marker/if crater: park)
         doCornerAction();
+
+        while(opModeIsActive()) {
+            idle();
+        }
     }
 
 
-    public void dropFromLander() {
+   public void dropFromLander() {
         DcMotor.RunMode originalValue = robot.lift.getMode();
         robot.lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -183,7 +196,7 @@ public class RoverRuckusAutonomousBlueDepot extends LinearOpMode {
 
             RelicRecoveryUtilities.totalYellowHues(leftHueTotal, middleHueTotal, rightHueTotal);
             if (leftHueTotal > middleHueTotal && middleHueTotal > rightHueTotal) {
-                return GoldPosition.LEFT;
+                return LEFT;
             } else if (rightHueTotal > middleHueTotal && rightHueTotal > leftHueTotal) {
                 return GoldPosition.RIGHT;
             } else {
@@ -198,18 +211,12 @@ public class RoverRuckusAutonomousBlueDepot extends LinearOpMode {
     }
 
     public void doCornerAction() {
-        if (initialPosition.equals("depot")) {
+        if (initialPosition == BLUE_DEPOT || initialPosition== RED_DEPOT) {
             robot.marker.setPosition(1);
-        } else if (initialPosition.equals("crater")) {
-            ;
-        } else {
-            robot.left.setPower(1);
-            final double currentTime = time;
-            double targetTime = currentTime + 5;
-            while (targetTime < time) {
-                idle();
-            }
-            robot.left.setPower(0);
+            robot.marker.setPosition(0);
+        }
+        else {
+
         }
     }
 
@@ -240,75 +247,133 @@ public class RoverRuckusAutonomousBlueDepot extends LinearOpMode {
         double angleGoal = Math.atan2(yDiff, xDiff) * (180 / Math.PI);
 
         angleImu = robot.getAngle();
-
-        while (Math.abs(angleGoal - angleImu) > 1) {
-            angleImu = robot.getAngle();
-
-            robot.left.setPower(-getPower(angleImu, angleGoal));
-            robot.right.setPower(getPower(angleImu, angleGoal));
-
-            telemetry.addData("Goal Angle", angleGoal);
-            telemetry.addData("angleGoal-angle ", angleGoal - angleImu);
-            telemetry.addData("angleImu", angleImu);
-            telemetry.addData("Power", getPower(angleImu, angleGoal));
-            telemetry.update();
-            idle();
-        }
-
-
-        robot.left.setPower(0);
-        robot.right.setPower(0);
-
         double distanceToGoal = Math.sqrt((Math.pow(yDiff, 2) + Math.pow(xDiff, 2)));
 
-        int encodersToGoal = (int) (VuforiaUtilities.INCHES_TO_ENCODERCOUNTS * distanceToGoal);
+        if (distanceToGoal >2 ) {
+            while (Math.abs(angleGoal - angleImu) > 1) {
+                angleImu = robot.getAngle();
 
-        telemetry.addData("distance to goal", distanceToGoal);
-        telemetry.addData("encoders to goal", encodersToGoal);
-        telemetry.update();
+                robot.left.setPower(-getPower(angleImu, angleGoal));
+                robot.right.setPower(getPower(angleImu, angleGoal));
+                telemetry.addData("Goal", String.format("%f %f", goalX, goalY));
+                telemetry.addData("Start", String.format("%f %f", startX, startY));
 
-        robot.left.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.right.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.left.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.right.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                telemetry.addData("Goal Angle", angleGoal);
+                telemetry.addData("angleGoal-angle ", angleGoal - angleImu);
+                telemetry.addData("Robot Angle ", angleImu);
+                telemetry.addData("offset Angle", robot.offset);
+                telemetry.addData("Power", getPower(angleImu, angleGoal));
+                telemetry.update();
+                idle();
+            }
 
-        robot.left.setTargetPosition(encodersToGoal);
-        robot.right.setTargetPosition(encodersToGoal);
 
-        robot.left.setPower(.75);
-        robot.right.setPower(.75);
+            robot.left.setPower(0);
+            robot.right.setPower(0);
 
-        while (robot.left.isBusy()) {
-            telemetry.addData("left Counts", robot.left.getCurrentPosition());
-            telemetry.addData("right Counts", robot.right.getCurrentPosition());
+
+            int encodersToGoal = (int) (VuforiaUtilities.INCHES_TO_ENCODERCOUNTS * distanceToGoal);
+
             telemetry.addData("distance to goal", distanceToGoal);
             telemetry.addData("encoders to goal", encodersToGoal);
             telemetry.update();
 
-            idle();
-        }
+            robot.left.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            robot.right.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            robot.left.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            robot.right.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        robot.left.setPower(0);
-        robot.right.setPower(0);
+            robot.left.setTargetPosition(encodersToGoal);
+            robot.right.setTargetPosition(encodersToGoal);
+
+            robot.left.setPower(.75);
+            robot.right.setPower(.75);
+
+            while (robot.left.isBusy()) {
+
+                telemetry.addData("Goal", String.format("%f %f", goalX, goalY));
+                telemetry.addData("Start", String.format("%f %f", startX, startY));
+                telemetry.addData("left Counts", robot.left.getCurrentPosition());
+                telemetry.addData("right Counts", robot.right.getCurrentPosition());
+                telemetry.addData("distance to goal", distanceToGoal);
+                telemetry.addData("encoders to goal", encodersToGoal);
+                telemetry.update();
+
+                idle();
+            }
+
+            robot.left.setPower(0);
+            robot.right.setPower(0);
+        }
+        else {
+           telemetry.addData("too close not moving or turning", "");
+           telemetry.update();
+        }
 
     }
 
-    public PolarCoord getGoalPosition(GoldPosition goldPosition) {
-
-
-        switch (goldPosition) {
-            case LEFT:
-                return new PolarCoord(42.70655476, -8.019544399
-                        , -76.2005146);
-            case MIDDLE:
-                return new PolarCoord(23.52207794, -23.52207794
-                        , -45);
-            case RIGHT:
-                return new PolarCoord(8.019544399, -42.70655476
-                        , -13.7994854);
+    public PolarCoord getGoldenPostition (GoldPosition goldPostition, StartPosition startPostition )
+    {
+        if (startPostition == BLUE_DEPOT)
+        {
+            switch (goldPostition) {
+                case LEFT:
+                    return new PolarCoord(8.019544399, 42.70655476
+                            , 13.7994854);
+                case MIDDLE:
+                    return new PolarCoord(23.52207794, 23.52207794
+                            , 45);
+                case RIGHT:
+                    return new PolarCoord(42.70655476, 8.019544399
+                            , 76.2005146);
+            }
         }
+        else if (startPostition == BLUE_CRATER)
+        {
 
+            switch (goldPostition) {
+                case LEFT:
+                    return new PolarCoord(42.70655476, -8.019544399
+                            , -76.2005146);
+                case MIDDLE:
+                    return new PolarCoord(23.52207794, -23.52207794
+                            , -45);
+                case RIGHT:
+                    return new PolarCoord(8.019544399, -42.70655476
+                            , -13.7994854);
+            }
+        }
+        else if (startPostition == RED_DEPOT)
+        {
 
+            switch (goldPostition) {
+                case LEFT:
+                    return new PolarCoord(-8.019544399, -42.70655476
+                            , -166.2005146
+                    );
+                case MIDDLE:
+                    return new PolarCoord(-23.52207794, -23.52207794
+                            , -135);
+                case RIGHT:
+                    return new PolarCoord(-42.70655476, -8.019544399
+                            , -103.7994854
+                    );
+            }
+        }
+        else
+        {
+            switch (goldPostition) {
+                case LEFT:
+                    return new PolarCoord(-42.70655476, 8.019544399
+                            , 103.7994854);
+                case MIDDLE:
+                    return new PolarCoord(-23.52207794, 23.52207794
+                            , 135);
+                case RIGHT:
+                    return new PolarCoord(-8.019544399, 42.70655476
+                            , 166.2005146);
+            }
+        }
         return new PolarCoord(0, 0, 0);
     }
 
@@ -316,18 +381,21 @@ public class RoverRuckusAutonomousBlueDepot extends LinearOpMode {
     {
         double distance = 0.0;
         if (startPosition == BLUE_DEPOT) {
-            distance = Math.sqrt(Math.pow(54 - goal.x, 2) + Math.pow(-54 - goal.y, 2));
+            distance = Math.sqrt(Math.pow(54 - goal.x, 2) + Math.pow(54 - goal.y, 2));
+
         }
         else if (startPosition == BLUE_CRATER){
-            distance = Math.sqrt(Math.pow(54 - goal.x, 2) + Math.pow(54 - goal.y, 2));
+            distance = Math.sqrt(Math.pow(54 - goal.x, 2) + Math.pow(-54 - goal.y, 2));
+
         }
         else if (startPosition == RED_DEPOT){
-            distance = Math.sqrt(Math.pow(-54 - goal.x, 2) + Math.pow(54 - goal.y, 2));
+            distance = Math.sqrt(Math.pow(-54 - goal.x, 2) + Math.pow(-54 - goal.y, 2));
+
         }
         else {
-            distance = Math.sqrt(Math.pow(-54 - goal.x, 2) + Math.pow(-54 - goal.y, 2));
+            distance = Math.sqrt(Math.pow(-54 - goal.x, 2) + Math.pow(54 - goal.y, 2));
+
         }
          return distance;
-
     }
 }

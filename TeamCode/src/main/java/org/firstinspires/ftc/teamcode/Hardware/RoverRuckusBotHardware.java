@@ -81,8 +81,7 @@ public class RoverRuckusBotHardware {
 
     public double getAngle() {
         Orientation orientation = gyroscope.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
-        return orientation.firstAngle - offset;
-
+        return orientation.firstAngle + offset;
     }
 }
 
