@@ -7,9 +7,9 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import org.firstinspires.ftc.teamcode.Hardware.RRCoachBotHardware;
 import org.firstinspires.ftc.teamcode.Hardware.RoverRuckusBotHardware;
 
-@TeleOp(name="CoachBot")
+@TeleOp(name="CoachBotNoMovement")
 
-public class CoachBotTeleOp extends OpMode {
+public class CoachBotNoMovementTeleOp extends OpMode {
     RRCoachBotHardware robot = new RRCoachBotHardware();
     @Override
     public void init() {
@@ -18,12 +18,6 @@ public class CoachBotTeleOp extends OpMode {
 
     @Override
     public void loop() {
-        double leftMotor = -gamepad1.left_stick_y;
-        double rightMotor = -gamepad1.right_stick_y;
-//        robot.leftFront.setPower(leftMotor);
-//        robot.leftBack.setPower(leftMotor);
-//        robot.rightFront.setPower(rightMotor);
-//        robot.rightBack.setPower(rightMotor);
 
         if (gamepad1.y){
             robot.lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -59,8 +53,10 @@ public class CoachBotTeleOp extends OpMode {
 
         if (gamepad2.left_bumper){
             robot.elbow.setPower(0.3);
+            telemetry.addData("left bumper hit", "");
         } else if(gamepad2.left_trigger > .02) {
             robot.elbow.setPower(-0.3);
+            telemetry.addData("left trigger hit", "");
         } else {
             robot.elbow.setPower(0);
         }
@@ -73,10 +69,8 @@ public class CoachBotTeleOp extends OpMode {
             robot.marker.setPosition(.5);
         }
 
-//        telemetry.addData("leftFrontMotor" , robot.leftFront.getCurrentPosition());
-//        telemetry.addData("leftBackMotor" , robot.leftBack.getCurrentPosition());
-//        telemetry.addData("rightFrontMotor" , robot.rightFront.getCurrentPosition());
-//        telemetry.addData("rightBackMotor" , robot.rightBack.getCurrentPosition());
+        telemetry.addData("shoulder" , robot.shoulder.getCurrentPosition());
+        telemetry.addData("elbow" , robot.elbow.getCurrentPosition());
         telemetry.addData("lift" , robot.lift.getCurrentPosition());
         telemetry.addData("markerServo" , robot.marker.getPosition());
         telemetry.update();
