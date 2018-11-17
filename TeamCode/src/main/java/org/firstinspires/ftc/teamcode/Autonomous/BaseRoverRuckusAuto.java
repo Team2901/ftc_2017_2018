@@ -65,6 +65,7 @@ public class BaseRoverRuckusAuto extends LinearOpMode {
         //step -2: initialize hardware
         robot.init(hardwareMap);
         // step -1: initialize vuforia
+        /*
         VuforiaLocalizer.Parameters parameters = VuforiaUtilities.getBackCameraParameters(hardwareMap);
         vuforia = VuforiaUtilities.getVuforia(parameters);
 
@@ -74,16 +75,17 @@ public class BaseRoverRuckusAuto extends LinearOpMode {
         red = roverRuckus.get(1);
         front = roverRuckus.get(2);
         back = roverRuckus.get(3);
+        */
         //step 0: locate cheddar
         waitForStart();
-        BaseRoverRuckusAuto.GoldPosition goldPosition = determineGoldPosition();
+        BaseRoverRuckusAuto.GoldPosition goldPosition = LEFT ;//determineGoldPosition();
         //step 1: drop down from lander
-         dropFromLander();
+         //dropFromLander();
         //step 2: do vuforia to determine position
-        roverRuckus.activate();
-        OpenGLMatrix location = VuforiaUtilities.getLocation(blue, red, front, back);
+        // roverRuckus.activate();
+        OpenGLMatrix location = null; //  VuforiaUtilities.getLocation(blue, red, front, back);
         if (location == null){
-            location = VuforiaUtilities.getMatrix(0,0,-45, 12,-12,0);
+            location = VuforiaUtilities.getMatrix(0,0,45, 24,24,0);
         }
         VectorF translation = location.getTranslation();
 
@@ -157,7 +159,7 @@ public class BaseRoverRuckusAuto extends LinearOpMode {
     }
 
 
-    public void dropFromLander() {
+   public void dropFromLander() {
         DcMotor.RunMode originalValue = robot.lift.getMode();
         robot.lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -296,20 +298,6 @@ public class BaseRoverRuckusAuto extends LinearOpMode {
         {
             switch (goldPostition) {
                 case LEFT:
-                    return new PolarCoord(42.70655476, -8.019544399
-                            , -76.2005146);
-                case MIDDLE:
-                    return new PolarCoord(23.52207794, -23.52207794
-                            , -45);
-                case RIGHT:
-                    return new PolarCoord(8.019544399, -42.70655476
-                            , -13.7994854);
-            }
-        }
-        else if (startPostition == BLUE_CRATER)
-        {
-            switch (goldPostition) {
-                case LEFT:
                     return new PolarCoord(8.019544399, 42.70655476
                             , 13.7994854);
                 case MIDDLE:
@@ -320,22 +308,24 @@ public class BaseRoverRuckusAuto extends LinearOpMode {
                             , 76.2005146);
             }
         }
+        else if (startPostition == BLUE_CRATER)
+        {
+
+            switch (goldPostition) {
+                case LEFT:
+                    return new PolarCoord(42.70655476, -8.019544399
+                            , -76.2005146);
+                case MIDDLE:
+                    return new PolarCoord(23.52207794, -23.52207794
+                            , -45);
+                case RIGHT:
+                    return new PolarCoord(8.019544399, -42.70655476
+                            , -13.7994854);
+            }
+        }
         else if (startPostition == RED_DEPOT)
         {
-           switch (goldPostition) {
-               case LEFT:
-                   return new PolarCoord(-42.70655476, 8.019544399
-                           , 103.7994854);
-               case MIDDLE:
-                   return new PolarCoord(-23.52207794, 23.52207794
-                           , 135);
-               case RIGHT:
-                   return new PolarCoord(-8.019544399, 42.70655476
-                           , 166.2005146);
-           }
-        }
-        else
-        {
+
             switch (goldPostition) {
                 case LEFT:
                     return new PolarCoord(-8.019544399, -42.70655476
@@ -350,6 +340,20 @@ public class BaseRoverRuckusAuto extends LinearOpMode {
                     );
             }
         }
+        else
+        {
+            switch (goldPostition) {
+                case LEFT:
+                    return new PolarCoord(-42.70655476, 8.019544399
+                            , 103.7994854);
+                case MIDDLE:
+                    return new PolarCoord(-23.52207794, 23.52207794
+                            , 135);
+                case RIGHT:
+                    return new PolarCoord(-8.019544399, 42.70655476
+                            , 166.2005146);
+            }
+        }
         return new PolarCoord(0, 0, 0);
     }
 
@@ -357,16 +361,20 @@ public class BaseRoverRuckusAuto extends LinearOpMode {
     {
         double distance = 0.0;
         if (startPosition == BLUE_DEPOT) {
-            distance = Math.sqrt(Math.pow(54 - goal.x, 2) + Math.pow(-54 - goal.y, 2));
+            distance = Math.sqrt(Math.pow(54 - goal.x, 2) + Math.pow(54 - goal.y, 2));
+
         }
         else if (startPosition == BLUE_CRATER){
-            distance = Math.sqrt(Math.pow(54 - goal.x, 2) + Math.pow(54 - goal.y, 2));
+            distance = Math.sqrt(Math.pow(54 - goal.x, 2) + Math.pow(-54 - goal.y, 2));
+
         }
         else if (startPosition == RED_DEPOT){
-            distance = Math.sqrt(Math.pow(-54 - goal.x, 2) + Math.pow(54 - goal.y, 2));
+            distance = Math.sqrt(Math.pow(-54 - goal.x, 2) + Math.pow(-54 - goal.y, 2));
+
         }
         else {
-            distance = Math.sqrt(Math.pow(-54 - goal.x, 2) + Math.pow(-54 - goal.y, 2));
+            distance = Math.sqrt(Math.pow(-54 - goal.x, 2) + Math.pow(54 - goal.y, 2));
+
         }
          return distance;
 
