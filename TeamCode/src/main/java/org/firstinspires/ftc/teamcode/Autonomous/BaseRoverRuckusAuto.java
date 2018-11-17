@@ -22,13 +22,13 @@ import org.firstinspires.ftc.teamcode.Utility.RelicRecoveryUtilities;
 import org.firstinspires.ftc.teamcode.Utility.RoverRuckusUtilities;
 import org.firstinspires.ftc.teamcode.Utility.VuforiaUtilities;
 
-import static org.firstinspires.ftc.teamcode.Autonomous.RoverRuckusAutonomousBlueDepot.StartPosition.BLUE_CRATER;
-import static org.firstinspires.ftc.teamcode.Autonomous.RoverRuckusAutonomousBlueDepot.StartPosition.BLUE_DEPOT;
-import static org.firstinspires.ftc.teamcode.Autonomous.RoverRuckusAutonomousBlueDepot.StartPosition.RED_DEPOT;
+import static org.firstinspires.ftc.teamcode.Autonomous.BaseRoverRuckusAuto.GoldPosition.*;
+import static org.firstinspires.ftc.teamcode.Autonomous.BaseRoverRuckusAuto.StartPosition.BLUE_CRATER;
+import static org.firstinspires.ftc.teamcode.Autonomous.BaseRoverRuckusAuto.StartPosition.BLUE_DEPOT;
+import static org.firstinspires.ftc.teamcode.Autonomous.BaseRoverRuckusAuto.StartPosition.RED_DEPOT;
 
 
-@Autonomous(name = "RoverRuckusAutonomous Blue Depot")
-public class RoverRuckusAutonomousBlueDepot extends LinearOpMode {
+public class BaseRoverRuckusAuto extends LinearOpMode {
 
     RoverRuckusBotHardware robot = new RoverRuckusBotHardware();
     VuforiaLocalizer vuforia;
@@ -76,7 +76,7 @@ public class RoverRuckusAutonomousBlueDepot extends LinearOpMode {
         back = roverRuckus.get(3);
         //step 0: locate cheddar
         waitForStart();
-        RoverRuckusAutonomousBlueDepot.GoldPosition goldPosition = determineGoldPosition();
+        BaseRoverRuckusAuto.GoldPosition goldPosition = determineGoldPosition();
         //step 1: drop down from lander
          dropFromLander();
         //step 2: do vuforia to determine position
@@ -100,7 +100,7 @@ public class RoverRuckusAutonomousBlueDepot extends LinearOpMode {
 
 
         //step 3: go to the cheddar pivot point
-        PolarCoord goal = getGoalPosition(goldPosition);
+        PolarCoord goal = getGoldenPostition(goldPosition, initialPosition);
         goToPosition(x, y, goal.x, goal.y, angleVu);
 
         //step 4:turn to face depot point
@@ -130,7 +130,7 @@ public class RoverRuckusAutonomousBlueDepot extends LinearOpMode {
         robot.left.setPower(0);
         robot.right.setPower(0);
         //step 5: gooooo
-        double distance = Math.sqrt(Math.pow(54 - goal.x, 2) + Math.pow(-54 - goal.y, 2));
+        double distance = getDistance(initialPosition, goal);
 
         robot.left.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.right.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -183,7 +183,7 @@ public class RoverRuckusAutonomousBlueDepot extends LinearOpMode {
 
             RelicRecoveryUtilities.totalYellowHues(leftHueTotal, middleHueTotal, rightHueTotal);
             if (leftHueTotal > middleHueTotal && middleHueTotal > rightHueTotal) {
-                return GoldPosition.LEFT;
+                return LEFT;
             } else if (rightHueTotal > middleHueTotal && rightHueTotal > leftHueTotal) {
                 return GoldPosition.RIGHT;
             } else {
@@ -198,18 +198,11 @@ public class RoverRuckusAutonomousBlueDepot extends LinearOpMode {
     }
 
     public void doCornerAction() {
-        if (initialPosition.equals("depot")) {
+        if (initialPosition == BLUE_DEPOT || initialPosition== RED_DEPOT) {
             robot.marker.setPosition(1);
-        } else if (initialPosition.equals("crater")) {
-            ;
-        } else {
-            robot.left.setPower(1);
-            final double currentTime = time;
-            double targetTime = currentTime + 5;
-            while (targetTime < time) {
-                idle();
-            }
-            robot.left.setPower(0);
+        }
+        else {
+
         }
     }
 
@@ -293,22 +286,70 @@ public class RoverRuckusAutonomousBlueDepot extends LinearOpMode {
 
     }
 
-    public PolarCoord getGoalPosition(GoldPosition goldPosition) {
 
 
-        switch (goldPosition) {
-            case LEFT:
-                return new PolarCoord(42.70655476, -8.019544399
-                        , -76.2005146);
-            case MIDDLE:
-                return new PolarCoord(23.52207794, -23.52207794
-                        , -45);
-            case RIGHT:
-                return new PolarCoord(8.019544399, -42.70655476
-                        , -13.7994854);
+
+
+    public PolarCoord getGoldenPostition (GoldPosition goldPostition, StartPosition startPostition )
+    {
+        if (startPostition == BLUE_DEPOT)
+        {
+            switch (goldPostition) {
+                case LEFT:
+                    return new PolarCoord(42.70655476, -8.019544399
+                            , -76.2005146);
+                case MIDDLE:
+                    return new PolarCoord(23.52207794, -23.52207794
+                            , -45);
+                case RIGHT:
+                    return new PolarCoord(8.019544399, -42.70655476
+                            , -13.7994854);
+            }
         }
-
-
+        else if (startPostition == BLUE_CRATER)
+        {
+            switch (goldPostition) {
+                case LEFT:
+                    return new PolarCoord(8.019544399, 42.70655476
+                            , 13.7994854);
+                case MIDDLE:
+                    return new PolarCoord(23.52207794, 23.52207794
+                            , 45);
+                case RIGHT:
+                    return new PolarCoord(42.70655476, 8.019544399
+                            , 76.2005146);
+            }
+        }
+        else if (startPostition == RED_DEPOT)
+        {
+           switch (goldPostition) {
+               case LEFT:
+                   return new PolarCoord(-42.70655476, 8.019544399
+                           , 103.7994854);
+               case MIDDLE:
+                   return new PolarCoord(-23.52207794, 23.52207794
+                           , 135);
+               case RIGHT:
+                   return new PolarCoord(-8.019544399, 42.70655476
+                           , 166.2005146);
+           }
+        }
+        else
+        {
+            switch (goldPostition) {
+                case LEFT:
+                    return new PolarCoord(-8.019544399, -42.70655476
+                            , -166.2005146
+                    );
+                case MIDDLE:
+                    return new PolarCoord(-23.52207794, -23.52207794
+                            , -135);
+                case RIGHT:
+                    return new PolarCoord(-42.70655476, -8.019544399
+                            , -103.7994854
+                    );
+            }
+        }
         return new PolarCoord(0, 0, 0);
     }
 
