@@ -14,11 +14,11 @@ public class MultiWebCamTest extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
 
-        WebcamName webcam1 = hardwareMap.get(WebcamName.class, "webcam_1");
-        WebcamName webcam2 = hardwareMap.get(WebcamName.class, "webcam_2");
+        WebcamName webcam = hardwareMap.get(WebcamName.class, "webcam");
 
-        VuforiaLocalizer.Parameters parameters1 = VuforiaUtilities.getWebcamParameters(hardwareMap, webcam1);
-        VuforiaLocalizer.Parameters parameters2 = VuforiaUtilities.getWebcamParameters(hardwareMap, webcam2);
+
+        VuforiaLocalizer.Parameters parameters1 = VuforiaUtilities.getWebcamParameters(hardwareMap, webcam);
+        VuforiaLocalizer.Parameters parameters2 = VuforiaUtilities.getBackCameraParameters(hardwareMap);
 
         VuforiaLocalizer vuforia = VuforiaUtilities.getVuforia(parameters1);
         vuforia.getCamera().close();
