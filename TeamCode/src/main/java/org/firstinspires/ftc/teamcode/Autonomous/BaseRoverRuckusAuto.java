@@ -78,14 +78,16 @@ public class BaseRoverRuckusAuto extends LinearOpMode {
         */
         //step 0: locate cheddar
         waitForStart();
-        BaseRoverRuckusAuto.GoldPosition goldPosition = LEFT ;//determineGoldPosition();
+        BaseRoverRuckusAuto.GoldPosition goldPosition = RIGHT ;//determineGoldPosition();
         //step 1: drop down from lander
          //dropFromLander();
         //step 2: do vuforia to determine position
         // roverRuckus.activate();
         OpenGLMatrix location = null; //  VuforiaUtilities.getLocation(blue, red, front, back);
         if (location == null){
-            location = VuforiaUtilities.getMatrix(0,0,45, 24,24,0);
+            location = VuforiaUtilities.getMatrix(0,0,45,
+                    (float) (24/VuforiaUtilities.MM_TO_INCHES),
+                    (float) (24/VuforiaUtilities.MM_TO_INCHES),0);
         }
         VectorF translation = location.getTranslation();
 
@@ -105,6 +107,7 @@ public class BaseRoverRuckusAuto extends LinearOpMode {
         PolarCoord goal = getGoldenPostition(goldPosition, initialPosition);
         goToPosition(x, y, goal.x, goal.y, angleVu);
 
+
         //step 4:turn to face depot point
         double angleImu = robot.getAngle();
 
@@ -123,15 +126,19 @@ public class BaseRoverRuckusAuto extends LinearOpMode {
 
             telemetry.addData("goldPosition" , goldPosition);
             telemetry.addData("Goal Angle", goal.theta);
+            telemetry.addData("Robot Angle ", angleImu);
+            telemetry.addData("offset Angle", robot.offset);
             telemetry.addData("angleGoal-angle ", goal.theta - angleImu);
             telemetry.addData("Power", getPower(angleImu, goal.theta));
             telemetry.update();
             idle();
         }
 
+
         robot.left.setPower(0);
         robot.right.setPower(0);
         //step 5: gooooo
+
         double distance = getDistance(initialPosition, goal);
 
         robot.left.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -156,6 +163,10 @@ public class BaseRoverRuckusAuto extends LinearOpMode {
         }
         //step 7: do corner action(if depot: drop team marker/if crater: park)
         doCornerAction();
+
+        while(opModeIsActive()) {
+            idle();
+        }
     }
 
 
@@ -202,6 +213,7 @@ public class BaseRoverRuckusAuto extends LinearOpMode {
     public void doCornerAction() {
         if (initialPosition == BLUE_DEPOT || initialPosition== RED_DEPOT) {
             robot.marker.setPosition(1);
+            robot.marker.setPosition(0);
         }
         else {
 
@@ -235,62 +247,70 @@ public class BaseRoverRuckusAuto extends LinearOpMode {
         double angleGoal = Math.atan2(yDiff, xDiff) * (180 / Math.PI);
 
         angleImu = robot.getAngle();
-
-        while (Math.abs(angleGoal - angleImu) > 1) {
-            angleImu = robot.getAngle();
-
-            robot.left.setPower(-getPower(angleImu, angleGoal));
-            robot.right.setPower(getPower(angleImu, angleGoal));
-
-            telemetry.addData("Goal Angle", angleGoal);
-            telemetry.addData("angleGoal-angle ", angleGoal - angleImu);
-            telemetry.addData("angleImu", angleImu);
-            telemetry.addData("Power", getPower(angleImu, angleGoal));
-            telemetry.update();
-            idle();
-        }
-
-
-        robot.left.setPower(0);
-        robot.right.setPower(0);
-
         double distanceToGoal = Math.sqrt((Math.pow(yDiff, 2) + Math.pow(xDiff, 2)));
 
-        int encodersToGoal = (int) (VuforiaUtilities.INCHES_TO_ENCODERCOUNTS * distanceToGoal);
+        if (distanceToGoal >2 ) {
+            while (Math.abs(angleGoal - angleImu) > 1) {
+                angleImu = robot.getAngle();
 
-        telemetry.addData("distance to goal", distanceToGoal);
-        telemetry.addData("encoders to goal", encodersToGoal);
-        telemetry.update();
+                robot.left.setPower(-getPower(angleImu, angleGoal));
+                robot.right.setPower(getPower(angleImu, angleGoal));
+                telemetry.addData("Goal", String.format("%f %f", goalX, goalY));
+                telemetry.addData("Start", String.format("%f %f", startX, startY));
 
-        robot.left.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.right.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.left.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.right.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                telemetry.addData("Goal Angle", angleGoal);
+                telemetry.addData("angleGoal-angle ", angleGoal - angleImu);
+                telemetry.addData("Robot Angle ", angleImu);
+                telemetry.addData("offset Angle", robot.offset);
+                telemetry.addData("Power", getPower(angleImu, angleGoal));
+                telemetry.update();
+                idle();
+            }
 
-        robot.left.setTargetPosition(encodersToGoal);
-        robot.right.setTargetPosition(encodersToGoal);
 
-        robot.left.setPower(.75);
-        robot.right.setPower(.75);
+            robot.left.setPower(0);
+            robot.right.setPower(0);
 
-        while (robot.left.isBusy()) {
-            telemetry.addData("left Counts", robot.left.getCurrentPosition());
-            telemetry.addData("right Counts", robot.right.getCurrentPosition());
+
+            int encodersToGoal = (int) (VuforiaUtilities.INCHES_TO_ENCODERCOUNTS * distanceToGoal);
+
             telemetry.addData("distance to goal", distanceToGoal);
             telemetry.addData("encoders to goal", encodersToGoal);
             telemetry.update();
 
-            idle();
+            robot.left.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            robot.right.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            robot.left.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            robot.right.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+            robot.left.setTargetPosition(encodersToGoal);
+            robot.right.setTargetPosition(encodersToGoal);
+
+            robot.left.setPower(.75);
+            robot.right.setPower(.75);
+
+            while (robot.left.isBusy()) {
+
+                telemetry.addData("Goal", String.format("%f %f", goalX, goalY));
+                telemetry.addData("Start", String.format("%f %f", startX, startY));
+                telemetry.addData("left Counts", robot.left.getCurrentPosition());
+                telemetry.addData("right Counts", robot.right.getCurrentPosition());
+                telemetry.addData("distance to goal", distanceToGoal);
+                telemetry.addData("encoders to goal", encodersToGoal);
+                telemetry.update();
+
+                idle();
+            }
+
+            robot.left.setPower(0);
+            robot.right.setPower(0);
+        }
+        else {
+           telemetry.addData("too close not moving or turning", "");
+           telemetry.update();
         }
 
-        robot.left.setPower(0);
-        robot.right.setPower(0);
-
     }
-
-
-
-
 
     public PolarCoord getGoldenPostition (GoldPosition goldPostition, StartPosition startPostition )
     {
@@ -377,6 +397,5 @@ public class BaseRoverRuckusAuto extends LinearOpMode {
 
         }
          return distance;
-
     }
 }
