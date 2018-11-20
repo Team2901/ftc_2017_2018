@@ -1,22 +1,16 @@
 /* Copyright (c) 2014, 2015 Qualcomm Technologies Inc
-
 All rights reserved.
-
 Redistribution and use in source and binary forms, with or without modification,
 are permitted (subject to the limitations in the disclaimer below) provided that
 the following conditions are met:
-
 Redistributions of source code must retain the above copyright notice, this list
 of conditions and the following disclaimer.
-
 Redistributions in binary form must reproduce the above copyright notice, this
 list of conditions and the following disclaimer in the documentation and/or
 other materials provided with the distribution.
-
 Neither the name of Qualcomm Technologies Inc nor the names of its contributors
 may be used to endorse or promote products derived from this software without
 specific prior written permission.
-
 NO EXPRESS OR IMPLIED LICENSES TO ANY PARTY'S PATENT RIGHTS ARE GRANTED BY THIS
 LICENSE. THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
@@ -60,6 +54,7 @@ import android.webkit.WebView;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.LinearLayout.LayoutParams;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 
@@ -168,13 +163,14 @@ public class FtcRobotControllerActivity extends Activity
     protected WifiMuteStateMachine wifiMuteStateMachine;
     protected MotionDetection motionDetection;
 
+    /////////////////////////////////////////////////////////
+
     public static final int COLOR_BLUE = 0x5533ccff;
     public static final int COLOR_GREEN = 0x5500ff00;
     public static final int COLOR_PINK= 0x55ff3399;
     public static final int COLOR_YELLOW = 0x55ffff00;
     public static final int COLOR_WHITE = 0x55ffffff;
 
-    /////////////////////////////////////////////////////////
 
     public void setupPreviewLayout(final int cameraMonitorViewIdParent){
         final View parentView = findViewById(cameraMonitorViewIdParent);
@@ -391,6 +387,8 @@ public class FtcRobotControllerActivity extends Activity
                 popupMenu.show();
             }
         });
+
+        updateMonitorLayout(getResources().getConfiguration());
 
         BlocksOpMode.setActivityAndWebView(this, (WebView) findViewById(R.id.webViewBlocksRuntime));
 
@@ -662,6 +660,31 @@ public class FtcRobotControllerActivity extends Activity
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         // don't destroy assets on screen rotation
+        updateMonitorLayout(newConfig);
+    }
+
+    /**
+     * Updates the orientation of monitorContainer (which contains cameraMonitorView and
+     * tfodMonitorView) based on the given configuration. Makes the children split the space.
+     */
+    private void updateMonitorLayout(Configuration configuration) {
+        LinearLayout monitorContainer = (LinearLayout) findViewById(R.id.monitorContainer);
+        if (configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            // When the phone is landscape, lay out the monitor views horizontally.
+            monitorContainer.setOrientation(LinearLayout.HORIZONTAL);
+            for (int i = 0; i < monitorContainer.getChildCount(); i++) {
+                View view = monitorContainer.getChildAt(i);
+                view.setLayoutParams(new LayoutParams(0, LayoutParams.MATCH_PARENT, 1 /* weight */));
+            }
+        } else {
+            // When the phone is portrait, lay out the monitor views vertically.
+            monitorContainer.setOrientation(LinearLayout.VERTICAL);
+            for (int i = 0; i < monitorContainer.getChildCount(); i++) {
+                View view = monitorContainer.getChildAt(i);
+                view.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, 0, 1 /* weight */));
+            }
+        }
+        monitorContainer.requestLayout();
     }
 
     @Override
