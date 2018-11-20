@@ -89,7 +89,7 @@ public class RelicRecoveryUtilities {
     }
 
         public static List<String> readConfigFile (String filename) throws IOException {
-        final File teamDir = new File(Environment.getExternalStorageDirectory(), "team");
+        final File teamDir = new File(Environment.getExternalStorageDirectory(), "Team");
 
         boolean newDir = teamDir.mkdirs();
 
