@@ -16,7 +16,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 import org.firstinspires.ftc.teamcode.Utility.VuforiaUtilities;
 
 
-@Autonomous (name = "VuForiaTest")
+@Autonomous(name = "VuForiaTest")
 public class VuForiaTest extends LinearOpMode {
 
     VuforiaLocalizer vuforia;
@@ -68,24 +68,25 @@ public class VuForiaTest extends LinearOpMode {
 
         OpenGLMatrix location = null;
         while (opModeIsActive()) {
+
             location = getLocation(blue, red, front, back);
+            if(location != null) {
+                VectorF translation = location.getTranslation();
 
-            VectorF translation = location.getTranslation();
+                Orientation orientation = Orientation.getOrientation(location,
+                        AxesReference.EXTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES);
 
-            Orientation orientation = Orientation.getOrientation(location,
-                    AxesReference.EXTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES);
+                double x = (translation.get(0) * MM_TO_INCHES);
+                double y = (translation.get(1) * MM_TO_INCHES);
+                double z = (translation.get(2) * MM_TO_INCHES);
+                float angle = orientation.thirdAngle;
 
-            double x = (translation.get(0) * MM_TO_INCHES);
-            double y = (translation.get(1) * MM_TO_INCHES);
-            double z = (translation.get(2) * MM_TO_INCHES);
-            float angle = orientation.thirdAngle;
-
-            telemetry.addData("X", "%.2f", x);
-            telemetry.addData("Y", "%.2f", y);
-            telemetry.addData("Z", "%.2f", z);
-            telemetry.addData("Angle", "%.2f", angle);
-            telemetry.update();
-
+                telemetry.addData("X", "%.2f", x);
+                telemetry.addData("Y", "%.2f", y);
+                telemetry.addData("Z", "%.2f", z);
+                telemetry.addData("Angle", "%.2f", angle);
+                telemetry.update();
+            }
 
             idle();
         }
@@ -106,26 +107,24 @@ public class VuForiaTest extends LinearOpMode {
         OpenGLMatrix backLocation = null;
         OpenGLMatrix frontLocation = null;
 
-        while (location == null && opModeIsActive()) {
-            blueLocation = ((VuforiaTrackableDefaultListener)
-                    blue.getListener()).getUpdatedRobotLocation();
-            redLocation = ((VuforiaTrackableDefaultListener)
-                    red.getListener()).getUpdatedRobotLocation();
-            backLocation = ((VuforiaTrackableDefaultListener)
-                    back.getListener()).getUpdatedRobotLocation();
-            frontLocation = ((VuforiaTrackableDefaultListener)
-                    front.getListener()).getUpdatedRobotLocation();
 
-            if (blueLocation != null) {
-                location = blueLocation;
-            } else if (redLocation != null) {
-                location = redLocation;
-            } else if (backLocation != null) {
-                location = backLocation;
-            } else if (frontLocation != null) {
-                location = frontLocation;
-            }
-            idle();
+        blueLocation = ((VuforiaTrackableDefaultListener)
+                blue.getListener()).getUpdatedRobotLocation();
+        redLocation = ((VuforiaTrackableDefaultListener)
+                red.getListener()).getUpdatedRobotLocation();
+        backLocation = ((VuforiaTrackableDefaultListener)
+                back.getListener()).getUpdatedRobotLocation();
+        frontLocation = ((VuforiaTrackableDefaultListener)
+                front.getListener()).getUpdatedRobotLocation();
+
+        if (blueLocation != null) {
+            location = blueLocation;
+        } else if (redLocation != null) {
+            location = redLocation;
+        } else if (backLocation != null) {
+            location = backLocation;
+        } else if (frontLocation != null) {
+            location = frontLocation;
         }
         return location;
     }
