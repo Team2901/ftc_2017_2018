@@ -27,4 +27,6 @@ import org.firstinspires.ftc.teamcode.Utility.VuforiaUtilities;
 public class RoverRuckusAutonomousBlueCrater extends BaseRoverRuckusAuto {
 
     public StartPosition initialPosition = StartPosition.BLUE_CRATER;
+
+
 }
