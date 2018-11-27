@@ -318,13 +318,13 @@ public class BaseRoverRuckusAuto extends LinearOpMode {
         {
             switch (goldPostition) {
                 case LEFT:
-                    return new PolarCoord(8.019544399, 42.70655476
+                    return new PolarCoord(-8.019544399, 42.70655476
                             , 13.7994854);
                 case MIDDLE:
-                    return new PolarCoord(23.52207794, 23.52207794
+                    return new PolarCoord(-23.52207794, 23.52207794
                             , 45);
                 case RIGHT:
-                    return new PolarCoord(42.70655476, 8.019544399
+                    return new PolarCoord(-42.70655476, 8.019544399
                             , 76.2005146);
             }
         }
@@ -333,14 +333,15 @@ public class BaseRoverRuckusAuto extends LinearOpMode {
 
             switch (goldPostition) {
                 case LEFT:
-                    return new PolarCoord(42.70655476, -8.019544399
+                    return new PolarCoord(42.70655476, 8.019544399
                             , -76.2005146);
                 case MIDDLE:
-                    return new PolarCoord(23.52207794, -23.52207794
+                    return new PolarCoord(23.52207794, 23.52207794
                             , -45);
                 case RIGHT:
-                    return new PolarCoord(8.019544399, -42.70655476
-                            , -13.7994854);
+                    return new PolarCoord(8.350603181, 52.46792362
+                            , -17.68439203);
+                    //zero is when robot id looking at blue cripto graph
             }
         }
         else if (startPostition == RED_DEPOT)
@@ -348,14 +349,14 @@ public class BaseRoverRuckusAuto extends LinearOpMode {
 
             switch (goldPostition) {
                 case LEFT:
-                    return new PolarCoord(-8.019544399, -42.70655476
+                    return new PolarCoord(8.019544399, -42.70655476
                             , -166.2005146
                     );
                 case MIDDLE:
-                    return new PolarCoord(-23.52207794, -23.52207794
+                    return new PolarCoord(23.52207794, -23.52207794
                             , -135);
                 case RIGHT:
-                    return new PolarCoord(-42.70655476, -8.019544399
+                    return new PolarCoord(42.70655476, -8.019544399
                             , -103.7994854
                     );
             }
@@ -364,13 +365,13 @@ public class BaseRoverRuckusAuto extends LinearOpMode {
         {
             switch (goldPostition) {
                 case LEFT:
-                    return new PolarCoord(-42.70655476, 8.019544399
+                    return new PolarCoord(-42.70655476, -8.019544399
                             , 103.7994854);
                 case MIDDLE:
-                    return new PolarCoord(-23.52207794, 23.52207794
+                    return new PolarCoord(-23.52207794, -23.52207794
                             , 135);
                 case RIGHT:
-                    return new PolarCoord(-8.019544399, 42.70655476
+                    return new PolarCoord(-8.019544399, -42.70655476
                             , 166.2005146);
             }
         }
