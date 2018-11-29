@@ -48,6 +48,38 @@ public class RelicRecoveryUtilities {
             }
         }
     }
+    public static String winnerFrom2Bmaps (int middleHueTotal, int rightHueTotal) throws IOException
+    {
+        final File teamDir = new File(Environment.getExternalStorageDirectory(), "Team");
+        boolean newDir = teamDir.mkdirs();
+        final File file = new File(teamDir, "WinnerYellowFrom2Bitmaps.txt");
+        int winnerCount = 0;
+        String winnerLocation = "?";
+        if (winnerCount < middleHueTotal)
+        {
+          winnerCount= middleHueTotal;
+          winnerLocation = "M";
+        }
+        if (winnerCount < rightHueTotal)
+        {
+            winnerLocation = "R";
+        }
+        if (Math.abs(rightHueTotal-middleHueTotal)< 40)
+        {
+            winnerLocation = "L";
+        }
+        try (BufferedWriter writer = new BufferedWriter (new FileWriter(file)))
+        {
+            writer.write("Middle Jewel Yellow count = " + middleHueTotal);
+            writer.newLine();
+            writer.write( "Right Jewel Yellow count = " + rightHueTotal);
+            writer.newLine();
+            writer.write ("winner is " + winnerLocation);
+        }
+
+        return winnerLocation;
+
+    }
 
     public static String totalYellowHues (int leftHueTotal, int middleHueTotal, int rightHueTotal) throws IOException
     {

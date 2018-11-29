@@ -56,7 +56,8 @@ public class SetUpCode2019 extends LinearOpModeJewelCamera {
         final FtcRobotControllerActivity activity =(FtcRobotControllerActivity )hardwareMap.appContext;
 
 
-        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier(
+                "cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         VuforiaLocalizer.Parameters parameters = VuforiaUtilities.getBackCameraParameters(hardwareMap);
         vuforia = VuforiaUtilities.getVuforia(parameters);
         activity.setupPreviewLayout(cameraMonitorViewId);
@@ -72,12 +73,16 @@ public class SetUpCode2019 extends LinearOpModeJewelCamera {
 
             RelicRecoveryUtilities.saveHueFile("jewelHuesBig.txt", bitmap);
 
-            int leftHueTotal = RoverRuckusUtilities.getJewelHueCount(bitmap, jewelConfigLeft, jewelBitmapLeft, "jewelHuesLeft.txt");
-            int middleHueTotal = RoverRuckusUtilities.getJewelHueCount(bitmap, jewelConfigMiddle, jewelBitmapMiddle, "jewelHuesMiddle.txt");
-            int rightHueTotal = RoverRuckusUtilities.getJewelHueCount(bitmap, jewelConfigRight, jewelBitmapRight, "jewelHuesRight.txt");
+            int leftHueTotal = RoverRuckusUtilities.getJewelHueCount(bitmap, jewelConfigLeft,
+                    jewelBitmapLeft, "jewelHuesLeft.txt");
+            int middleHueTotal = RoverRuckusUtilities.getJewelHueCount(bitmap, jewelConfigMiddle,
+                    jewelBitmapMiddle, "jewelHuesMiddle.txt");
+            int rightHueTotal = RoverRuckusUtilities.getJewelHueCount(bitmap, jewelConfigRight,
+                    jewelBitmapRight, "jewelHuesRight.txt");
 
 
             RelicRecoveryUtilities.totalYellowHues(leftHueTotal, middleHueTotal, rightHueTotal);
+            RelicRecoveryUtilities.winnerFrom2Bmaps(middleHueTotal, rightHueTotal);
 
 
 
