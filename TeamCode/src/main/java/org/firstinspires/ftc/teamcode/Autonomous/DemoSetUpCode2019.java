@@ -41,6 +41,9 @@ public class DemoSetUpCode2019 extends LinearOpModeJewelCamera {
     String jewelBitmapMiddle = "jewelBitmapMiddle.png";
     String jewelBitmapRight = "jewelBitmapRight.png";
 
+    int leftHueTotal = 0;
+    int middleHueTotal = 0;
+    int rightHueTotal = 0;
     //left
     //middle
     //right
@@ -72,9 +75,9 @@ public class DemoSetUpCode2019 extends LinearOpModeJewelCamera {
 
             RelicRecoveryUtilities.saveHueFile("jewelHuesBig.txt", bitmap);
 
-            int leftHueTotal = RoverRuckusUtilities.getJewelHueCount(bitmap, jewelConfigLeft, jewelBitmapLeft, "jewelHuesLeft.txt");
-            int middleHueTotal = RoverRuckusUtilities.getJewelHueCount(bitmap, jewelConfigMiddle, jewelBitmapMiddle, "jewelHuesMiddle.txt");
-            int rightHueTotal = RoverRuckusUtilities.getJewelHueCount(bitmap, jewelConfigRight, jewelBitmapRight, "jewelHuesRight.txt");
+            RoverRuckusUtilities.getJewelHueCount(bitmap, jewelConfigLeft, jewelBitmapLeft, "jewelHuesLeft.txt");
+            RoverRuckusUtilities.getJewelHueCount(bitmap, jewelConfigMiddle, jewelBitmapMiddle, "jewelHuesMiddle.txt");
+            RoverRuckusUtilities.getJewelHueCount(bitmap, jewelConfigRight, jewelBitmapRight, "jewelHuesRight.txt");
 
             //turn all boxes white
             jewelLeft().setBackgroundColor(0x55ffffff);
@@ -98,7 +101,8 @@ public class DemoSetUpCode2019 extends LinearOpModeJewelCamera {
                 //turn middle box yellow
                 jewel = this.jewelMiddle();
             }
-            jewel.setBackgroundColor(0x55ffff00);
+
+            //jewelLeft.post({ jewelLeft.setText(Integer.toString(leftHueTotal)); jewelLeft.setBackgroundColor(0x55ffffff);});
 
         } catch (Exception e) {
             telemetry.addData("ERROR WRITING TO FILE JEWEL BITMAP", e.getMessage());
