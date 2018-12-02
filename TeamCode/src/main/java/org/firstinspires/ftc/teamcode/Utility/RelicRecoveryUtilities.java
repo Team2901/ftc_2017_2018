@@ -64,7 +64,7 @@ public class RelicRecoveryUtilities {
         {
             winnerLocation = "R";
         }
-        if (Math.abs(rightHueTotal-middleHueTotal)< 40)
+        if (Math.abs(rightHueTotal-middleHueTotal)<30)
         {
             winnerLocation = "L";
         }
@@ -396,8 +396,8 @@ This allows only one problem spot to remain
         double xPercent = (bitmap.getWidth()) / 100.0;
         double yPercent = (bitmap.getHeight()) / 100.0;
 
-        for (int x = 0; x < bitmap.getWidth(); x = x+20) { // replace 200 with x pixel size value
-            for (int y = 0; y < bitmap.getHeight(); y = y+20) {
+        for (int x = 0; x < bitmap.getWidth(); x = x+1) { // replace 200 with x pixel size value
+            for (int y = 0; y < bitmap.getHeight(); y = y+1) {
                 int color = bitmap.getPixel( x, y );
 
                 int red = Color.red(color);
@@ -423,8 +423,8 @@ This allows only one problem spot to remain
         int total = 0;
 
 
-        for (int x = 0; x < bitmap.getWidth(); x = x+20) { // replace 200 with x pixel size value
-            for (int y = 0; y < bitmap.getHeight(); y = y+20) {
+        for (int x = 0; x < bitmap.getWidth(); x = x+1) { // replace 200 with x pixel size value
+            for (int y = 0; y < bitmap.getHeight(); y = y+1) {
                 int color = bitmap.getPixel( x, y );
 
                 int red = Color.red(color);
