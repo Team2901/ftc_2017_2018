@@ -2,13 +2,6 @@ package org.firstinspires.ftc.teamcode.Utility;
 
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.graphics.Matrix;
-
-import com.vuforia.Image;
-import com.vuforia.PIXEL_FORMAT;
-
-import org.firstinspires.ftc.robotcontroller.internal.JewelFinder;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 
 public class ColorUtilities {
     //Converts RGB channels from the bitmap to HSV counts to get a the of the hue of the pixels
@@ -88,15 +81,15 @@ public class ColorUtilities {
         return colorCount;
     }
 
-    public static int[] getColorCounts (Bitmap bitmap){
-        int[] colorCounts = new int [360];
+    public static int[] getColorCounts(Bitmap bitmap) {
+        int[] colorCounts = new int[360];
 
         double xPercent = (bitmap.getWidth()) / 100.0;
         double yPercent = (bitmap.getHeight()) / 100.0;
 
-        for (int x = 0; x < bitmap.getWidth(); x = x+1) { // replace 200 with x pixel size value
-            for (int y = 0; y < bitmap.getHeight(); y = y+1) {
-                int color = bitmap.getPixel( x, y );
+        for (int x = 0; x < bitmap.getWidth(); x = x + 1) { // replace 200 with x pixel size value
+            for (int y = 0; y < bitmap.getHeight(); y = y + 1) {
+                int color = bitmap.getPixel(x, y);
 
                 int red = Color.red(color);
                 int green = Color.green(color);
@@ -116,16 +109,14 @@ public class ColorUtilities {
     }
 
 
-
-    public static int determineColor (Bitmap bitmap, int minHue, int maxHue)
-    {
+    public static int determineColor(Bitmap bitmap, int minHue, int maxHue) {
 
         int total = 0;
 
 
-        for (int x = 0; x < bitmap.getWidth(); x = x+5) { // replace 200 with x pixel size value
-            for (int y = 0; y < bitmap.getHeight(); y = y+5) {
-                int color = bitmap.getPixel( x, y );
+        for (int x = 0; x < bitmap.getWidth(); x = x + 5) { // replace 200 with x pixel size value
+            for (int y = 0; y < bitmap.getHeight(); y = y + 5) {
+                int color = bitmap.getPixel(x, y);
 
                 int red = Color.red(color);
                 int green = Color.green(color);
@@ -133,9 +124,8 @@ public class ColorUtilities {
 
                 double[] HBV = RGBtoHSV(red, green, blue);
                 int hue = (int) HBV[0];
-                if (minHue<= hue && hue <= maxHue)
-                {
-                    total ++;
+                if (minHue <= hue && hue <= maxHue) {
+                    total++;
                 }
             }
         }

@@ -15,8 +15,7 @@ import java.io.IOException;
 
 public class BitmapUtilities {
 
-    public static String findWinnerLocation (int leftHueTotal, int middleHueTotal, int rightHueTotal)
-    {
+    public static String findWinnerLocation(int leftHueTotal, int middleHueTotal, int rightHueTotal) {
 
         int winnerCount = 0;
         String winnerLocation = "?";
@@ -35,29 +34,25 @@ public class BitmapUtilities {
         return winnerLocation;
     }
 
-    public static String findWinnerLocation (int middleHueTotal, int rightHueTotal)
-    {
+    public static String findWinnerLocation(int middleHueTotal, int rightHueTotal) {
 
         int winnerCount = 0;
         String winnerLocation = "?";
 
-        if (winnerCount < rightHueTotal)
-        {
+        if (winnerCount < rightHueTotal) {
             winnerLocation = "R";
         }
-        if (Math.abs(rightHueTotal-middleHueTotal)<30)
-        {
+        if (Math.abs(rightHueTotal - middleHueTotal) < 30) {
             winnerLocation = "L";
         }
         return winnerLocation;
     }
 
-    public static Bitmap getBabyBitmap (Bitmap bitmap, int sampleLeftXPct, int sampleTopYPct, int sampleRightXPct, int sampleBotYPct)
-    {
-        int startXPx = (int)((sampleLeftXPct/100.0) * bitmap.getWidth());
-        int startYPx = (int)((sampleTopYPct/100.0) * bitmap.getHeight());
-        int endXPx = (int)((sampleRightXPct/100.0) * bitmap.getWidth());
-        int endYPx = (int)((sampleBotYPct/100.0) * bitmap.getHeight());
+    public static Bitmap getBabyBitmap(Bitmap bitmap, int sampleLeftXPct, int sampleTopYPct, int sampleRightXPct, int sampleBotYPct) {
+        int startXPx = (int) ((sampleLeftXPct / 100.0) * bitmap.getWidth());
+        int startYPx = (int) ((sampleTopYPct / 100.0) * bitmap.getHeight());
+        int endXPx = (int) ((sampleRightXPct / 100.0) * bitmap.getWidth());
+        int endYPx = (int) ((sampleBotYPct / 100.0) * bitmap.getHeight());
         int width = endXPx - startXPx;
         int height = endYPx - startYPx;
 
@@ -86,22 +81,22 @@ public class BitmapUtilities {
     }
 
     public static Bitmap getVuforiaImage(VuforiaLocalizer vuforia) {
-        try{
-            VuforiaLocalizer.CloseableFrame closeableFrame = vuforia.getFrameQueue().take ();
-            for (int i=0; i < closeableFrame.getNumImages(); i++){
-                Image image= closeableFrame.getImage (i);
-                if (image.getFormat()== PIXEL_FORMAT.RGB565){
-                    Bitmap bitmap= Bitmap.createBitmap(image.getWidth (),
+        try {
+            VuforiaLocalizer.CloseableFrame closeableFrame = vuforia.getFrameQueue().take();
+            for (int i = 0; i < closeableFrame.getNumImages(); i++) {
+                Image image = closeableFrame.getImage(i);
+                if (image.getFormat() == PIXEL_FORMAT.RGB565) {
+                    Bitmap bitmap = Bitmap.createBitmap(image.getWidth(),
                             image.getHeight(),
                             Bitmap.Config.RGB_565);
-                    bitmap.copyPixelsFromBuffer (image.getPixels());
-                    Matrix matrix = new Matrix ();
+                    bitmap.copyPixelsFromBuffer(image.getPixels());
+                    Matrix matrix = new Matrix();
                     matrix.postRotate(90);
 
                     return Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
                 }
             }
-        } catch (Exception e){
+        } catch (Exception e) {
             return null;
         }
 

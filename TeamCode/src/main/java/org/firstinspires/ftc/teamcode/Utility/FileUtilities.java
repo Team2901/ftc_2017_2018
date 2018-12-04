@@ -22,7 +22,7 @@ public class FileUtilities {
 
         final File file = new File(teamDir, filename);
 
-        try (BufferedWriter writer = new BufferedWriter (new FileWriter(file))){
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
             for (Object o : config) {
                 writer.write(o.toString());
                 writer.newLine();
@@ -30,7 +30,7 @@ public class FileUtilities {
         }
     }
 
-    public static List<String> readConfigFile (String filename) throws IOException {
+    public static List<String> readConfigFile(String filename) throws IOException {
         final File teamDir = new File(Environment.getExternalStorageDirectory(), "Team");
 
         boolean newDir = teamDir.mkdirs();
@@ -39,7 +39,7 @@ public class FileUtilities {
 
         final List<String> config = new ArrayList<>();
 
-        try (BufferedReader reader = new BufferedReader(new FileReader(file))){
+        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             String line = reader.readLine();
             while (line != null) {
                 config.add(line);
@@ -54,10 +54,10 @@ public class FileUtilities {
     so we can confirm the code works correctly
     */
 
-    public static void saveBitmap(String filename, Bitmap bitmap) throws IOException{
+    public static void saveBitmap(String filename, Bitmap bitmap) throws IOException {
         String filePath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Pictures";
 
-        try (FileOutputStream fileOutputStream = new FileOutputStream(filePath+"/"+filename)) {
+        try (FileOutputStream fileOutputStream = new FileOutputStream(filePath + "/" + filename)) {
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, fileOutputStream);
             fileOutputStream.flush();
             fileOutputStream.close();
@@ -82,46 +82,42 @@ public class FileUtilities {
         return bitmap;
     }
 
-    public static void writeWinnerFile (String winnerLocation, int leftHueTotal,
-                                        int middleHueTotal, int rightHueTotal) throws IOException
-    {
+    public static void writeWinnerFile(String winnerLocation, int leftHueTotal,
+                                       int middleHueTotal, int rightHueTotal) throws IOException {
         final File teamDir = new File(Environment.getExternalStorageDirectory(), "Team");
         boolean newDir = teamDir.mkdirs();
         final File file = new File(teamDir, "writeWinnerFile.txt");
 
-        try (BufferedWriter writer = new BufferedWriter (new FileWriter(file)))
-        {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
             writer.write("Left Jewel Yellow count = " + leftHueTotal);
             writer.newLine();
             writer.write("Middle Jewel Yellow count = " + middleHueTotal);
             writer.newLine();
-            writer.write( "Right Jewel Yellow count = " + rightHueTotal);
+            writer.write("Right Jewel Yellow count = " + rightHueTotal);
             writer.newLine();
-            writer.write ("winner is " + winnerLocation);
+            writer.write("winner is " + winnerLocation);
         }
 
     }
 
-    public static void writeWinnerFile (String winnerLocation, int middleHueTotal,
-                                        int rightHueTotal) throws IOException
-    {
+    public static void writeWinnerFile(String winnerLocation, int middleHueTotal,
+                                       int rightHueTotal) throws IOException {
         final File teamDir = new File(Environment.getExternalStorageDirectory(), "Team");
         boolean newDir = teamDir.mkdirs();
         final File file = new File(teamDir, "writeWinnerFile.txt");
 
-        try (BufferedWriter writer = new BufferedWriter (new FileWriter(file)))
-        {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
             writer.write("Middle Jewel Yellow count = " + middleHueTotal);
             writer.newLine();
-            writer.write( "Right Jewel Yellow count = " + rightHueTotal);
+            writer.write("Right Jewel Yellow count = " + rightHueTotal);
             writer.newLine();
-            writer.write ("winner is " + winnerLocation);
+            writer.write("winner is " + winnerLocation);
         }
 
     }
 
-    public static void saveHueFile(String jewelHues, Bitmap bitmap) throws IOException{
-        int [] colorCounts = ColorUtilities.getColorCounts(bitmap );
+    public static void saveHueFile(String jewelHues, Bitmap bitmap) throws IOException {
+        int[] colorCounts = ColorUtilities.getColorCounts(bitmap);
 
 
         final File teamDir = new File(Environment.getExternalStorageDirectory(), "Team");
@@ -130,10 +126,10 @@ public class FileUtilities {
 
         final File file = new File(teamDir, jewelHues);
 
-        try (BufferedWriter writer = new BufferedWriter (new FileWriter(file))){
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
 
 
-            for (int i=0; i<colorCounts.length; i++) {
+            for (int i = 0; i < colorCounts.length; i++) {
                 int colorCount = colorCounts[i];
                 writer.write(String.valueOf(colorCount));
                 writer.newLine();
@@ -145,8 +141,6 @@ public class FileUtilities {
         //Bitmap readBitmap()
 
         // RGBtoHSV();
-
-
 
 
     }
