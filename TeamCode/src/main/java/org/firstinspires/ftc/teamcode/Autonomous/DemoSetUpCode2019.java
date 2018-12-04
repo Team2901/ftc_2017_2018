@@ -6,27 +6,17 @@ import android.os.Environment;
 
 //import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cRangeSensor;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.vuforia.PIXEL_FORMAT;
-import com.vuforia.Vuforia;
 
 import org.firstinspires.ftc.robotcontroller.internal.FtcRobotControllerActivity;
 import org.firstinspires.ftc.robotcontroller.internal.JewelFinder;
 import org.firstinspires.ftc.robotcontroller.internal.LinearOpModeJewelCamera;
-import org.firstinspires.ftc.robotcore.external.ClassFactory;
-import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
-import org.firstinspires.ftc.teamcode.Utility.RelicRecoveryUtilities;
+import org.firstinspires.ftc.teamcode.Utility.BitmapUtilities;
+import org.firstinspires.ftc.teamcode.Utility.FileUtilities;
 import org.firstinspires.ftc.teamcode.Utility.RoverRuckusUtilities;
 import org.firstinspires.ftc.teamcode.Utility.VuforiaUtilities;
 
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.List;
 
 @SuppressLint("DefaultLocale")
 @Autonomous(name = "DemoSetUpCode2019")
@@ -69,11 +59,11 @@ public class DemoSetUpCode2019 extends LinearOpModeJewelCamera {
         waitForStart();
 
         saveConfigFile();
-        Bitmap bitmap =  RelicRecoveryUtilities.getVuforiaImage(vuforia);
+        Bitmap bitmap =  BitmapUtilities.getVuforiaImage(vuforia);
         try {
-            RelicRecoveryUtilities.saveBitmap(jewelBitmap, bitmap);
+            FileUtilities.saveBitmap(jewelBitmap, bitmap);
 
-            RelicRecoveryUtilities.saveHueFile("jewelHuesBig.txt", bitmap);
+            FileUtilities.saveHueFile("jewelHuesBig.txt", bitmap);
 
             RoverRuckusUtilities.getJewelHueCount(bitmap, jewelConfigLeft, jewelBitmapLeft, "jewelHuesLeft.txt");
             RoverRuckusUtilities.getJewelHueCount(bitmap, jewelConfigMiddle, jewelBitmapMiddle, "jewelHuesMiddle.txt");
@@ -85,7 +75,8 @@ public class DemoSetUpCode2019 extends LinearOpModeJewelCamera {
             jewelRight().setBackgroundColor(0x55ffffff);
 
             JewelFinder jewel = null;
-            String winner = RelicRecoveryUtilities.totalYellowHues(leftHueTotal, middleHueTotal, rightHueTotal);
+            String winner = BitmapUtilities.findWinnerLocation(leftHueTotal, middleHueTotal, rightHueTotal);
+            FileUtilities.writeWinnerFile(winner, middleHueTotal, leftHueTotal, rightHueTotal);
             if(winner.equals("L"))
             {
                 //turn left box yellow
@@ -119,7 +110,7 @@ public class DemoSetUpCode2019 extends LinearOpModeJewelCamera {
 
         try {
             JewelFinder jewelLeft = jewelLeft();
-            RelicRecoveryUtilities.writeConfigFile(jewelConfigLeft,jewelLeft.getBoxPct() );
+            FileUtilities.writeConfigFile(jewelConfigLeft,jewelLeft.getBoxPct() );
 
         } catch (Exception e) {
             telemetry.addData("ERROR WRITING TO FILE JEWEL LEFT", e.getMessage());
@@ -128,7 +119,7 @@ public class DemoSetUpCode2019 extends LinearOpModeJewelCamera {
 
         try {
             JewelFinder jewelMiddle = jewelMiddle();
-            RelicRecoveryUtilities.writeConfigFile(jewelConfigMiddle,jewelMiddle.getBoxPct() );
+            FileUtilities.writeConfigFile(jewelConfigMiddle,jewelMiddle.getBoxPct() );
 
         } catch (Exception e) {
             telemetry.addData("ERROR WRITING TO FILE JEWEL MIDDLE", e.getMessage());
@@ -137,7 +128,7 @@ public class DemoSetUpCode2019 extends LinearOpModeJewelCamera {
 
         try  {
             JewelFinder jewelRight = jewelRight();
-            RelicRecoveryUtilities.writeConfigFile(jewelConfigRight, jewelRight.getBoxPct());
+            FileUtilities.writeConfigFile(jewelConfigRight, jewelRight.getBoxPct());
 
         } catch (Exception e) {
             telemetry.addData("ERROR WRITING TO FILE JEWEL RIGHT", e.getMessage());

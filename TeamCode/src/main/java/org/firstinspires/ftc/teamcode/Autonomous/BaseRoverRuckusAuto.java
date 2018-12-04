@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode.Autonomous;
 
 import android.graphics.Bitmap;
 
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
@@ -17,8 +16,9 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 import org.firstinspires.ftc.teamcode.Hardware.RoverRuckusBotHardware;
+import org.firstinspires.ftc.teamcode.Utility.BitmapUtilities;
+import org.firstinspires.ftc.teamcode.Utility.FileUtilities;
 import org.firstinspires.ftc.teamcode.Utility.PolarCoord;
-import org.firstinspires.ftc.teamcode.Utility.RelicRecoveryUtilities;
 import org.firstinspires.ftc.teamcode.Utility.RoverRuckusUtilities;
 import org.firstinspires.ftc.teamcode.Utility.VuforiaUtilities;
 
@@ -187,17 +187,18 @@ public class BaseRoverRuckusAuto extends LinearOpMode {
 
     public GoldPosition determineGoldPosition() {
 
-        Bitmap bitmap = RelicRecoveryUtilities.getVuforiaImage(vuforia);
+        Bitmap bitmap = BitmapUtilities.getVuforiaImage(vuforia);
         try {
-            RelicRecoveryUtilities.saveBitmap(jewelBitmap, bitmap);
+            FileUtilities.saveBitmap(jewelBitmap, bitmap);
 
-            RelicRecoveryUtilities.saveHueFile("jewelHuesBig.txt", bitmap);
+            FileUtilities.saveHueFile("jewelHuesBig.txt", bitmap);
 
             int leftHueTotal = RoverRuckusUtilities.getJewelHueCount(bitmap, jewelConfigLeft, jewelBitmapLeft, "jewelHuesLeft.txt");
             int middleHueTotal = RoverRuckusUtilities.getJewelHueCount(bitmap, jewelConfigMiddle, jewelBitmapMiddle, "jewelHuesMiddle.txt");
             int rightHueTotal = RoverRuckusUtilities.getJewelHueCount(bitmap, jewelConfigRight, jewelBitmapRight, "jewelHuesRight.txt");
 
-            RelicRecoveryUtilities.totalYellowHues(leftHueTotal, middleHueTotal, rightHueTotal);
+         String winnerLocation = BitmapUtilities.findWinnerLocation (leftHueTotal, middleHueTotal, rightHueTotal);
+            FileUtilities.writeWinnerFile(winnerLocation, leftHueTotal, middleHueTotal, rightHueTotal);
             if (leftHueTotal > middleHueTotal && middleHueTotal > rightHueTotal) {
                 return LEFT;
             } else if (rightHueTotal > middleHueTotal && rightHueTotal > leftHueTotal) {

@@ -10,7 +10,8 @@ import org.firstinspires.ftc.robotcontroller.internal.FtcRobotControllerActivity
 import org.firstinspires.ftc.robotcontroller.internal.JewelFinder;
 import org.firstinspires.ftc.robotcontroller.internal.LinearOpModeJewelCamera;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
-import org.firstinspires.ftc.teamcode.Utility.RelicRecoveryUtilities;
+import org.firstinspires.ftc.teamcode.Utility.BitmapUtilities;
+import org.firstinspires.ftc.teamcode.Utility.FileUtilities;
 import org.firstinspires.ftc.teamcode.Utility.RoverRuckusUtilities;
 import org.firstinspires.ftc.teamcode.Utility.VuforiaUtilities;
 
@@ -56,18 +57,19 @@ public class SetUpCodeDemo extends LinearOpModeJewelCamera {
         waitForStart();
 
         saveConfigFile();
-        Bitmap bitmap =  RelicRecoveryUtilities.getVuforiaImage(vuforia);
+        Bitmap bitmap =  BitmapUtilities.getVuforiaImage(vuforia);
         try {
-            RelicRecoveryUtilities.saveBitmap(jewelBitmap, bitmap);
+            FileUtilities.saveBitmap(jewelBitmap, bitmap);
 
-            RelicRecoveryUtilities.saveHueFile("jewelHuesBig.txt", bitmap);
+            FileUtilities.saveHueFile("jewelHuesBig.txt", bitmap);
 
             int leftHueTotal = RoverRuckusUtilities.getJewelHueCount(bitmap, jewelConfigLeft, jewelBitmapLeft, "jewelHuesLeft.txt");
             int middleHueTotal = RoverRuckusUtilities.getJewelHueCount(bitmap, jewelConfigMiddle, jewelBitmapMiddle, "jewelHuesMiddle.txt");
             int rightHueTotal = RoverRuckusUtilities.getJewelHueCount(bitmap, jewelConfigRight, jewelBitmapRight, "jewelHuesRight.txt");
 
 
-            RelicRecoveryUtilities.totalYellowHues(leftHueTotal, middleHueTotal, rightHueTotal);
+            String winner = BitmapUtilities.findWinnerLocation(leftHueTotal, middleHueTotal, rightHueTotal);
+            FileUtilities.writeWinnerFile(winner, leftHueTotal, middleHueTotal, rightHueTotal);
 
 
 
@@ -85,7 +87,7 @@ public class SetUpCodeDemo extends LinearOpModeJewelCamera {
 
         try {
             JewelFinder jewelLeft = jewelLeft();
-            RelicRecoveryUtilities.writeConfigFile(jewelConfigLeft,jewelLeft.getBoxPct() );
+            FileUtilities.writeConfigFile(jewelConfigLeft,jewelLeft.getBoxPct() );
 
         } catch (Exception e) {
             telemetry.addData("ERROR WRITING TO FILE JEWEL LEFT", e.getMessage());
@@ -94,7 +96,7 @@ public class SetUpCodeDemo extends LinearOpModeJewelCamera {
 
         try {
             JewelFinder jewelMiddle = jewelMiddle();
-            RelicRecoveryUtilities.writeConfigFile(jewelConfigMiddle,jewelMiddle.getBoxPct() );
+            FileUtilities.writeConfigFile(jewelConfigMiddle,jewelMiddle.getBoxPct() );
 
         } catch (Exception e) {
             telemetry.addData("ERROR WRITING TO FILE JEWEL MIDDLE", e.getMessage());
@@ -103,7 +105,7 @@ public class SetUpCodeDemo extends LinearOpModeJewelCamera {
 
         try  {
             JewelFinder jewelRight = jewelRight();
-            RelicRecoveryUtilities.writeConfigFile(jewelConfigRight, jewelRight.getBoxPct());
+            FileUtilities.writeConfigFile(jewelConfigRight, jewelRight.getBoxPct());
 
         } catch (Exception e) {
             telemetry.addData("ERROR WRITING TO FILE JEWEL RIGHT", e.getMessage());
