@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
@@ -61,7 +62,7 @@ public class RoverRuckusAutonomousBlueCraterWebcam extends LinearOpMode {
         robot.init(hardwareMap);
         // step -1: initialize vuforia
         webcam = hardwareMap.get(WebcamName.class, "webcam");
-        VuforiaLocalizer.Parameters parameters = VuforiaUtilities.getWebcamParameters(hardwareMap, webcam);
+        VuforiaLocalizer.Parameters parameters = VuforiaUtilities.getWebCameraParameters(hardwareMap, webcam);
         vuforia = VuforiaUtilities.getVuforia(parameters);
 
 
@@ -78,7 +79,13 @@ public class RoverRuckusAutonomousBlueCraterWebcam extends LinearOpMode {
 
         //step 2: do vuforia to determine position
         roverRuckus.activate();
-        OpenGLMatrix location = VuforiaUtilities.getLocation(blue, red, front, back);
+
+        OpenGLMatrix location = null;
+        ElapsedTime time = new ElapsedTime();
+        while (location == null && time.seconds() < 5) {
+            location = VuforiaUtilities.getLocation(blue, red, front, back);
+        }
+
         if (location == null){
             location = VuforiaUtilities.getMatrix(0,0,45, 12,12,0);
         }
@@ -175,16 +182,16 @@ public class RoverRuckusAutonomousBlueCraterWebcam extends LinearOpMode {
         telemetry.update();
         Bitmap bitmap = BitmapUtilities.getVuforiaImage(vuforia);
         try {
-            FileUtilities.saveBitmap(jewelBitmap, bitmap);
+            FileUtilities.writeBitmapFile(jewelBitmap, bitmap);
 
-            FileUtilities.saveHueFile("jewelHuesBig.txt", bitmap);
+            FileUtilities.writeHueFile("jewelHuesBig.txt", bitmap);
 
             int leftHueTotal = RoverRuckusUtilities.getJewelHueCount(bitmap, jewelConfigLeft, jewelBitmapLeft, "jewelHuesLeft.txt");
             int middleHueTotal = RoverRuckusUtilities.getJewelHueCount(bitmap, jewelConfigMiddle, jewelBitmapMiddle, "jewelHuesMiddle.txt");
             int rightHueTotal = RoverRuckusUtilities.getJewelHueCount(bitmap, jewelConfigRight, jewelBitmapRight, "jewelHuesRight.txt");
 
             String winner = BitmapUtilities.findWinnerLocation(leftHueTotal, middleHueTotal, rightHueTotal);
-            FileUtilities.writeWinnerFile(winner, middleHueTotal, leftHueTotal, rightHueTotal);
+            FileUtilities.writeWinnerFile(winner, leftHueTotal, middleHueTotal, rightHueTotal);
 
             if (leftHueTotal > middleHueTotal && middleHueTotal > rightHueTotal) {
                 return GoldPosition.LEFT;

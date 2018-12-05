@@ -61,9 +61,9 @@ public class DemoSetUpCode2019 extends LinearOpModeJewelCamera {
         saveConfigFile();
         Bitmap bitmap =  BitmapUtilities.getVuforiaImage(vuforia);
         try {
-            FileUtilities.saveBitmap(jewelBitmap, bitmap);
+            FileUtilities.writeBitmapFile(jewelBitmap, bitmap);
 
-            FileUtilities.saveHueFile("jewelHuesBig.txt", bitmap);
+            FileUtilities.writeHueFile("jewelHuesBig.txt", bitmap);
 
             RoverRuckusUtilities.getJewelHueCount(bitmap, jewelConfigLeft, jewelBitmapLeft, "jewelHuesLeft.txt");
             RoverRuckusUtilities.getJewelHueCount(bitmap, jewelConfigMiddle, jewelBitmapMiddle, "jewelHuesMiddle.txt");
@@ -76,7 +76,7 @@ public class DemoSetUpCode2019 extends LinearOpModeJewelCamera {
 
             JewelFinder jewel = null;
             String winner = BitmapUtilities.findWinnerLocation(leftHueTotal, middleHueTotal, rightHueTotal);
-            FileUtilities.writeWinnerFile(winner, middleHueTotal, leftHueTotal, rightHueTotal);
+            FileUtilities.writeWinnerFile(winner,leftHueTotal, middleHueTotal, rightHueTotal);
             if(winner.equals("L"))
             {
                 //turn left box yellow

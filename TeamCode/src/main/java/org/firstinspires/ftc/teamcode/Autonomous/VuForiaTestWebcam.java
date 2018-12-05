@@ -33,7 +33,7 @@ public class VuForiaTestWebcam extends LinearOpMode {
     public void runOpMode() {
 
         webcam = hardwareMap.get(WebcamName.class, "webcam");
-        VuforiaLocalizer.Parameters parameters = VuforiaUtilities.getWebcamParameters(hardwareMap, webcam);
+        VuforiaLocalizer.Parameters parameters = VuforiaUtilities.getWebCameraParameters(hardwareMap, webcam);
         vuforia = VuforiaUtilities.getVuforia(parameters);
         VuforiaTrackables roverRuckus = this.vuforia.loadTrackablesFromAsset("RoverRuckus");
 

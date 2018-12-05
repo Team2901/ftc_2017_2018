@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.Utility;
 
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.util.ElapsedTime;
 import com.vuforia.PIXEL_FORMAT;
 import com.vuforia.Vuforia;
 
@@ -17,22 +16,17 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 
-
-
 public class VuforiaUtilities {
-
 
     public static final double MM_TO_INCHES = 0.0393701;
     public static final double INCHES_TO_MM = 25.4;
     public static final double FIELD_RADIUS = 1828.8;
-    //for never rest 40s
-    public static final double ENCODER_COUNTS_PER_REV = 1120;
-    //measured may not be exact
-    public static final double INCHES_PER_ROTATION = 7.75;
+    public static final double ENCODER_COUNTS_PER_REV = 1120; //for never rest 40s
+    public static final double INCHES_PER_ROTATION = 7.75; //measured may not be exact
     public static final double INCHES_TO_ENCODERCOUNTS = ((1 / INCHES_PER_ROTATION) * ENCODER_COUNTS_PER_REV);
 
-
-    public static OpenGLMatrix phoneLocation = getMatrix(90, -0, -90,  (int)(-6*INCHES_TO_MM), (int)(1*INCHES_TO_MM),(int)(18*INCHES_TO_MM));
+    public static OpenGLMatrix phoneLocation = getMatrix(90, -0, -90,
+            (int) (-6 * INCHES_TO_MM), (int) (1 * INCHES_TO_MM), (int) (18 * INCHES_TO_MM));
 
     public final static String VUFORIA_KEY = "AQQpWjP/////AAABmWf3iVzlb0FUp3bUlTfyu04cg6nObJiyAcRVvd" +
             "XnI9UGwJLT8PeUmQnawxjoZEpxQX4SACGC67Ix1pI2PTCBBrPOug9cDMLwL3g2TKSlKCfpMru3ooxbXaZ9ulWIc0" +
@@ -41,18 +35,21 @@ public class VuforiaUtilities {
             "ExDflqSYtkfC+rLL8j601v3TsFI26x/UlE+YZg1UQkQo/eJI5aTEDL6ypVAmuZe";
 
     public static VuforiaLocalizer.Parameters getBackCameraParameters(HardwareMap hardwareMap) {
-        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+        int cameraMonitorViewId = hardwareMap.appContext.getResources()
+                .getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
         parameters.vuforiaLicenseKey = VUFORIA_KEY;
         parameters.cameraDirection = VuforiaLocalizer.CameraDirection.BACK;
         return parameters;
     }
 
-    public static VuforiaLocalizer.Parameters getWebcamParameters(HardwareMap hardwareMap, WebcamName webcam) {
-        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+    public static VuforiaLocalizer.Parameters getWebCameraParameters(HardwareMap hardwareMap,
+                                                                     WebcamName webcamName) {
+        int cameraMonitorViewId = hardwareMap.appContext.getResources()
+                .getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
         parameters.vuforiaLicenseKey = VUFORIA_KEY;
-        parameters.cameraName = webcam;
+        parameters.cameraName = webcamName;
         return parameters;
     }
 
@@ -63,30 +60,24 @@ public class VuforiaUtilities {
         return vuforia;
     }
 
-    public static VuforiaTrackables setUpTrackables(VuforiaLocalizer vuforia ,VuforiaLocalizer.Parameters parameters ) {
+    public static VuforiaTrackables setUpTrackables(VuforiaLocalizer vuforia,
+                                                    VuforiaLocalizer.Parameters parameters) {
 
         VuforiaTrackables roverRuckus = vuforia.loadTrackablesFromAsset("RoverRuckus");
-        VuforiaTrackable blue;
-        VuforiaTrackable red;
-        VuforiaTrackable front;
-        VuforiaTrackable back;
-
-        blue = roverRuckus.get(0);
-        red = roverRuckus.get(1);
-        front = roverRuckus.get(2);
-        back = roverRuckus.get(3);
+        VuforiaTrackable blue = roverRuckus.get(0);
+        VuforiaTrackable red = roverRuckus.get(1);
+        VuforiaTrackable front = roverRuckus.get(2);
+        VuforiaTrackable back = roverRuckus.get(3);
 
         blue.setName("blue");
         red.setName("red");
         front.setName("front");
         back.setName("back");
 
-
         OpenGLMatrix blueTrackablePosition = getMatrix(90, 0, -90, (float) FIELD_RADIUS, 0, (float) 152.4);
         OpenGLMatrix frontTrackablePosition = getMatrix(90, 0, 0, 0, (float) FIELD_RADIUS, (float) 152.4);
         OpenGLMatrix redTrackablePosition = getMatrix(90, 0, 90, (float) -FIELD_RADIUS, 0, (float) 152.4);
         OpenGLMatrix backTrackablePosition = getMatrix(90, 0, 180, 0, (float) -FIELD_RADIUS, (float) 152.4);
-
 
         blue.setLocation(blueTrackablePosition);
         red.setLocation(redTrackablePosition);
@@ -97,8 +88,6 @@ public class VuforiaUtilities {
         ((VuforiaTrackableDefaultListener) red.getListener()).setPhoneInformation(phoneLocation, parameters.cameraDirection);
         ((VuforiaTrackableDefaultListener) front.getListener()).setPhoneInformation(phoneLocation, parameters.cameraDirection);
         ((VuforiaTrackableDefaultListener) back.getListener()).setPhoneInformation(phoneLocation, parameters.cameraDirection);
-
-
 
         return roverRuckus;
     }
@@ -113,34 +102,25 @@ public class VuforiaUtilities {
     public static OpenGLMatrix getLocation(VuforiaTrackable blue, VuforiaTrackable red,
                                            VuforiaTrackable front, VuforiaTrackable back) {
         OpenGLMatrix location = null;
-        OpenGLMatrix blueLocation = null;
-        OpenGLMatrix redLocation = null;
-        OpenGLMatrix backLocation = null;
-        OpenGLMatrix frontLocation = null;
+        OpenGLMatrix blueLocation = ((VuforiaTrackableDefaultListener)
+                blue.getListener()).getUpdatedRobotLocation();
+        OpenGLMatrix redLocation = ((VuforiaTrackableDefaultListener)
+                red.getListener()).getUpdatedRobotLocation();
+        OpenGLMatrix backLocation = ((VuforiaTrackableDefaultListener)
+                back.getListener()).getUpdatedRobotLocation();
+        OpenGLMatrix frontLocation = ((VuforiaTrackableDefaultListener)
+                front.getListener()).getUpdatedRobotLocation();
 
-        ElapsedTime time = new ElapsedTime();
-
-        while (location == null && time.seconds() <5) {
-            blueLocation = ((VuforiaTrackableDefaultListener)
-                    blue.getListener()).getUpdatedRobotLocation();
-            redLocation = ((VuforiaTrackableDefaultListener)
-                    red.getListener()).getUpdatedRobotLocation();
-            backLocation = ((VuforiaTrackableDefaultListener)
-                    back.getListener()).getUpdatedRobotLocation();
-            frontLocation = ((VuforiaTrackableDefaultListener)
-                    front.getListener()).getUpdatedRobotLocation();
-
-            if (blueLocation != null) {
-                location = blueLocation;
-            } else if (redLocation != null) {
-                location = redLocation;
-            } else if (backLocation != null) {
-                location = backLocation;
-            } else if (frontLocation != null) {
-                location = frontLocation;
-            }
-
+        if (blueLocation != null) {
+            location = blueLocation;
+        } else if (redLocation != null) {
+            location = redLocation;
+        } else if (backLocation != null) {
+            location = backLocation;
+        } else if (frontLocation != null) {
+            location = frontLocation;
         }
+
         return location;
     }
 }

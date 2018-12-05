@@ -17,7 +17,7 @@ public class MultiWebCamTest extends LinearOpMode {
         WebcamName webcam = hardwareMap.get(WebcamName.class, "webcam");
 
 
-        VuforiaLocalizer.Parameters parameters1 = VuforiaUtilities.getWebcamParameters(hardwareMap, webcam);
+        VuforiaLocalizer.Parameters parameters1 = VuforiaUtilities.getWebCameraParameters(hardwareMap, webcam);
         VuforiaLocalizer.Parameters parameters2 = VuforiaUtilities.getBackCameraParameters(hardwareMap);
 
         VuforiaLocalizer vuforia = VuforiaUtilities.getVuforia(parameters1);

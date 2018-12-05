@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
@@ -63,7 +64,6 @@ public class OneCornerAuto extends LinearOpMode {
     public void runOpMode() {
         robot.init(hardwareMap);
 
-        // webcam = hardwareMap.get(WebcamName.class, "webcam");
         VuforiaLocalizer.Parameters parameters = VuforiaUtilities.getBackCameraParameters(hardwareMap);
         vuforia = VuforiaUtilities.getVuforia(parameters);
 
@@ -77,7 +77,12 @@ public class OneCornerAuto extends LinearOpMode {
         waitForStart();
 
         roverRuckus.activate();
-        OpenGLMatrix location = VuforiaUtilities.getLocation(blue, red, front, back);
+
+        OpenGLMatrix location = null;
+        ElapsedTime time = new ElapsedTime();
+        while (location == null && time.seconds() < 5) {
+            location = VuforiaUtilities.getLocation(blue, red, front, back);
+        }
 
         VectorF translation = location.getTranslation();
 

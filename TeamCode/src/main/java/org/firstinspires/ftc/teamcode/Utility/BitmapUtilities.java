@@ -15,7 +15,9 @@ import java.io.IOException;
 
 public class BitmapUtilities {
 
-    public static String findWinnerLocation(int leftHueTotal, int middleHueTotal, int rightHueTotal) {
+    public static String findWinnerLocation(int leftHueTotal,
+                                            int middleHueTotal,
+                                            int rightHueTotal) {
 
         int winnerCount = 0;
         String winnerLocation = "?";
@@ -34,7 +36,8 @@ public class BitmapUtilities {
         return winnerLocation;
     }
 
-    public static String findWinnerLocation(int middleHueTotal, int rightHueTotal) {
+    public static String findWinnerLocation(int middleHueTotal,
+                                            int rightHueTotal) {
 
         int winnerCount = 0;
         String winnerLocation = "?";
@@ -48,7 +51,9 @@ public class BitmapUtilities {
         return winnerLocation;
     }
 
-    public static Bitmap getBabyBitmap(Bitmap bitmap, int sampleLeftXPct, int sampleTopYPct, int sampleRightXPct, int sampleBotYPct) {
+    public static Bitmap getBabyBitmap(Bitmap bitmap,
+                                       int sampleLeftXPct, int sampleTopYPct,
+                                       int sampleRightXPct, int sampleBotYPct) {
         int startXPx = (int) ((sampleLeftXPct / 100.0) * bitmap.getWidth());
         int startYPx = (int) ((sampleTopYPct / 100.0) * bitmap.getHeight());
         int endXPx = (int) ((sampleRightXPct / 100.0) * bitmap.getWidth());
@@ -63,7 +68,7 @@ public class BitmapUtilities {
         return getBabyBitmap(bitmap, jewel.boxLeftXPct, jewel.boxTopYPct, jewel.boxRightXPct, jewel.boxBotYPct);
     }
 
-    public static Bitmap drawSamplingBox(Bitmap bitmap, String filename,
+    public static Bitmap drawSamplingBox(String filename, Bitmap bitmap,
                                          int sampleLeftXPct, int sampleTopYPct,
                                          int sampleRightXPct, int sampleBotYPct) throws IOException {
         double xPercent = (bitmap.getWidth()) / 100.0;
@@ -76,7 +81,7 @@ public class BitmapUtilities {
                 (int) (sampleTopYPct * yPercent),
                 (int) (sampleRightXPct * xPercent),
                 (int) (sampleBotYPct * yPercent), p);
-        //saveBitmap(filename, mutableBitmap);
+        //writeBitmapFile(filename, mutableBitmap);
         return mutableBitmap;
     }
 
@@ -102,6 +107,4 @@ public class BitmapUtilities {
 
         return null;
     }
-
-
 }

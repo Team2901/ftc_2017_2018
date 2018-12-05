@@ -52,7 +52,7 @@ public class VuNavTest extends LinearOpMode {
 
 
         webcam = hardwareMap.get(WebcamName.class, "webcam");
-        VuforiaLocalizer.Parameters parameters = VuforiaUtilities.getWebcamParameters(hardwareMap, webcam);
+        VuforiaLocalizer.Parameters parameters = VuforiaUtilities.getWebCameraParameters(hardwareMap, webcam);
         vuforia = VuforiaUtilities.getVuforia(parameters);
 
 

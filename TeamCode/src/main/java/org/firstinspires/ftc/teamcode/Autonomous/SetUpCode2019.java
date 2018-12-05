@@ -59,9 +59,9 @@ public class SetUpCode2019 extends LinearOpModeJewelCamera {
         saveConfigFile();
         Bitmap bitmap = BitmapUtilities.getVuforiaImage(vuforia);
         try {
-            FileUtilities.saveBitmap(jewelBitmap, bitmap);
+            FileUtilities.writeBitmapFile(jewelBitmap, bitmap);
 
-            FileUtilities.saveHueFile("jewelHuesBig.txt", bitmap);
+            FileUtilities.writeHueFile("jewelHuesBig.txt", bitmap);
 
             int leftHueTotal = RoverRuckusUtilities.getJewelHueCount(bitmap, jewelConfigLeft,
                     jewelBitmapLeft, "jewelHuesLeft.txt");
