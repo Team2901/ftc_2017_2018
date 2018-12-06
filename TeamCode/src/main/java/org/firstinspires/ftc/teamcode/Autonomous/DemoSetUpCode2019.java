@@ -65,43 +65,52 @@ public class DemoSetUpCode2019 extends LinearOpModeJewelCamera {
 
             FileUtilities.writeHueFile("jewelHuesBig.txt", bitmap);
 
-            RoverRuckusUtilities.getJewelHueCount(bitmap, jewelConfigLeft, jewelBitmapLeft, "jewelHuesLeft.txt");
-            RoverRuckusUtilities.getJewelHueCount(bitmap, jewelConfigMiddle, jewelBitmapMiddle, "jewelHuesMiddle.txt");
-            RoverRuckusUtilities.getJewelHueCount(bitmap, jewelConfigRight, jewelBitmapRight, "jewelHuesRight.txt");
+            leftHueTotal = RoverRuckusUtilities.getJewelHueCount(bitmap, jewelConfigLeft, jewelBitmapLeft, "jewelHuesLeft.txt");
+            middleHueTotal = RoverRuckusUtilities.getJewelHueCount(bitmap, jewelConfigMiddle, jewelBitmapMiddle, "jewelHuesMiddle.txt");
+            rightHueTotal = RoverRuckusUtilities.getJewelHueCount(bitmap, jewelConfigRight, jewelBitmapRight, "jewelHuesRight.txt");
 
-            //turn all boxes white
-            jewelLeft().setBackgroundColor(0x55ffffff);
-            jewelMiddle().setBackgroundColor(0x55ffffff);
-            jewelRight().setBackgroundColor(0x55ffffff);
-
-            JewelFinder jewel = null;
+            JewelFinder winningJewel = null;
             String winner = BitmapUtilities.findWinnerLocation(leftHueTotal, middleHueTotal, rightHueTotal);
             FileUtilities.writeWinnerFile(winner,leftHueTotal, middleHueTotal, rightHueTotal);
             if(winner.equals("L"))
             {
                 //turn left box yellow
-                jewel = this.jewelLeft();
+                winningJewel = this.jewelLeft();
             }
             if(winner.equals("R"))
             {
                 //turn right box yellow
-                jewel = this.jewelRight();
+                winningJewel = this.jewelRight();
             }
             if(winner.equals("M"))
             {
                 //turn middle box yellow
-                jewel = this.jewelMiddle();
+                winningJewel = this.jewelMiddle();
             }
 
-            //jewelLeft.post({ jewelLeft.setText(Integer.toString(leftHueTotal)); jewelLeft.setBackgroundColor(0x55ffffff);});
+            //turn all boxes white
+            jewelLeft.post(new Runnable( ) { public void run() {
+                jewelLeft.setText(Integer.toString(leftHueTotal));
+                jewelLeft.setBackgroundColor(0x55ffffff);}});
+            jewelMiddle.post(new Runnable( ) { public void run() {
+                jewelMiddle.setText(Integer.toString(leftHueTotal));
+                jewelMiddle.setBackgroundColor(0x55ffffff);}});
+            jewelRight.post(new Runnable( ) { public void run() {
+                jewelRight.setText(Integer.toString(leftHueTotal));
+                jewelRight.setBackgroundColor(0x55ffffff);}});
+
+            //winningJewel.post(new Runnable( ) { public void run() {jewel.setBackgroundColor(0x55ffff00);}});
 
         } catch (Exception e) {
             telemetry.addData("ERROR WRITING TO FILE JEWEL BITMAP", e.getMessage());
             telemetry.update();
         }
-        wait(1000);
         activity.removeJewelFinder(this);
 
+        while(opModeIsActive())
+        {
+            idle();
+        }
 
     }
 
