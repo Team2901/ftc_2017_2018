@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 
 public class ColorUtilities {
+    public static final int HUE_SAMPLE_RATE = 1;
 
     public static int getColorCount(Bitmap bitmap,
                                     int minHue, int maxHue,
@@ -43,8 +44,8 @@ public class ColorUtilities {
     public static int getColorCount(Bitmap bitmap, int minHue, int maxHue) {
         int total = 0;
 
-        for (int x = 0; x < bitmap.getWidth(); x = x + 5) { // replace 200 with x pixel size value
-            for (int y = 0; y < bitmap.getHeight(); y = y + 5) {
+        for (int x = 0; x < bitmap.getWidth(); x = x + HUE_SAMPLE_RATE) { // replace 200 with x pixel size value
+            for (int y = 0; y < bitmap.getHeight(); y = y + HUE_SAMPLE_RATE) {
                 int color = bitmap.getPixel(x, y);
 
                 int red = Color.red(color);
@@ -62,11 +63,16 @@ public class ColorUtilities {
         return total;
     }
 
+    public static int getColorCount(int[] colorCounts, int minHue, int maxHue) {
+        // TODO
+        return 0;
+    }
+
     public static int[] getColorCounts(Bitmap bitmap) {
         int[] colorCounts = new int[360];
 
-        for (int x = 0; x < bitmap.getWidth(); x = x + 1) { // replace 200 with x pixel size value
-            for (int y = 0; y < bitmap.getHeight(); y = y + 1) {
+        for (int x = 0; x < bitmap.getWidth(); x = x + HUE_SAMPLE_RATE) { // replace 200 with x pixel size value
+            for (int y = 0; y < bitmap.getHeight(); y = y + HUE_SAMPLE_RATE) {
                 int color = bitmap.getPixel(x, y);
 
                 int red = Color.red(color);
