@@ -10,6 +10,7 @@ import com.vuforia.PIXEL_FORMAT;
 
 import org.firstinspires.ftc.robotcontroller.internal.JewelFinder;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
+import org.firstinspires.ftc.teamcode.Autonomous.BaseRoverRuckusAuto;
 
 import java.io.IOException;
 
@@ -49,6 +50,19 @@ public class BitmapUtilities {
             winnerLocation = "L";
         }
         return winnerLocation;
+    }
+
+    BaseRoverRuckusAuto.GoldPosition findGoldPosition(int leftHueTotal,
+                                                        int middleHueTotal,
+                                                        int rightHueTotal) {
+        //TODO
+        return null;
+    }
+
+    BaseRoverRuckusAuto.GoldPosition findGoldPosition(int middleHueTotal,
+                                                      int rightHueTotal) {
+        //TODO
+        return null;
     }
 
     public static Bitmap getBabyBitmap(Bitmap bitmap,

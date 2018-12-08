@@ -120,10 +120,9 @@ public class FileUtilities {
         }
     }
 
-    public static void writeWinnerFile(
-            String winnerLocation,
-            int middleHueTotal,
-            int rightHueTotal) throws IOException  {
+    public static void writeWinnerFile(String winnerLocation,
+                                       int middleHueTotal,
+                                       int rightHueTotal) throws IOException  {
         writeWinnerFile(WINNER_FILE_NAME_2,winnerLocation, middleHueTotal, rightHueTotal);
     }
 
@@ -159,5 +158,10 @@ public class FileUtilities {
                 writer.newLine();
             }
         }
+    }
+
+    public static void writeHueFile(String filename,
+                                    int[] colorCounts) throws IOException {
+        //TODO
     }
 }

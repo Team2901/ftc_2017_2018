@@ -52,10 +52,10 @@ public class BaseRoverRuckusAuto extends LinearOpMode {
     double z;
     float angleVu;
 
-    enum StartPosition {
+   public enum StartPosition {
         RED_CRATER, RED_DEPOT, BLUE_CRATER, BLUE_DEPOT;
     }
-    enum GoldPosition {
+   public enum GoldPosition {
 
         LEFT, MIDDLE, RIGHT
     }
