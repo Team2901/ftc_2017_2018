@@ -56,9 +56,9 @@ public class RoverRuckusBotHardware {
         right.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-        latch = hardwareMap.servo.get("latch");
+       // latch = hardwareMap.servo.get("latch");
         marker = hardwareMap.servo.get("marker");
-        latch.setPosition(0);
+        //latch.setPosition(0);
         marker.setPosition(0);
 
         imu = ahwMap.get(BNO055IMU.class, "imu");
