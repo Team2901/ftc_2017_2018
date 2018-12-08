@@ -85,7 +85,7 @@ public class BaseRoverRuckusAuto extends LinearOpMode {
         // roverRuckus.activate();
         OpenGLMatrix location = null; //  VuforiaUtilities.getLocation(blue, red, front, back);
         if (location == null){
-            location = VuforiaUtilities.getMatrix(0,0,45,
+            location = VuforiaUtilities.getMatrix(-1,1,45,
                     (float) (24/VuforiaUtilities.MM_TO_INCHES),
                     (float) (24/VuforiaUtilities.MM_TO_INCHES),0);
         }
