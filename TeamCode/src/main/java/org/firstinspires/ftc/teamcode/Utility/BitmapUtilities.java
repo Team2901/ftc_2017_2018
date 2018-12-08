@@ -6,15 +6,15 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 
 import com.vuforia.Image;
-import com.vuforia.PIXEL_FORMAT;
 
-import org.firstinspires.ftc.robotcontroller.internal.JewelFinder;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.teamcode.Autonomous.BaseRoverRuckusAuto;
 
 import java.io.IOException;
 
 public class BitmapUtilities {
+
+    public static final int PIXEL_FORMAT_RGB565 = 1;
 
     public static String findWinnerLocation(int leftHueTotal,
                                             int middleHueTotal,
@@ -78,9 +78,6 @@ public class BitmapUtilities {
         return Bitmap.createBitmap(bitmap, startXPx, startYPx, width, height);
     }
 
-    public static Bitmap getBabyBitmap(Bitmap bitmap, JewelFinder jewel) {
-        return getBabyBitmap(bitmap, jewel.boxLeftXPct, jewel.boxTopYPct, jewel.boxRightXPct, jewel.boxBotYPct);
-    }
 
     public static Bitmap drawSamplingBox(String filename, Bitmap bitmap,
                                          int sampleLeftXPct, int sampleTopYPct,
@@ -104,7 +101,7 @@ public class BitmapUtilities {
             VuforiaLocalizer.CloseableFrame closeableFrame = vuforia.getFrameQueue().take();
             for (int i = 0; i < closeableFrame.getNumImages(); i++) {
                 Image image = closeableFrame.getImage(i);
-                if (image.getFormat() == PIXEL_FORMAT.RGB565) {
+                if (image.getFormat() == PIXEL_FORMAT_RGB565) {
                     Bitmap bitmap = Bitmap.createBitmap(image.getWidth(),
                             image.getHeight(),
                             Bitmap.Config.RGB_565);
