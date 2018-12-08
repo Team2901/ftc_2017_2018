@@ -18,6 +18,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 
 public class VuforiaUtilities {
 
+    public static final int PIXEL_FORMAT_RGB565 = 1;
     public static final double MM_TO_INCHES = 0.0393701;
     public static final double INCHES_TO_MM = 25.4;
     public static final double FIELD_RADIUS = 1828.8;
@@ -56,7 +57,7 @@ public class VuforiaUtilities {
     public static VuforiaLocalizer getVuforia(VuforiaLocalizer.Parameters parameters) {
         VuforiaLocalizer vuforia = ClassFactory.getInstance().createVuforia(parameters);
         vuforia.setFrameQueueCapacity(1);
-        Vuforia.setFrameFormat(PIXEL_FORMAT.RGB565, true);
+        Vuforia.setFrameFormat(PIXEL_FORMAT_RGB565, true);
         return vuforia;
     }
 
