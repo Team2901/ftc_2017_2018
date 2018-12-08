@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.Autonomous;
 
 import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.os.Environment;
 
 //import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cRangeSensor;
@@ -34,6 +35,9 @@ public class DemoSetUpCode2019 extends LinearOpModeJewelCamera {
     int leftHueTotal = 0;
     int middleHueTotal = 0;
     int rightHueTotal = 0;
+
+    JewelFinder winningJewel = null;
+
     //left
     //middle
     //right
@@ -69,7 +73,6 @@ public class DemoSetUpCode2019 extends LinearOpModeJewelCamera {
             middleHueTotal = RoverRuckusUtilities.getJewelHueCount(bitmap, jewelConfigMiddle, jewelBitmapMiddle, "jewelHuesMiddle.txt");
             rightHueTotal = RoverRuckusUtilities.getJewelHueCount(bitmap, jewelConfigRight, jewelBitmapRight, "jewelHuesRight.txt");
 
-            JewelFinder winningJewel = null;
             String winner = BitmapUtilities.findWinnerLocation(leftHueTotal, middleHueTotal, rightHueTotal);
             FileUtilities.writeWinnerFile(winner,leftHueTotal, middleHueTotal, rightHueTotal);
             if(winner.equals("L"))
@@ -91,13 +94,25 @@ public class DemoSetUpCode2019 extends LinearOpModeJewelCamera {
             //turn all boxes white
             jewelLeft.post(new Runnable( ) { public void run() {
                 jewelLeft.setText(Integer.toString(leftHueTotal));
-                jewelLeft.setBackgroundColor(0x55ffffff);}});
+                if (jewelLeft == winningJewel){
+                    jewelLeft.setBackgroundColor(Color.YELLOW);
+                } else
+                jewelLeft.setBackgroundColor(Color.WHITE);
+            }});
             jewelMiddle.post(new Runnable( ) { public void run() {
-                jewelMiddle.setText(Integer.toString(leftHueTotal));
-                jewelMiddle.setBackgroundColor(0x55ffffff);}});
+                jewelMiddle.setText(Integer.toString(middleHueTotal));
+                if (jewelMiddle == winningJewel){
+                    jewelMiddle.setBackgroundColor(Color.YELLOW);
+                } else
+                jewelMiddle.setBackgroundColor(Color.WHITE);
+            }});
             jewelRight.post(new Runnable( ) { public void run() {
-                jewelRight.setText(Integer.toString(leftHueTotal));
-                jewelRight.setBackgroundColor(0x55ffffff);}});
+                jewelRight.setText(Integer.toString(rightHueTotal));
+                if (jewelLeft == winningJewel){
+                    jewelLeft.setBackgroundColor(Color.YELLOW);
+                } else
+                jewelRight.setBackgroundColor(Color.WHITE);
+            }});
 
             //winningJewel.post(new Runnable( ) { public void run() {jewel.setBackgroundColor(0x55ffff00);}});
 
@@ -105,13 +120,12 @@ public class DemoSetUpCode2019 extends LinearOpModeJewelCamera {
             telemetry.addData("ERROR WRITING TO FILE JEWEL BITMAP", e.getMessage());
             telemetry.update();
         }
-        activity.removeJewelFinder(this);
 
         while(opModeIsActive())
         {
             idle();
         }
-
+        activity.removeJewelFinder(this);
     }
 
 

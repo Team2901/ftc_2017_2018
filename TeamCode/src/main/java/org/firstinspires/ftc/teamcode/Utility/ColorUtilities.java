@@ -23,8 +23,10 @@ public class ColorUtilities {
                 int green = Color.green(color);
                 int blue = Color.blue(color);
 
-                float[] HBV = RGBtoHSV(red, green, blue);
-                double hue = HBV[0];
+                float[] HSV = new float[3];
+                Color.RGBToHSV(red, green, blue, HSV);
+
+                double hue = HSV[0];
 
                 if (minHue < maxHue) {
                     if (minHue < hue && hue < maxHue) {
@@ -52,8 +54,10 @@ public class ColorUtilities {
                 int green = Color.green(color);
                 int blue = Color.blue(color);
 
-                float[] HBV = RGBtoHSV(red, green, blue);
-                int hue = (int) HBV[0];
+                float[] HSV = new float[3];
+                Color.RGBToHSV(red, green, blue, HSV);
+
+                int hue = (int) HSV[0];
                 if (minHue <= hue && hue <= maxHue) {
                     total++;
                 }
@@ -79,8 +83,10 @@ public class ColorUtilities {
                 int green = Color.green(color);
                 int blue = Color.blue(color);
 
-                float[] HBV = RGBtoHSV(red, green, blue);
-                int hue = (int) HBV[0];
+                float[] HSV = new float[3];
+                Color.RGBToHSV(red, green, blue, HSV);
+
+                int hue = (int) HSV[0];
 
                 int hueCount = colorCounts[hue];
                 hueCount++;
@@ -92,11 +98,4 @@ public class ColorUtilities {
         return colorCounts;
     }
 
-    public static float[] RGBtoHSV(int r, int g, int b) {
-        //Converts RGB channels from the bitmap to HSV counts to get a the of the hue of the pixels
-
-        float[] hsv = new float[3];
-        Color.RGBToHSV(r, g, b, hsv);
-        return hsv;
-    }
 }
