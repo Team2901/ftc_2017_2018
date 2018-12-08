@@ -109,10 +109,14 @@ public class BaseRoverRuckusAuto extends LinearOpMode {
         z = ((translation.get(2) * VuforiaUtilities.MM_TO_INCHES));
         angleVu = orientation.thirdAngle;
 
+        double angleImu = robot.getAngle();
+
+        robot.offset = angleVu - angleImu;
+
 
         //step 3: go to the cheddar pivot point
         PolarCoord goal = getGoldenPostition(goldPosition, initialPosition);
-        goToPosition(x, y, goal.x, goal.y, angleVu);
+        goToPosition(x, y, goal.x, goal.y);
 
         telemetry.addData("goalx", goal.x);
         telemetry.addData("goaly", goal.y);
@@ -224,6 +228,20 @@ public class BaseRoverRuckusAuto extends LinearOpMode {
 
     }
 
+    public PolarCoord getCornerPosition(StartPosition startPosition){
+        switch (startPosition){
+            case BLUE_CRATER:
+                return new PolarCoord(54, -54 , 0);
+            case BLUE_DEPOT:
+                return new PolarCoord(54, 54, 0);
+            case RED_DEPOT:
+                return new PolarCoord(-54, -54, 0);
+            case RED_CRATER:
+                return new PolarCoord(-54 , 54, 0);
+        }
+    return null;
+    }
+
     public void doCornerAction() {
         if (initialPosition == BLUE_DEPOT || initialPosition == RED_DEPOT) {
             robot.marker.setPosition(1);
@@ -261,18 +279,14 @@ public class BaseRoverRuckusAuto extends LinearOpMode {
         }
     }
 
-    //Only use once per class and ALWAYS FOR VUFORIA
-    public void goToPosition(double startX, double startY, double goalX, double goalY, double angleVu) {
-        double angleImu = robot.getAngle();
-
-        robot.offset = angleVu - angleImu;
+    public void goToPosition(double startX, double startY, double goalX, double goalY) {
 
         double xDiff = goalX - startX;
         double yDiff = goalY - startY;
 
         double angleGoal = Math.atan2(yDiff, xDiff) * (180 / Math.PI);
 
-        angleImu = robot.getAngle();
+        double  angleImu = robot.getAngle();
         double distanceToGoal = Math.sqrt((Math.pow(yDiff, 2) + Math.pow(xDiff, 2)));
 
         if (distanceToGoal > 2) {
