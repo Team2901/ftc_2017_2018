@@ -124,11 +124,13 @@ public class BaseRoverRuckusAuto extends LinearOpMode {
 
 
         //step 4:turn to face depot point
-        double angleImu = robot.getAngle();
+        // double angleImu = robot.getAngle();
 
         robot.left.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.right.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
+        robot.getAngle();
+        double currentRobotAngle =robot.getAngle();
 
         while (Math.abs(goal.theta - angleImu) > 1) {
             angleImu = robot.getAngle();
@@ -136,15 +138,15 @@ public class BaseRoverRuckusAuto extends LinearOpMode {
             robot.left.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             robot.right.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-            robot.left.setPower(-getPower(angleImu, goal.theta));
-            robot.right.setPower(getPower(angleImu, goal.theta));
+            robot.left.setPower(-getPower(angleImu, goal.theta, currentRobotAngle));
+            robot.right.setPower(getPower(angleImu, goal.theta, currentRobotAngle));
 
             telemetry.addData("goldPosition", goldPosition);
             telemetry.addData("Goal Angle", goal.theta);
             telemetry.addData("Robot Angle ", angleImu);
             telemetry.addData("offset Angle", robot.offset);
             telemetry.addData("angleGoal-angle ", goal.theta - angleImu);
-            telemetry.addData("Power", getPower(angleImu, goal.theta));
+            telemetry.addData("Power", getPower(angleImu, goal.theta, currentRobotAngle));
             telemetry.update();
             idle();
         }
@@ -239,7 +241,7 @@ public class BaseRoverRuckusAuto extends LinearOpMode {
             case RED_CRATER:
                 return new PolarCoord(-54 , 54, 0);
         }
-    return null;
+        return null;
     }
 
     public void doCornerAction() {
@@ -256,12 +258,8 @@ public class BaseRoverRuckusAuto extends LinearOpMode {
 
         double relCurrent = AngleUnit.normalizeDegrees(absCurrent - absStart);
         double relGoal = AngleUnit.normalizeDegrees(absGoal - absStart);
-        if (relCurrent < relGoal / 2) {
+        return getPower( relCurrent, relGoal);
 
-            return (.01 * relCurrent + (Math.signum(relCurrent) * .075));
-        } else {
-            return (.01 * (relGoal - relCurrent) + (Math.signum(relGoal - relCurrent) * .025));
-        }
     }
 
     double getPower(double currentPosition, double goal) {
@@ -269,13 +267,22 @@ public class BaseRoverRuckusAuto extends LinearOpMode {
         If under halfway to the goal, have the robot speed up by .01 for every angle until it is
         over halfway there
          */
+        if (goal > 0) {
+            if (currentPosition < goal / 2) {
 
-        if (currentPosition < goal / 2) {
-
-            return (.01 * currentPosition + (Math.signum(currentPosition) * .1));
-        } else {
+                return (.01 * currentPosition +  (Math.signum((currentPosition==0)? goal: currentPosition) * .1));
+            } else {
 // Starts to slow down by .01 per angle closer to the goal.
-            return (.01 * (goal - currentPosition + (Math.signum(currentPosition) * .1)));
+                return (.01 * (goal - currentPosition) + (Math.signum((currentPosition==0)? goal: currentPosition) * .1));
+            }
+        }
+        else {
+            if (currentPosition > goal/2){
+                return (0.01 * currentPosition +  (Math.signum((currentPosition==0)? goal: currentPosition) * .1));
+            }
+            else {
+                return (0.01 * (goal - currentPosition) +  (Math.signum((currentPosition==0)? goal: currentPosition) * .1));
+            }
         }
     }
 
@@ -295,14 +302,15 @@ public class BaseRoverRuckusAuto extends LinearOpMode {
 
                 robot.left.setPower(-getPower(angleImu, angleGoal , angleVu));
                 robot.right.setPower(getPower(angleImu, angleGoal , angleVu));
-              //  telemetry.addData("Goal", String.format("%f %f", goalX, goalY));
-             //   telemetry.addData("Start", String.format("%f %f", startX, startY));
+                //  telemetry.addData("Goal", String.format("%f %f", goalX, goalY));
+                //   telemetry.addData("Start", String.format("%f %f", startX, startY));
 
                 telemetry.addData("Goal Angle", angleGoal);
                 telemetry.addData("angleGoal-angle ", AngleUnit.normalizeDegrees(angleGoal - angleImu));
                 telemetry.addData("Robot Angle ", angleImu);
                 //telemetry.addData("offset Angle", robot.offset);
-                telemetry.addData("Power", getPower(angleImu, angleGoal));
+                telemetry.addData("Power", getPower(angleImu, angleGoal, angleVu));
+                telemetry.addData("start Angle", angleVu);
                 telemetry.update();
                 idle();
             }
