@@ -68,4 +68,11 @@ public abstract class BaseRRHardware {
     public abstract void goStraight(double power);
 
     public abstract void turn(double power);
+
+    public abstract void resetEncoderCounts();
+    public abstract void setMode(DcMotor.RunMode runMode);
+
+    public abstract void setTargetPosition(int targetPosition);
+    public abstract boolean isLeftBusy();
+    public abstract int getLeftCurrentPosition();
 }

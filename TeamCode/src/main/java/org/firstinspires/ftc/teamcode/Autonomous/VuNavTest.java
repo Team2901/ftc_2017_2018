@@ -152,8 +152,7 @@ public class VuNavTest extends LinearOpMode {
         telemetry.addData("encoders to goal", encodersToGoal);
         telemetry.update();
 
-        robot.left.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.right.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.resetEncoderCounts();
         robot.left.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.right.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 

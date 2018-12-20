@@ -15,6 +15,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
+import org.firstinspires.ftc.teamcode.Hardware.BaseRRHardware;
 import org.firstinspires.ftc.teamcode.Hardware.RoverRuckusBotHardware;
 import org.firstinspires.ftc.teamcode.Utility.BitmapUtilities;
 import org.firstinspires.ftc.teamcode.Utility.FileUtilities;
@@ -126,8 +127,7 @@ public class BaseRoverRuckusAuto extends LinearOpMode {
         //step 4:turn to face depot point
         // double angleImu = robot.getAngle();
 
-        robot.left.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.right.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.resetEncoderCounts();
 
         robot.getAngle();
         double currentRobotAngle =robot.getAngle();
@@ -135,48 +135,42 @@ public class BaseRoverRuckusAuto extends LinearOpMode {
         while (Math.abs(goal.theta - angleImu) > 1) {
             angleImu = robot.getAngle();
 
-            robot.left.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            robot.right.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            robot.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-            robot.left.setPower(-getPower(angleImu, goal.theta, currentRobotAngle));
-            robot.right.setPower(getPower(angleImu, goal.theta, currentRobotAngle));
+            double power = getPower(angleImu, goal.theta, currentRobotAngle);
+            robot.turn(-power);
 
             telemetry.addData("goldPosition", goldPosition);
             telemetry.addData("Goal Angle", goal.theta);
             telemetry.addData("Robot Angle ", angleImu);
             telemetry.addData("offset Angle", robot.offset);
             telemetry.addData("angleGoal-angle ", goal.theta - angleImu);
-            telemetry.addData("Power", getPower(angleImu, goal.theta, currentRobotAngle));
+            telemetry.addData("Power", power);
             telemetry.update();
             idle();
         }
 
 
-        robot.left.setPower(0);
-        robot.right.setPower(0);
+       robot.goStraight(0);
         //step 5: gooooo
 
         double distance = getDistance(initialPosition, goal);
 
-        robot.left.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.right.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.resetEncoderCounts();
 
-        robot.left.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.right.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        robot.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        robot.right.setTargetPosition((int) (distance * VuforiaUtilities.INCHES_TO_ENCODERCOUNTS));
-        robot.left.setTargetPosition((int) (distance * VuforiaUtilities.INCHES_TO_ENCODERCOUNTS));
+        robot.setTargetPosition((int) (distance * VuforiaUtilities.INCHES_TO_ENCODERCOUNTS));
 
 
-        while (robot.left.isBusy()) {
+        while (robot.isLeftBusy()) {
             telemetry.addData("distance to goal", distance);
             telemetry.addData("encoders to goal", distance * VuforiaUtilities.INCHES_TO_ENCODERCOUNTS);
-            telemetry.addData("encoders", robot.left.getCurrentPosition());
+            telemetry.addData("encoders", robot.getLeftCurrentPosition());
             telemetry.update();
 
 
-            robot.left.setPower(1);
-            robot.right.setPower(1);
+            robot.goStraight(1);
         }
         //step 7: do corner action(if depot: drop team marker/if crater: park)
         doCornerAction();
@@ -299,25 +293,22 @@ public class BaseRoverRuckusAuto extends LinearOpMode {
         if (distanceToGoal > 2) {
             while (Math.abs(angleGoal - angleImu) > 1) {
                 angleImu = robot.getAngle();
+                double power = getPower(angleImu, angleGoal, angleVu);
+              robot.turn(-power);
 
-                robot.left.setPower(-getPower(angleImu, angleGoal , angleVu));
-                robot.right.setPower(getPower(angleImu, angleGoal , angleVu));
-                //  telemetry.addData("Goal", String.format("%f %f", goalX, goalY));
-                //   telemetry.addData("Start", String.format("%f %f", startX, startY));
 
                 telemetry.addData("Goal Angle", angleGoal);
                 telemetry.addData("angleGoal-angle ", AngleUnit.normalizeDegrees(angleGoal - angleImu));
                 telemetry.addData("Robot Angle ", angleImu);
                 //telemetry.addData("offset Angle", robot.offset);
-                telemetry.addData("Power", getPower(angleImu, angleGoal, angleVu));
+                telemetry.addData("Power", power);
                 telemetry.addData("start Angle", angleVu);
                 telemetry.update();
                 idle();
             }
 
 
-            robot.left.setPower(0);
-            robot.right.setPower(0);
+            robot.goStraight(0);
 
 
             int encodersToGoal = (int) (VuforiaUtilities.INCHES_TO_ENCODERCOUNTS * distanceToGoal);
@@ -326,23 +317,18 @@ public class BaseRoverRuckusAuto extends LinearOpMode {
             telemetry.addData("encoders to goal", encodersToGoal);
             telemetry.update();
 
-            robot.left.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            robot.right.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            robot.left.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            robot.right.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            robot.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            robot.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-            robot.left.setTargetPosition(encodersToGoal);
-            robot.right.setTargetPosition(encodersToGoal);
+            robot.setTargetPosition(encodersToGoal);
 
-            robot.left.setPower(.75);
-            robot.right.setPower(.75);
+            robot.goStraight(0.75);
 
-            while (robot.left.isBusy()) {
+            while (robot.isLeftBusy()) {
 
                 telemetry.addData("Goal", String.format("%f %f", goalX, goalY));
                 telemetry.addData("Start", String.format("%f %f", startX, startY));
-                telemetry.addData("left Counts", robot.left.getCurrentPosition());
-                telemetry.addData("right Counts", robot.right.getCurrentPosition());
+                telemetry.addData("left Counts", robot.getLeftCurrentPosition());
                 telemetry.addData("distance to goal", distanceToGoal);
                 telemetry.addData("encoders to goal", encodersToGoal);
                 telemetry.update();
@@ -350,8 +336,7 @@ public class BaseRoverRuckusAuto extends LinearOpMode {
                 idle();
             }
 
-            robot.left.setPower(0);
-            robot.right.setPower(0);
+            robot.goStraight(0);
         } else {
             telemetry.addData("too close not moving or turning", "");
             telemetry.update();

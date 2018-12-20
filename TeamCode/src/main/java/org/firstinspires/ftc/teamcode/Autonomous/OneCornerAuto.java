@@ -183,7 +183,6 @@ public class OneCornerAuto extends LinearOpMode {
 
         while (Math.abs(angleGoal - angleImu) > 1) {
             angleImu = robot.getAngle();
-
             robot.left.setPower(-getPower(angleImu, angleGoal));
             robot.right.setPower(getPower(angleImu, angleGoal));
 

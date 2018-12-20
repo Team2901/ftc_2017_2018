@@ -38,8 +38,7 @@ public class RoverRuckusBotHardware extends BaseRRHardware{
         left.setDirection(DcMotorSimple.Direction.REVERSE);
         right.setDirection(DcMotorSimple.Direction.FORWARD);
 
-        left.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        right.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        resetEncoderCounts();
 
         left.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         right.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -57,6 +56,31 @@ public class RoverRuckusBotHardware extends BaseRRHardware{
     public void turn(double power) {
         left.setPower(power);
         right.setPower(-power);
+    }
+    @Override
+    public void resetEncoderCounts() {
+        left.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        right.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+    }
+    public void setMode(DcMotor.RunMode runMode) {
+        left.setMode(runMode);
+        right.setMode(runMode);
+    }
+
+    @Override
+    public void setTargetPosition(int targetPosition) {
+        left.setTargetPosition(targetPosition);
+        right.setTargetPosition(targetPosition);
+    }
+
+    @Override
+    public boolean isLeftBusy() {
+        return left.isBusy();
+    }
+
+    @Override
+    public int getLeftCurrentPosition() {
+        return left.getCurrentPosition();
     }
 }
 

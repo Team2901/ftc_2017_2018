@@ -67,6 +67,39 @@ public class RRCoachBotHardware extends BaseRRHardware{
         rightBack.setPower(-power);
         rightFront.setPower(-power);
     }
+
+    @Override
+    public void resetEncoderCounts() {
+    leftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+    leftBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+    rightFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+    rightBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+    }
+    @Override
+    public void setMode(DcMotor.RunMode runMode) {
+        leftFront.setMode(runMode);
+        leftBack.setMode(runMode);
+        rightFront.setMode(runMode);
+        rightBack.setMode(runMode);
+    }
+
+    @Override
+    public void setTargetPosition(int targetPosition) {
+        leftFront.setTargetPosition(targetPosition);
+        leftBack.setTargetPosition(targetPosition);
+        rightFront.setTargetPosition(targetPosition);
+        rightBack.setTargetPosition(targetPosition);
+    }
+
+    @Override
+    public boolean isLeftBusy() {
+        return leftFront.isBusy();
+    }
+
+    @Override
+    public int getLeftCurrentPosition() {
+        return leftFront.getCurrentPosition();
+    }
 }
 
 
