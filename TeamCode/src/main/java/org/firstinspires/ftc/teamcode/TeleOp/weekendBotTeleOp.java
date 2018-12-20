@@ -4,13 +4,13 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.Hardware.weekendBot;
+import org.firstinspires.ftc.teamcode.Hardware.weekendBotHardware;
 
 @TeleOp(name = "WeekendBo ", group = "TeleOp")
 @Disabled
 public class weekendBotTeleOp extends OpMode {
 
-    weekendBot robot = new weekendBot();
+    weekendBotHardware robot = new weekendBotHardware();
 
     public void init() {
 
