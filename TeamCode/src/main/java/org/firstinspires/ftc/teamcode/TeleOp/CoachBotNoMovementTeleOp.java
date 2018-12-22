@@ -44,21 +44,21 @@ public class CoachBotNoMovementTeleOp extends OpMode {
         }
 
         if (gamepad2.right_bumper){
-            robot.shoulder.setPower(0.3);
+          //  robot.shoulder.setPower(0.3);
         } else if(gamepad2.right_trigger > .02) {
-            robot.shoulder.setPower(-0.3);
+        //    robot.shoulder.setPower(-0.3);
         } else {
-            robot.shoulder.setPower(0);
+        //    robot.shoulder.setPower(0);
         }
 
         if (gamepad2.left_bumper){
-            robot.elbow.setPower(0.3);
+        //    robot.elbow.setPower(0.3);
             telemetry.addData("left bumper hit", "");
         } else if(gamepad2.left_trigger > .02) {
-            robot.elbow.setPower(-0.3);
+        //    robot.elbow.setPower(-0.3);
             telemetry.addData("left trigger hit", "");
         } else {
-            robot.elbow.setPower(0);
+        //    robot.elbow.setPower(0);
         }
 
         if (gamepad2.x) {
@@ -69,8 +69,8 @@ public class CoachBotNoMovementTeleOp extends OpMode {
             robot.marker.setPosition(.5);
         }
 
-        telemetry.addData("shoulder" , robot.shoulder.getCurrentPosition());
-        telemetry.addData("elbow" , robot.elbow.getCurrentPosition());
+    //    telemetry.addData("shoulder" , robot.shoulder.getCurrentPosition());
+    //    telemetry.addData("elbow" , robot.elbow.getCurrentPosition());
         telemetry.addData("lift" , robot.lift.getCurrentPosition());
         telemetry.addData("markerServo" , robot.marker.getPosition());
         telemetry.update();
