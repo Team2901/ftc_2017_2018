@@ -43,9 +43,8 @@ public class ColorUtilities {
         return colorCount;
     }
 
-    public static int getColorCount(Bitmap bitmap, int minHue, int maxHue) {
-        int total = 0;
-
+    public static int[] getColorCount(Bitmap bitmap, int minHue, int maxHue) {
+        int[]counts = {0,0};
         for (int x = 0; x < bitmap.getWidth(); x = x + HUE_SAMPLE_RATE) { // replace 200 with x pixel size value
             for (int y = 0; y < bitmap.getHeight(); y = y + HUE_SAMPLE_RATE) {
                 int color = bitmap.getPixel(x, y);
@@ -58,13 +57,16 @@ public class ColorUtilities {
                 Color.RGBToHSV(red, green, blue, HSV);
 
                 int hue = (int) HSV[0];
+                if (HSV[1] <= 0.5 && HSV[2] >= 0.9){
+                    counts[1]++;
+                }
                 if (minHue <= hue && hue <= maxHue) {
-                    total++;
+                    counts[0]++;
                 }
             }
         }
 
-        return total;
+        return counts;
     }
 
     public static int getColorCount(int[] colorCounts, int minHue, int maxHue) {

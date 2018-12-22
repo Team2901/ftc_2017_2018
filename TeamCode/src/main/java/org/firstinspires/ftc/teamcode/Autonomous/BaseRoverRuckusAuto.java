@@ -203,15 +203,15 @@ public class BaseRoverRuckusAuto extends LinearOpMode {
 
             FileUtilities.writeHueFile("jewelHuesBig.txt", bitmap);
 
-            int leftHueTotal = RoverRuckusUtilities.getJewelHueCount(bitmap, jewelConfigLeft, jewelBitmapLeft, "jewelHuesLeft.txt");
-            int middleHueTotal = RoverRuckusUtilities.getJewelHueCount(bitmap, jewelConfigMiddle, jewelBitmapMiddle, "jewelHuesMiddle.txt");
-            int rightHueTotal = RoverRuckusUtilities.getJewelHueCount(bitmap, jewelConfigRight, jewelBitmapRight, "jewelHuesRight.txt");
+            int[] leftHueTotal = RoverRuckusUtilities.getJewelHueCount(bitmap, jewelConfigLeft, jewelBitmapLeft, "jewelHuesLeft.txt");
+            int[] middleHueTotal = RoverRuckusUtilities.getJewelHueCount(bitmap, jewelConfigMiddle, jewelBitmapMiddle, "jewelHuesMiddle.txt");
+            int[] rightHueTotal = RoverRuckusUtilities.getJewelHueCount(bitmap, jewelConfigRight, jewelBitmapRight, "jewelHuesRight.txt");
 
-            String winnerLocation = BitmapUtilities.findWinnerLocation(leftHueTotal, middleHueTotal, rightHueTotal);
-            FileUtilities.writeWinnerFile(winnerLocation, leftHueTotal, middleHueTotal, rightHueTotal);
-            if (leftHueTotal > middleHueTotal && middleHueTotal > rightHueTotal) {
+            String winnerLocation = BitmapUtilities.findWinnerLocation(leftHueTotal[0], middleHueTotal[0], rightHueTotal[0]);
+            FileUtilities.writeWinnerFile(winnerLocation, leftHueTotal[0], middleHueTotal[0], rightHueTotal[0]);
+            if (leftHueTotal[0] > middleHueTotal[0] && middleHueTotal[0] > rightHueTotal[0]) {
                 return LEFT;
-            } else if (rightHueTotal > middleHueTotal && rightHueTotal > leftHueTotal) {
+            } else if (rightHueTotal[0] > middleHueTotal[0] && rightHueTotal[0] > leftHueTotal[0]) {
                 return GoldPosition.RIGHT;
             } else {
                 return GoldPosition.MIDDLE;

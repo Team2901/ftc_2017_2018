@@ -18,6 +18,7 @@ import org.firstinspires.ftc.teamcode.Utility.RoverRuckusUtilities;
 import org.firstinspires.ftc.teamcode.Utility.VuforiaUtilities;
 
 import java.io.File;
+import java.io.IOException;
 
 @SuppressLint("DefaultLocale")
 @Autonomous(name = "DemoSetUpCode2019")
@@ -32,9 +33,9 @@ public class DemoSetUpCode2019 extends LinearOpModeJewelCamera {
     String jewelBitmapMiddle = "jewelBitmapMiddle.png";
     String jewelBitmapRight = "jewelBitmapRight.png";
 
-    int leftHueTotal = 0;
-    int middleHueTotal = 0;
-    int rightHueTotal = 0;
+    int leftHueTotal[] = {0,0};
+    int middleHueTotal[] = {0,0};
+    int rightHueTotal[] = {0,0};
 
     JewelFinder winningJewel = null;
 
@@ -54,6 +55,10 @@ public class DemoSetUpCode2019 extends LinearOpModeJewelCamera {
 
 
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+
+
+
+
         VuforiaLocalizer.Parameters parameters = VuforiaUtilities.getBackCameraParameters(hardwareMap);
         vuforia = VuforiaUtilities.getVuforia(parameters);
         activity.setupPreviewLayout(cameraMonitorViewId);
@@ -73,8 +78,8 @@ public class DemoSetUpCode2019 extends LinearOpModeJewelCamera {
             middleHueTotal = RoverRuckusUtilities.getJewelHueCount(bitmap, jewelConfigMiddle, jewelBitmapMiddle, "jewelHuesMiddle.txt");
             rightHueTotal = RoverRuckusUtilities.getJewelHueCount(bitmap, jewelConfigRight, jewelBitmapRight, "jewelHuesRight.txt");
 
-            String winner = BitmapUtilities.findWinnerLocation(leftHueTotal, middleHueTotal, rightHueTotal);
-            FileUtilities.writeWinnerFile(winner,leftHueTotal, middleHueTotal, rightHueTotal);
+            String winner = BitmapUtilities.findWinnerLocation(leftHueTotal[0], middleHueTotal[0], rightHueTotal[0]);
+            FileUtilities.writeWinnerFile(winner,leftHueTotal[0], middleHueTotal[0], rightHueTotal[0]);
             if(winner.equals("L"))
             {
                 //turn left box yellow
@@ -93,21 +98,21 @@ public class DemoSetUpCode2019 extends LinearOpModeJewelCamera {
 
             //turn all boxes white
             jewelLeft.post(new Runnable( ) { public void run() {
-                jewelLeft.setText(Integer.toString(leftHueTotal));
+                jewelLeft.setText(Integer.toString(leftHueTotal[0]));
                 if (jewelLeft == winningJewel){
                     jewelLeft.setBackgroundColor(Color.YELLOW);
                 } else
                 jewelLeft.setBackgroundColor(Color.WHITE);
             }});
             jewelMiddle.post(new Runnable( ) { public void run() {
-                jewelMiddle.setText(Integer.toString(middleHueTotal));
+                jewelMiddle.setText(Integer.toString(middleHueTotal[0]));
                 if (jewelMiddle == winningJewel){
                     jewelMiddle.setBackgroundColor(Color.YELLOW);
                 } else
                 jewelMiddle.setBackgroundColor(Color.WHITE);
             }});
             jewelRight.post(new Runnable( ) { public void run() {
-                jewelRight.setText(Integer.toString(rightHueTotal));
+                jewelRight.setText(Integer.toString(rightHueTotal[0]));
                 if (jewelLeft == winningJewel){
                     jewelLeft.setBackgroundColor(Color.YELLOW);
                 } else
@@ -120,7 +125,14 @@ public class DemoSetUpCode2019 extends LinearOpModeJewelCamera {
             telemetry.addData("ERROR WRITING TO FILE JEWEL BITMAP", e.getMessage());
             telemetry.update();
         }
+        Bitmap robotBitmap = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), bitmap.getConfig());
+        try {
+            FileUtilities.writeBitmapFile("robotBitmap.png", robotBitmap);
 
+        } catch (IOException e){
+            telemetry.addData("ERROR WRITING TO FILE ROBOT BITMAP", e.getMessage());
+            telemetry.update();
+        }
         while(opModeIsActive())
         {
             idle();
