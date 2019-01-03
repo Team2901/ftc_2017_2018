@@ -126,9 +126,9 @@ public class TestAuto extends LinearOpMode {
 
             FileUtilities.writeHueFile("jewelHuesBig.txt", bitmap);
 
-            int leftHueTotal = RoverRuckusUtilities.getJewelHueCount(bitmap, jewelConfigLeft, jewelBitmapLeft, "jewelHuesLeft.txt");
-            int middleHueTotal = RoverRuckusUtilities.getJewelHueCount(bitmap, jewelConfigMiddle, jewelBitmapMiddle, "jewelHuesMiddle.txt");
-            int rightHueTotal = RoverRuckusUtilities.getJewelHueCount(bitmap, jewelConfigRight, jewelBitmapRight, "jewelHuesRight.txt");
+            int leftHueTotal = RoverRuckusUtilities.getJewelHueCount(bitmap, jewelConfigLeft, jewelBitmapLeft, "jewelHuesLeft.txt")[0];
+            int middleHueTotal = RoverRuckusUtilities.getJewelHueCount(bitmap, jewelConfigMiddle, jewelBitmapMiddle, "jewelHuesMiddle.txt")[0];
+            int rightHueTotal = RoverRuckusUtilities.getJewelHueCount(bitmap, jewelConfigRight, jewelBitmapRight, "jewelHuesRight.txt")[0];
 
             String winnerLocation = BitmapUtilities.findWinnerLocation(leftHueTotal, middleHueTotal, rightHueTotal);
             FileUtilities.writeWinnerFile(winnerLocation, leftHueTotal, middleHueTotal, rightHueTotal);
