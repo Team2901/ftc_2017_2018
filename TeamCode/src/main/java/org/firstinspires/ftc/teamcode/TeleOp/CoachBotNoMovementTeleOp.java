@@ -5,12 +5,12 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.teamcode.Hardware.RRCoachBotHardware;
-import org.firstinspires.ftc.teamcode.Hardware.RoverRuckusBotHardware;
 
 @TeleOp(name="CoachBotNoMovement")
 
 public class CoachBotNoMovementTeleOp extends OpMode {
     RRCoachBotHardware robot = new RRCoachBotHardware();
+
     @Override
     public void init() {
         robot.init(hardwareMap);
@@ -31,7 +31,6 @@ public class CoachBotNoMovementTeleOp extends OpMode {
                 robot.lift.setPower(0);
                 telemetry.addData("hit the limit", "!");
             }
-            //Arm goes down
         } else if (gamepad1.left_bumper){
             if(robot.lift.getCurrentPosition() >= 0  || gamepad1.y) {
                 robot.lift.setPower(-1);
@@ -43,22 +42,24 @@ public class CoachBotNoMovementTeleOp extends OpMode {
             robot.lift.setPower(0);
         }
 
+        /*
         if (gamepad2.right_bumper){
-          //  robot.shoulder.setPower(0.3);
+            robot.shoulder.setPower(0.3);
         } else if(gamepad2.right_trigger > .02) {
-        //    robot.shoulder.setPower(-0.3);
+            robot.shoulder.setPower(-0.3);
         } else {
-        //    robot.shoulder.setPower(0);
+            robot.shoulder.setPower(0);
         }
+        */
 
         if (gamepad2.left_bumper){
-        //    robot.elbow.setPower(0.3);
+            // robot.elbow.setPower(0.3);
             telemetry.addData("left bumper hit", "");
         } else if(gamepad2.left_trigger > .02) {
-        //    robot.elbow.setPower(-0.3);
+            // robot.elbow.setPower(-0.3);
             telemetry.addData("left trigger hit", "");
         } else {
-        //    robot.elbow.setPower(0);
+            // robot.elbow.setPower(0);
         }
 
         if (gamepad2.x) {
@@ -69,8 +70,8 @@ public class CoachBotNoMovementTeleOp extends OpMode {
             robot.marker.setPosition(.5);
         }
 
-    //    telemetry.addData("shoulder" , robot.shoulder.getCurrentPosition());
-    //    telemetry.addData("elbow" , robot.elbow.getCurrentPosition());
+        // telemetry.addData("shoulder" , robot.shoulder.getCurrentPosition());
+        // telemetry.addData("elbow" , robot.elbow.getCurrentPosition());
         telemetry.addData("lift" , robot.lift.getCurrentPosition());
         telemetry.addData("markerServo" , robot.marker.getPosition());
         telemetry.update();

@@ -8,14 +8,12 @@ import org.firstinspires.ftc.teamcode.Hardware.WeekendBotHardware;
 
 @TeleOp(name = "WeekendBo ", group = "TeleOp")
 @Disabled
-public class weekendBotTeleOp extends OpMode {
+public class WeekendBotTeleOp extends OpMode {
 
     WeekendBotHardware robot = new WeekendBotHardware();
 
     public void init() {
-
         robot.init(hardwareMap);
-
     }
 
     public void loop() {
@@ -34,7 +32,7 @@ public class weekendBotTeleOp extends OpMode {
 
         if (gamepad2.right_bumper) {
             robot.elbow.setPower(.25);
-        } else if (gamepad2.right_bumper) {
+        } else if (gamepad2.left_bumper) {
             robot.elbow.setPower(-.25);
         }
 
@@ -43,6 +41,5 @@ public class weekendBotTeleOp extends OpMode {
         } else if (gamepad2.b) {
             robot.pedipalps.setPower(-.25);
         }
-
     }
 }

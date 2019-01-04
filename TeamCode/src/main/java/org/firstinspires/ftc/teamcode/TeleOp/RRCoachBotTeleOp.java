@@ -3,7 +3,6 @@ package org.firstinspires.ftc.teamcode.TeleOp;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.robotcontroller.internal.OpModeCamera;
 import org.firstinspires.ftc.teamcode.Hardware.RRCoachBotHardware;
 
 @TeleOp (name = "RRCoachBotTeleOp")
@@ -13,7 +12,7 @@ public class RRCoachBotTeleOp extends OpMode {
 
     @Override
     public void init() {
-     robot.init(hardwareMap);
+        robot.init(hardwareMap);
     }
 
     @Override

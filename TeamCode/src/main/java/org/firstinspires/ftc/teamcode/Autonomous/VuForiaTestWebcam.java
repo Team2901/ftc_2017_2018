@@ -26,7 +26,6 @@ public class VuForiaTestWebcam extends LinearOpMode {
     public final double INCHES_TO_MM = 25.4;
     public final double FIELD_RADIUS = 1828.8;
 
-
     public OpenGLMatrix phoneLocation = getMatrix(90, -0, -90, 0, 0, 0);
     WebcamName webcam;
     @Override
@@ -47,12 +46,10 @@ public class VuForiaTestWebcam extends LinearOpMode {
         front.setName("front");
         back.setName("back");
 
-
         OpenGLMatrix blueTrackablePosition = getMatrix(90, 0, -90, (float) FIELD_RADIUS, 0, (float) 152.4);
         OpenGLMatrix frontTrackablePosition = getMatrix(90, 0, 0, 0, (float) FIELD_RADIUS, (float) 152.4);
         OpenGLMatrix redTrackablePosition = getMatrix(90, 0, 90, (float) -FIELD_RADIUS, 0, (float) 152.4);
         OpenGLMatrix backTrackablePosition = getMatrix(90, 0, 180, 0, (float) -FIELD_RADIUS, (float) 152.4);
-
 
         blue.setLocation(blueTrackablePosition);
         red.setLocation(redTrackablePosition);
@@ -89,8 +86,6 @@ public class VuForiaTestWebcam extends LinearOpMode {
                 telemetry.update();
             }
 
-
-
             idle();
         }
     }
@@ -110,24 +105,24 @@ public class VuForiaTestWebcam extends LinearOpMode {
         OpenGLMatrix backLocation = null;
         OpenGLMatrix frontLocation = null;
 
-            blueLocation = ((VuforiaTrackableDefaultListener)
-                    blue.getListener()).getUpdatedRobotLocation();
-            redLocation = ((VuforiaTrackableDefaultListener)
-                    red.getListener()).getUpdatedRobotLocation();
-            backLocation = ((VuforiaTrackableDefaultListener)
-                    back.getListener()).getUpdatedRobotLocation();
-            frontLocation = ((VuforiaTrackableDefaultListener)
-                    front.getListener()).getUpdatedRobotLocation();
+        blueLocation = ((VuforiaTrackableDefaultListener)
+                blue.getListener()).getUpdatedRobotLocation();
+        redLocation = ((VuforiaTrackableDefaultListener)
+                red.getListener()).getUpdatedRobotLocation();
+        backLocation = ((VuforiaTrackableDefaultListener)
+                back.getListener()).getUpdatedRobotLocation();
+        frontLocation = ((VuforiaTrackableDefaultListener)
+                front.getListener()).getUpdatedRobotLocation();
 
-            if (blueLocation != null) {
-                location = blueLocation;
-            } else if (redLocation != null) {
-                location = redLocation;
-            } else if (backLocation != null) {
-                location = backLocation;
-            } else if (frontLocation != null) {
-                location = frontLocation;
-            }
+        if (blueLocation != null) {
+            location = blueLocation;
+        } else if (redLocation != null) {
+            location = redLocation;
+        } else if (backLocation != null) {
+            location = backLocation;
+        } else if (frontLocation != null) {
+            location = frontLocation;
+        }
 
         return location;
     }

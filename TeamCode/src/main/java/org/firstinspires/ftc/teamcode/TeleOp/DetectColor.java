@@ -13,8 +13,8 @@ import org.firstinspires.ftc.robotcontroller.internal.OpModeCamera;
  * Enables control of the robot via the gamepad
  */
 
-//@TeleOp(name = "DetectColor", group = "ZZOpModeCameraPackage")
-//@Disabled
+@TeleOp(name = "DetectColor", group = "ZZOpModeCameraPackage")
+@Disabled
 public class DetectColor extends OpModeCamera {
 
   int ds2 = 2;  // additional downsampling of the image

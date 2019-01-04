@@ -7,7 +7,6 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import org.firstinspires.ftc.teamcode.Hardware.RoverRuckusBotHardware;
 
 @TeleOp(name="RoverRuckusBot")
-
 public class RoverRuckusBotTeleOp extends OpMode {
     RoverRuckusBotHardware robot = new RoverRuckusBotHardware();
 

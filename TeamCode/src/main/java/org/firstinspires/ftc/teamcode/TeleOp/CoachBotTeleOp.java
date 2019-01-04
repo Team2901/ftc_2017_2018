@@ -5,10 +5,8 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.teamcode.Hardware.RRCoachBotHardware;
-import org.firstinspires.ftc.teamcode.Hardware.RoverRuckusBotHardware;
 
 @TeleOp(name="CoachBot")
-
 public class CoachBotTeleOp extends OpMode {
     RRCoachBotHardware robot = new RRCoachBotHardware();
     @Override
@@ -20,10 +18,12 @@ public class CoachBotTeleOp extends OpMode {
     public void loop() {
         double leftMotor = -gamepad1.left_stick_y;
         double rightMotor = -gamepad1.right_stick_y;
-//        robot.leftFront.setPower(leftMotor);
-//        robot.leftBack.setPower(leftMotor);
-//        robot.rightFront.setPower(rightMotor);
-//        robot.rightBack.setPower(rightMotor);
+        /*
+        robot.leftFront.setPower(leftMotor);
+        robot.leftBack.setPower(leftMotor);
+        robot.rightFront.setPower(rightMotor);
+        robot.rightBack.setPower(rightMotor);
+        */
 
         if (gamepad1.y){
             robot.lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -49,21 +49,24 @@ public class CoachBotTeleOp extends OpMode {
             robot.lift.setPower(0);
         }
 
+        /*
         if (gamepad2.right_bumper){
-        //    robot.shoulder.setPower(0.3);
+            robot.shoulder.setPower(0.3);
         } else if(gamepad2.right_trigger > .02) {
-        //    robot.shoulder.setPower(-0.3);
+            robot.shoulder.setPower(-0.3);
         } else {
-        //    robot.shoulder.setPower(0);
+            robot.shoulder.setPower(0);
         }
-
+        */
+        /*
         if (gamepad2.left_bumper){
-        //    robot.elbow.setPower(0.3);
+            robot.elbow.setPower(0.3);
         } else if(gamepad2.left_trigger > .02) {
-        //    robot.elbow.setPower(-0.3);
+            robot.elbow.setPower(-0.3);
         } else {
-        //    robot.elbow.setPower(0);
+            robot.elbow.setPower(0);
         }
+        */
 
         if (gamepad2.x) {
             robot.marker.setPosition(0);
@@ -73,10 +76,12 @@ public class CoachBotTeleOp extends OpMode {
             robot.marker.setPosition(.5);
         }
 
-//        telemetry.addData("leftFrontMotor" , robot.leftFront.getCurrentPosition());
-//        telemetry.addData("leftBackMotor" , robot.leftBack.getCurrentPosition());
-//        telemetry.addData("rightFrontMotor" , robot.rightFront.getCurrentPosition());
-//        telemetry.addData("rightBackMotor" , robot.rightBack.getCurrentPosition());
+        /*
+        telemetry.addData("leftFrontMotor" , robot.leftFront.getCurrentPosition());
+        telemetry.addData("leftBackMotor" , robot.leftBack.getCurrentPosition());
+        telemetry.addData("rightFrontMotor" , robot.rightFront.getCurrentPosition());
+        telemetry.addData("rightBackMotor" , robot.rightBack.getCurrentPosition());
+        */
         telemetry.addData("lift" , robot.lift.getCurrentPosition());
         telemetry.addData("markerServo" , robot.marker.getPosition());
         telemetry.update();

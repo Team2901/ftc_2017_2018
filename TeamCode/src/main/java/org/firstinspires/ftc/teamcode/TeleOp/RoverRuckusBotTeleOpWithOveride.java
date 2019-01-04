@@ -6,7 +6,6 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.Hardware.RoverRuckusBotHardware;
 
 @TeleOp(name="RoverRuckusBotOverride")
-
 public class RoverRuckusBotTeleOpWithOveride extends OpMode {
     RoverRuckusBotHardware robot = new RoverRuckusBotHardware();
     @Override
@@ -42,12 +41,12 @@ public class RoverRuckusBotTeleOpWithOveride extends OpMode {
         telemetry.addData("lift position", robot.lift.getCurrentPosition());
 
         if (gamepad1.x) {
-        //    robot.latch.setPosition(0);
+            //    robot.latch.setPosition(0);
         } else if(gamepad1.b) {
-        //    robot.latch.setPosition(1);
+            //    robot.latch.setPosition(1);
         } else if (gamepad1.a) {
-        //    robot.latch.setPosition(.5);
-            }
+            //    robot.latch.setPosition(.5);
+        }
 
         telemetry.addData("leftMotor" , robot.left.getCurrentPosition());
         telemetry.addData("rightMotor" , robot.right.getCurrentPosition());

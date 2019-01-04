@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Environment;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcontroller.internal.JewelFinder;
@@ -23,7 +24,7 @@ import java.io.IOException;
  *This is bridgett's code to take a picture and save it to the phone
  */
 
-//@Autonomous
+@Disabled
 public class JewelAuto extends LinearOpModeJewelCamera {
     String filePath = "Pictures";
     String imageName = "TestImage.JPEG"; //TODO come back//
