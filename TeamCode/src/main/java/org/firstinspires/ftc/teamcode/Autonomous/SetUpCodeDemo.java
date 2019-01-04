@@ -37,22 +37,19 @@ public class SetUpCodeDemo extends LinearOpModeJewelCamera {
     //right
 
     /*
-    add jewel finder to screen
-    what till start is pressed
-    after start jewel finder position is saved to finder
+     * add jewel finder to screen
+     * wait until start is pressed
+     * after start jewel finder position is saved to file
      */
 
     @Override
     public void runOpMode() throws InterruptedException {
         final FtcRobotControllerActivity activity =(FtcRobotControllerActivity )hardwareMap.appContext;
 
-
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         VuforiaLocalizer.Parameters parameters = VuforiaUtilities.getBackCameraParameters(hardwareMap);
         vuforia = VuforiaUtilities.getVuforia(parameters);
-        activity.setupPreviewLayout(cameraMonitorViewId);
-        activity.removeJewelFinder(this);
-        activity.addJewelFinder(this);
+        activity.setupPreviewLayout(cameraMonitorViewId, this);
 
         waitForStart();
 
@@ -67,11 +64,8 @@ public class SetUpCodeDemo extends LinearOpModeJewelCamera {
             int[] middleHueTotal = RoverRuckusUtilities.getJewelHueCount(bitmap, jewelConfigMiddle, jewelBitmapMiddle, "jewelHuesMiddle.txt");
             int[] rightHueTotal = RoverRuckusUtilities.getJewelHueCount(bitmap, jewelConfigRight, jewelBitmapRight, "jewelHuesRight.txt");
 
-
             String winner = BitmapUtilities.findWinnerLocation(leftHueTotal[0], middleHueTotal[0], rightHueTotal[0]);
             FileUtilities.writeWinnerFile(winner, leftHueTotal[0], middleHueTotal[0], rightHueTotal[0]);
-
-
 
         } catch (Exception e) {
             telemetry.addData("ERROR WRITING TO FILE JEWEL BITMAP", e.getMessage());

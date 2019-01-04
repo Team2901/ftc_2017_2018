@@ -61,9 +61,7 @@ public class DemoSetUpCode2019 extends LinearOpModeJewelCamera {
 
         VuforiaLocalizer.Parameters parameters = VuforiaUtilities.getBackCameraParameters(hardwareMap);
         vuforia = VuforiaUtilities.getVuforia(parameters);
-        activity.setupPreviewLayout(cameraMonitorViewId);
-        activity.removeJewelFinder(this);
-        activity.addJewelFinder(this);
+        activity.setupPreviewLayout(cameraMonitorViewId, this);
 
         waitForStart();
 
