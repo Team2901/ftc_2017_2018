@@ -57,9 +57,9 @@ public class ColorUtilities {
                 Color.RGBToHSV(red, green, blue, HSV);
 
                 int hue = (int) HSV[0];
-                if (HSV[1] <= 0.5 && HSV[2] >= 0.9){
-                    counts[1]++;
-                }
+               // if (HSV[1] <= 0.5 && HSV[2] >= 0.9){
+                   // counts[1]++;
+               // }
                 if (minHue <= hue && hue <= maxHue) {
                     counts[0]++;
                 }
