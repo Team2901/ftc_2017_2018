@@ -49,6 +49,7 @@ public class DemoSetUpCode2019 extends LinearOpModeJewelCamera {
     after start jewel finder position is saved to finder
      */
 
+
     @Override
     public void runOpMode() throws InterruptedException {
         final FtcRobotControllerActivity activity =(FtcRobotControllerActivity )hardwareMap.appContext;

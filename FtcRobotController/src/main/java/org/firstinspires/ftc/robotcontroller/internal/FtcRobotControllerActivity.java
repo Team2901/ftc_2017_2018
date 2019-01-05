@@ -260,6 +260,9 @@ public class FtcRobotControllerActivity extends Activity
         });
     }
 
+    public void Bitmap(org.firstinspires.ftc.teamcode.Utility.RobotSetup robotSetup) {
+    }
+
     // END CAMERA ADD!!!
     //////////////////////////////////////////////
     protected class RobotRestarter implements Restarter {

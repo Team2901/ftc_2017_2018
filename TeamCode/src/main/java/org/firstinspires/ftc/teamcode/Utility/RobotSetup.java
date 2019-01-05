@@ -42,7 +42,7 @@ after start jewel finder position is saved to finder
 
 @Override
     public void runOpMode() throws InterruptedException {
-    ((FtcRobotControllerActivity) hardwareMap.appContext).addJewelFinder(this);
+  //  ((FtcRobotControllerActivity) hardwareMap.appContext);
 
 
     int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
@@ -56,7 +56,7 @@ after start jewel finder position is saved to finder
     VuforiaTrackable relicTemplate = relicTrackables.get(0);
     relicTemplate.setName("relicVuMarkTemplate"); // can help in debugging; otherwise not necessary
 
-    rangeSensor = hardwareMap.get(ModernRoboticsI2cRangeSensor.class, "rangeSensor");
+    //rangeSensor = hardwareMap.get(ModernRoboticsI2cRangeSensor.class, "rangeSensor");
 
     waitForStart();
 
