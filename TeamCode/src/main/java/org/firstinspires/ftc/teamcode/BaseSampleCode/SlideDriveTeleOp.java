@@ -1,11 +1,13 @@
 package org.firstinspires.ftc.teamcode.BaseSampleCode;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 /**
  * Created by Kearneyg20428 on 2/7/2017.
  */
+@Disabled
 @TeleOp(name="SlideDriveTeleOp", group="TeleOp")
 public class SlideDriveTeleOp extends OpMode {
 

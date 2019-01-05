@@ -29,10 +29,11 @@
 
 package org.firstinspires.ftc.teamcode.BaseSampleCode;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-
+@Disabled
 @TeleOp(name="Mechanum Drive" , group = "TeleOp")
 public class Mechanum_Only extends OpMode {
 
