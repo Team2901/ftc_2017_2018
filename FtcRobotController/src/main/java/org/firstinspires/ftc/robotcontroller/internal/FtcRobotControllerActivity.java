@@ -25,6 +25,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. */
 
 package org.firstinspires.ftc.robotcontroller.internal;
 
+
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.ComponentName;
@@ -260,8 +261,8 @@ public class FtcRobotControllerActivity extends Activity
         });
     }
 
-    public void Bitmap(org.firstinspires.ftc.teamcode.Utility.RobotSetup robotSetup) {
-    }
+    /*public void Bitmap(org.firstinspires.ftc.teamcode.Utility.RobotSetup robotSetup) {
+    } */
 
     // END CAMERA ADD!!!
     //////////////////////////////////////////////
