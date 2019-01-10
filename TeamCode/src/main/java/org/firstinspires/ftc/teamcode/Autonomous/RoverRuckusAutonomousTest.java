@@ -7,7 +7,7 @@ public class RoverRuckusAutonomousTest extends BaseRoverRuckusAuto {
 
     public RoverRuckusAutonomousTest() {
         super();
-        startPosition = StartPosition.BLUE_CRATER;
+        startCorner = StartCorner.BLUE_CRATER;
         xStart = 0;
         yStart = 0;
         angleStart  = 0;
@@ -17,7 +17,7 @@ public class RoverRuckusAutonomousTest extends BaseRoverRuckusAuto {
     @Override
     public void runOpMode() throws InterruptedException {
         robot.init(hardwareMap);
-        telemetry.addData("startPosition", startPosition);
+        telemetry.addData("startCorner", startCorner);
         telemetry.update();
 
         goToPosition(xStart, yStart, 24, 24);

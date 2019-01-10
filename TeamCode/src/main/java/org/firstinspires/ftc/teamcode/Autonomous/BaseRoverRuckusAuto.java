@@ -16,7 +16,6 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.teamcode.Hardware.BaseRRHardware;
 import org.firstinspires.ftc.teamcode.Hardware.RRCoachBotHardware;
-import org.firstinspires.ftc.teamcode.Hardware.RoverRuckusBotHardware;
 import org.firstinspires.ftc.teamcode.Utility.BitmapUtilities;
 import org.firstinspires.ftc.teamcode.Utility.FileUtilities;
 import org.firstinspires.ftc.teamcode.Utility.PolarCoord;
@@ -24,9 +23,9 @@ import org.firstinspires.ftc.teamcode.Utility.RoverRuckusUtilities;
 import org.firstinspires.ftc.teamcode.Utility.VuforiaUtilities;
 
 import static org.firstinspires.ftc.teamcode.Autonomous.BaseRoverRuckusAuto.GoldPosition.LEFT;
-import static org.firstinspires.ftc.teamcode.Autonomous.BaseRoverRuckusAuto.StartPosition.BLUE_CRATER;
-import static org.firstinspires.ftc.teamcode.Autonomous.BaseRoverRuckusAuto.StartPosition.BLUE_DEPOT;
-import static org.firstinspires.ftc.teamcode.Autonomous.BaseRoverRuckusAuto.StartPosition.RED_DEPOT;
+import static org.firstinspires.ftc.teamcode.Autonomous.BaseRoverRuckusAuto.StartCorner.BLUE_CRATER;
+import static org.firstinspires.ftc.teamcode.Autonomous.BaseRoverRuckusAuto.StartCorner.BLUE_DEPOT;
+import static org.firstinspires.ftc.teamcode.Autonomous.BaseRoverRuckusAuto.StartCorner.RED_DEPOT;
 
 @SuppressLint("DefaultLocale")
 public class BaseRoverRuckusAuto extends LinearOpMode {
@@ -41,7 +40,7 @@ public class BaseRoverRuckusAuto extends LinearOpMode {
 
     public static final int TARGET_LIFT_TICKS = -1120;
 
-    public enum StartPosition {
+    public enum StartCorner {
         RED_CRATER, RED_DEPOT, BLUE_CRATER, BLUE_DEPOT;
     }
 
@@ -54,7 +53,7 @@ public class BaseRoverRuckusAuto extends LinearOpMode {
     public VuforiaLocalizer vuforia;
     public WebcamName webcam;
 
-    public StartPosition startPosition;
+    public StartCorner startCorner;
     public float angleStart;
     public double xStart;
     public double yStart;
@@ -77,7 +76,7 @@ public class BaseRoverRuckusAuto extends LinearOpMode {
         VuforiaTrackable back = roverRuckus.get(3);
         */
 
-        telemetry.addData("startPosition", startPosition);
+        telemetry.addData("startCorner", startCorner);
         telemetry.update();
 
         waitForStart();
@@ -115,22 +114,43 @@ public class BaseRoverRuckusAuto extends LinearOpMode {
         robot.offset = angleVu - angleImu;
 
         //step 3: go to the cheddar pivot point
-        PolarCoord preJewelPosition = getPreJewelPosition(goldPosition, startPosition);
-        PolarCoord depotPosition = getDepotPosition(startPosition);
-        PolarCoord craterPosition = getCraterPosition(startPosition);
-        PolarCoord jewelPosition = getJewelPosition(goldPosition, startPosition);
+        PolarCoord preJewelPosition = getPreJewelPosition(goldPosition, startCorner);
 
         goToPosition(x, y, preJewelPosition.x, preJewelPosition.y);
 
-        // go to depot
+        if (startCorner == BLUE_DEPOT || startCorner == RED_DEPOT){
+            runOpModeDepotCorner(goldPosition);
+        } else {
+            runOpModeCraterCorner(goldPosition);
+
+        }
+
+
+        while (opModeIsActive()) {
+            idle();
+        }
+    }
+    public void runOpModeDepotCorner(BaseRoverRuckusAuto.GoldPosition goldPosition) {
+
+        PolarCoord preJewelPosition = getPreJewelPosition(goldPosition, startCorner);
+        PolarCoord depotPosition = getDepotPosition(startCorner);
+        PolarCoord craterPosition = getCraterPosition(startCorner);
+
         goToPosition(preJewelPosition, depotPosition);
         dropMarker();
         goToPosition(depotPosition, craterPosition);
+    }
+    public void runOpModeCraterCorner(BaseRoverRuckusAuto.GoldPosition goldPosition) {
 
-        // crater start
+        PolarCoord preJewelPosition = getPreJewelPosition(goldPosition, startCorner);
+
+        PolarCoord jewelPosition = getJewelPosition(goldPosition, startCorner);
+
         goToPosition(preJewelPosition, jewelPosition);
 
         double distance = PolarCoord.getDistanceBetween(jewelPosition, preJewelPosition);
+        //back up to prejewel position
+
         robot.resetEncoderCounts();
 
         robot.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -146,11 +166,7 @@ public class BaseRoverRuckusAuto extends LinearOpMode {
             robot.goStraight(1);
         }
 
-        while (opModeIsActive()) {
-            idle();
-        }
     }
-
     public void dropFromLander() {
         DcMotor.RunMode originalValue = robot.lift.getMode();
         robot.lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -293,8 +309,8 @@ public class BaseRoverRuckusAuto extends LinearOpMode {
         }
     }
 
-    public PolarCoord getPreJewelPosition(GoldPosition goldPosition, StartPosition startPosition) {
-        if (startPosition == BLUE_DEPOT) {
+    public PolarCoord getPreJewelPosition(GoldPosition goldPosition, StartCorner startCorner) {
+        if (startCorner == BLUE_DEPOT) {
             switch (goldPosition) {
                 case LEFT:
                     return new PolarCoord(8.019544399, 42.70655476
@@ -306,7 +322,7 @@ public class BaseRoverRuckusAuto extends LinearOpMode {
                     return new PolarCoord(42.70655476, 8.019544399
                             , 76.2005146);
             }
-        } else if (startPosition == BLUE_CRATER) {
+        } else if (startCorner == BLUE_CRATER) {
 
             switch (goldPosition) {
                 case LEFT:
@@ -320,7 +336,7 @@ public class BaseRoverRuckusAuto extends LinearOpMode {
                             , -13.7994854
                     );
             }
-        } else if (startPosition == RED_DEPOT) {
+        } else if (startCorner == RED_DEPOT) {
 
             switch (goldPosition) {
                 case LEFT:
@@ -351,8 +367,8 @@ public class BaseRoverRuckusAuto extends LinearOpMode {
         return new PolarCoord(0, 0, 0);
     }
 
-    public PolarCoord getJewelPosition(GoldPosition goldPosition, StartPosition startPosition) {
-        if (startPosition == BLUE_DEPOT) {
+    public PolarCoord getJewelPosition(GoldPosition goldPosition, StartCorner startCorner) {
+        if (startCorner == BLUE_DEPOT) {
             switch (goldPosition) {
                 case LEFT:
                     return new PolarCoord(47.5, 26.0);
@@ -361,7 +377,7 @@ public class BaseRoverRuckusAuto extends LinearOpMode {
                 case RIGHT:
                     return new PolarCoord(26.0, 47.5);
             }
-        } else if (startPosition == BLUE_CRATER) {
+        } else if (startCorner == BLUE_CRATER) {
 
             switch (goldPosition) {
                 case LEFT:
@@ -371,7 +387,7 @@ public class BaseRoverRuckusAuto extends LinearOpMode {
                 case RIGHT:
                     return new PolarCoord(26.0, -47.5);
             }
-        } else if (startPosition == RED_DEPOT) {
+        } else if (startCorner == RED_DEPOT) {
 
             switch (goldPosition) {
                 case LEFT:
@@ -394,8 +410,8 @@ public class BaseRoverRuckusAuto extends LinearOpMode {
         return new PolarCoord(0, 0);
     }
 
-    public PolarCoord getDepotPosition(StartPosition startPosition) {
-        switch (startPosition) {
+    public PolarCoord getDepotPosition(StartCorner startCorner) {
+        switch (startCorner) {
             case BLUE_DEPOT:
             case BLUE_CRATER:
                 return new PolarCoord(60, 60);
@@ -406,8 +422,8 @@ public class BaseRoverRuckusAuto extends LinearOpMode {
         return new PolarCoord(0, 0);
     }
 
-    public PolarCoord getCraterPosition(StartPosition startPosition) {
-        switch (startPosition) {
+    public PolarCoord getCraterPosition(StartCorner startCorner) {
+        switch (startCorner) {
             case BLUE_DEPOT:
             case BLUE_CRATER:
                 return new PolarCoord(60, -60);
