@@ -114,6 +114,9 @@ public class ColorUtilities {
 
                 float[] HSV = new float[3];
                 Color.RGBToHSV(red, green, blue, HSV);
+                HSV[1] = 1;
+                HSV[2] = 1;
+                int pixel = Color.HSVToColor(HSV);
 
                 int hue = (int) HSV[0];
 
@@ -121,7 +124,7 @@ public class ColorUtilities {
                 // counts[1]++;
                 // }
                 if (minHue <= hue && hue <= maxHue) {
-                    babyBitmapBW.setPixel(x, y, Color.WHITE);
+                    babyBitmapBW.setPixel(x, y, pixel);
                 }
             }
         }
