@@ -284,7 +284,8 @@ public class BaseRoverRuckusAuto extends LinearOpMode {
 
                 idle();
             }
-
+            robot.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            robot.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             robot.goStraight(0);
         } else {
             telemetry.addData("Too close. Skipped moving or turning", "");

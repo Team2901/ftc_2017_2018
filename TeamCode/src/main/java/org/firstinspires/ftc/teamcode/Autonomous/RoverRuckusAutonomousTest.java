@@ -24,6 +24,6 @@ public class RoverRuckusAutonomousTest extends BaseRoverRuckusAuto {
 
         waitForStart();
 
-        goToPosition(xStart, yStart, -24, -24);
+        goToPosition(24, 24, -24, -24);
     }
 }
