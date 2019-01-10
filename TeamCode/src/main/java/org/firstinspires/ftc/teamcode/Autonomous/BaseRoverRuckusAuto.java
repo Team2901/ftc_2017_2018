@@ -14,6 +14,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
+import org.firstinspires.ftc.teamcode.Hardware.BaseRRHardware;
+import org.firstinspires.ftc.teamcode.Hardware.RRCoachBotHardware;
 import org.firstinspires.ftc.teamcode.Hardware.RoverRuckusBotHardware;
 import org.firstinspires.ftc.teamcode.Utility.BitmapUtilities;
 import org.firstinspires.ftc.teamcode.Utility.FileUtilities;
@@ -48,7 +50,7 @@ public class BaseRoverRuckusAuto extends LinearOpMode {
         LEFT, MIDDLE, RIGHT
     }
 
-    public final RoverRuckusBotHardware robot = new RoverRuckusBotHardware();
+    public final BaseRRHardware robot = new RRCoachBotHardware();
     public VuforiaLocalizer vuforia;
     public WebcamName webcam;
 
@@ -133,11 +135,11 @@ public class BaseRoverRuckusAuto extends LinearOpMode {
 
         robot.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        robot.setTargetPosition((int) (distance * VuforiaUtilities.INCHES_TO_ENCODERCOUNTS));
+        robot.setTargetPosition((int) (distance * robot.getInchesToEncoderCounts()));
 
         while (robot.isLeftBusy()) {
             telemetry.addData("distance to goal", distance);
-            telemetry.addData("encoders to goal", distance * VuforiaUtilities.INCHES_TO_ENCODERCOUNTS);
+            telemetry.addData("encoders to goal", distance * robot.getInchesToEncoderCounts());
             telemetry.addData("encoders", robot.getLeftCurrentPosition());
             telemetry.update();
 
@@ -258,7 +260,7 @@ public class BaseRoverRuckusAuto extends LinearOpMode {
 
             robot.goStraight(0);
 
-            int ticksToGoal = (int) (VuforiaUtilities.INCHES_TO_ENCODERCOUNTS * distanceToGoal);
+            int ticksToGoal = (int) (robot.getInchesToEncoderCounts() * distanceToGoal);
 
             telemetry.addData("Distance to goal", distanceToGoal);
             telemetry.addData("Encoders to goal", ticksToGoal);
@@ -282,7 +284,8 @@ public class BaseRoverRuckusAuto extends LinearOpMode {
 
                 idle();
             }
-
+            robot.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            robot.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             robot.goStraight(0);
         } else {
             telemetry.addData("Too close. Skipped moving or turning", "");

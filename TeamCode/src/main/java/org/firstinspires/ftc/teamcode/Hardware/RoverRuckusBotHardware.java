@@ -31,7 +31,7 @@ public class RoverRuckusBotHardware extends BaseRRHardware{
     public static final double INCHES_PER_ROTATION = 7.75;
 
     public RoverRuckusBotHardware() {
-        super(0, 0.5);
+        super(0, 0.5, 7.75);
     }
 
     public void init(HardwareMap ahwMap) {

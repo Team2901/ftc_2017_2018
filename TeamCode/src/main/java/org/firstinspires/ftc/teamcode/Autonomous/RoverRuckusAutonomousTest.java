@@ -20,7 +20,10 @@ public class RoverRuckusAutonomousTest extends BaseRoverRuckusAuto {
         telemetry.addData("startPosition", startPosition);
         telemetry.update();
 
-        goToPosition(xStart, yStart, 24, 12);
-        goToPosition(24, 12, 9, 30);
+        goToPosition(xStart, yStart, 24, 24);
+
+        waitForStart();
+
+        goToPosition(24, 24, -24, -24);
     }
 }

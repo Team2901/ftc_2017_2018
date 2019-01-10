@@ -15,6 +15,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 public abstract class BaseRRHardware {
     protected HardwareMap hardwareMap = null;
 
+    public static final double ENCODER_COUNTS_PER_REV = 1120; //for never rest 40s
+
     public DcMotor lift;
 
     public Servo marker;
@@ -25,10 +27,12 @@ public abstract class BaseRRHardware {
 
     public double markerInitPosition = 0;
     public double markerDropPosition = 0;
+    public double inchesPerRotation = 0;
 
-    public BaseRRHardware(double markerInitPosition, double markerDropPosition) {
+    public BaseRRHardware(double markerInitPosition, double markerDropPosition, double inchesPerRotation) {
         this.markerInitPosition = markerInitPosition;
         this.markerDropPosition = markerDropPosition;
+        this.inchesPerRotation = inchesPerRotation;
     }
 
     public void init(HardwareMap ahwMap) {
@@ -75,4 +79,8 @@ public abstract class BaseRRHardware {
     public abstract void setTargetPosition(int targetPosition);
     public abstract boolean isLeftBusy();
     public abstract int getLeftCurrentPosition();
+
+    public double getInchesToEncoderCounts() {
+        return ((1 / inchesPerRotation) * ENCODER_COUNTS_PER_REV);
+    }
 }
