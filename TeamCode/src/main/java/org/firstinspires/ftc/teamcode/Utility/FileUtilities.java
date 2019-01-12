@@ -94,53 +94,67 @@ public class FileUtilities {
 
 
     public static void writeWinnerFile(String winnerLocation,
-                                       int leftHueTotal,
-                                       int middleHueTotal,
-                                       int rightHueTotal) throws IOException {
+                                       int[] leftHueTotal,
+                                       int[] middleHueTotal,
+                                       int[] rightHueTotal) throws IOException {
 
         writeWinnerFile(WINNER_FILE_NAME_3, winnerLocation, leftHueTotal, middleHueTotal, rightHueTotal);
     }
 
     public static void writeWinnerFile(String fileName,
-                                       String winnerLocation,
-                                       int leftHueTotal,
-                                       int middleHueTotal,
-                                       int rightHueTotal) throws IOException {
+                                       String winner,
+                                       int[] leftHueTotal,
+                                       int[] middleHueTotal,
+                                       int[] rightHueTotal) throws IOException {
         final File teamDir = new File(Environment.getExternalStorageDirectory(), TEAM_FOLDER_NAME);
         boolean newDir = teamDir.mkdirs();
         final File file = new File(teamDir, fileName);
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
-            writer.write("Left Jewel Yellow count = " + leftHueTotal);
+            writer.write("Left Jewel Yellow count = " + leftHueTotal[0]);
             writer.newLine();
-            writer.write("Middle Jewel Yellow count = " + middleHueTotal);
+            writer.write("Left Jewel White count = " + leftHueTotal[1]);
             writer.newLine();
-            writer.write("Right Jewel Yellow count = " + rightHueTotal);
             writer.newLine();
-            writer.write("winner is " + winnerLocation);
+            writer.write("Middle Jewel Yellow count = " + middleHueTotal[0]);
+            writer.newLine();
+            writer.write("Middle Jewel White count = " + middleHueTotal[1]);
+            writer.newLine();
+            writer.newLine();
+            writer.write("Right Jewel Yellow count = " + rightHueTotal[0]);
+            writer.newLine();
+            writer.write("Right Jewel White count = " + rightHueTotal[1]);
+            writer.newLine();
+            writer.write("winner is " + winner);
+
         }
     }
 
-    public static void writeWinnerFile(String winnerLocation,
-                                       int middleHueTotal,
-                                       int rightHueTotal) throws IOException  {
-        writeWinnerFile(WINNER_FILE_NAME_2,winnerLocation, middleHueTotal, rightHueTotal);
+    public static void writeWinnerFile(String winner,
+                                       int[] middleHueTotal,
+                                       int[] rightHueTotal) throws IOException  {
+        writeWinnerFile(WINNER_FILE_NAME_2,winner, middleHueTotal, rightHueTotal);
     }
 
     public static void writeWinnerFile(String fileName,
-                                       String winnerLocation,
-                                       int middleHueTotal,
-                                       int rightHueTotal) throws IOException {
+                                       String winner,
+                                       int[] middleHueTotal,
+                                       int[] rightHueTotal) throws IOException {
         final File teamDir = new File(Environment.getExternalStorageDirectory(), TEAM_FOLDER_NAME);
         boolean newDir = teamDir.mkdirs();
         final File file = new File(teamDir, fileName);
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
-            writer.write("Middle Jewel Yellow count = " + middleHueTotal);
+            writer.write("Middle Jewel Yellow count = " + middleHueTotal[0]);
             writer.newLine();
-            writer.write("Right Jewel Yellow count = " + rightHueTotal);
+            writer.write("Middle Jewel White count = " + middleHueTotal[1]);
             writer.newLine();
-            writer.write("winner is " + winnerLocation);
+            writer.newLine();
+            writer.write("Right Jewel Yellow count = " + rightHueTotal[0]);
+            writer.newLine();
+            writer.write("Right Jewel White count = " + rightHueTotal[1]);
+            writer.newLine();
+            writer.write("winner is " + winner);
         }
     }
 

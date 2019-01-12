@@ -191,8 +191,8 @@ public class BaseRoverRuckusAuto extends LinearOpMode {
             int[] middleHueTotal = RoverRuckusUtilities.getJewelHueCount(bitmap, jewelConfigMiddle, jewelBitmapMiddle, "jewelHuesMiddle.txt");
             int[] rightHueTotal = RoverRuckusUtilities.getJewelHueCount(bitmap, jewelConfigRight, jewelBitmapRight, "jewelHuesRight.txt");
 
-            String winnerLocation = BitmapUtilities.findWinnerLocation(leftHueTotal[0], middleHueTotal[0], rightHueTotal[0]);
-            FileUtilities.writeWinnerFile(winnerLocation, leftHueTotal[0], middleHueTotal[0], rightHueTotal[0]);
+            String winner = BitmapUtilities.findWinnerLocation(leftHueTotal, middleHueTotal, rightHueTotal);
+            FileUtilities.writeWinnerFile(winner, leftHueTotal, middleHueTotal, rightHueTotal);
             if (leftHueTotal[0] > middleHueTotal[0] && middleHueTotal[0] > rightHueTotal[0]) {
                 return LEFT;
             } else if (rightHueTotal[0] > middleHueTotal[0] && rightHueTotal[0] > leftHueTotal[0]) {

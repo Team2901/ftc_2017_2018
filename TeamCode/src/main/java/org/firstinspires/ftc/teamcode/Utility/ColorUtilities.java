@@ -57,10 +57,17 @@ public class ColorUtilities {
                 Color.RGBToHSV(red, green, blue, HSV);
 
                 int hue = (int) HSV[0];
-               // if (HSV[1] <= 0.5 && HSV[2] >= 0.9){
-                   // counts[1]++;
-               // }
-                if (minHue <= hue && hue <= maxHue) {
+                // if (HSV[1] <= 0.5 && HSV[2] >= 0.9){
+                // counts[1]++;
+                // }
+                if (HSV[1]<0.7)//in gray scale protion of color scale.
+                {
+                    if (HSV[2]>0.8)//white
+                    {
+                        counts[1]++;
+                    }
+                }
+                else if (minHue <= hue && hue <= maxHue) {
                     counts[0]++;
                 }
             }
@@ -75,7 +82,7 @@ public class ColorUtilities {
     }
 
     public static int[] getColorCounts(Bitmap bitmap) {
-        int[] colorCounts = new int[360];
+        int[] colorCounts = new int[361];
 
         for (int x = 0; x < bitmap.getWidth(); x = x + HUE_SAMPLE_RATE) { // replace 200 with x pixel size value
             for (int y = 0; y < bitmap.getHeight(); y = y + HUE_SAMPLE_RATE) {
@@ -92,8 +99,16 @@ public class ColorUtilities {
 
                 int hueCount = colorCounts[hue];
                 hueCount++;
-
-                colorCounts[hue] = hueCount;
+                if (HSV[1]<0.7)//in gray scale protion of color scale.
+                {
+                    if (HSV[2]>0.8)//white
+                    {
+                        colorCounts[360]++;
+                    }
+                }
+                else {
+                    colorCounts[hue] = hueCount;
+                }
             }
         }
 
@@ -103,7 +118,7 @@ public class ColorUtilities {
     public static Bitmap blackWhiteColorDecider (Bitmap bitmap, int minHue, int maxHue)
     {
         Bitmap babyBitmapBW = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(),bitmap.getConfig());
-
+        int newColor =0;
         for (int x = 0; x < bitmap.getWidth(); x++) { // replace 200 with x pixel size value
             for (int y = 0; y < bitmap.getHeight(); y++) {
                 int color = bitmap.getPixel(x, y);
@@ -114,22 +129,49 @@ public class ColorUtilities {
 
                 float[] HSV = new float[3];
                 Color.RGBToHSV(red, green, blue, HSV);
-                HSV[1] = 1;
-                HSV[2] = 1;
-                int pixel = Color.HSVToColor(HSV);
 
                 int hue = (int) HSV[0];
+               /* HSV[1] =(float) 1.0;
+                HSV[2]=(float) 1.0;
+                newColor = Color.HSVToColor(HSV); */
+
 
                 // if (HSV[1] <= 0.5 && HSV[2] >= 0.9){
                 // counts[1]++;
                 // }
-                if (minHue <= hue && hue <= maxHue) {
-                    babyBitmapBW.setPixel(x, y, pixel);
+                if (HSV[1]<0.7)//in gray scale protion of color scale.
+                {
+                   if (HSV[2]>0.8)//white
+                   {
+                     newColor = Color.WHITE;
+                   }
+                   else if (HSV[2]<0.2 ) //black
+                   {
+                       newColor= Color.BLACK;
+                   }
+                   else{
+                       newColor = Color.GRAY;
+
+                   }
+                    babyBitmapBW.setPixel(x, y, newColor);
+                }
+                else if (minHue <= hue && hue <= maxHue) {
+                    HSV[1] =(float) 1.0;
+                    HSV[2]=(float) 1.0;
+                    newColor = Color.HSVToColor(HSV);
+                    babyBitmapBW.setPixel(x, y, Color.CYAN);
+                }
+                else{
+                    HSV[1] =(float) 1.0;
+                    HSV[2]=(float) 1.0;
+                    newColor = Color.HSVToColor(HSV);
+                    babyBitmapBW.setPixel(x, y, newColor);
                 }
             }
         }
 
         return babyBitmapBW;
     }
+
 
 }

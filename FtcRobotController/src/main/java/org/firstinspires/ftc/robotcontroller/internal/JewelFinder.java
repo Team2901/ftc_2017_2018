@@ -41,7 +41,7 @@ public class JewelFinder extends TextView implements View.OnTouchListener {
         super(context, attrs, defStyle);
         this.setBackgroundColor( color);
         //CHANGE THIS TO CHANGE SIZE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        this.setLayoutParams(new FrameLayout.LayoutParams(75,75));
+        this.setLayoutParams(new FrameLayout.LayoutParams(100,100));
         this.setOnTouchListener(this);
         this.setText(location);
     }

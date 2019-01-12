@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.Utility;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 
@@ -16,40 +17,62 @@ public class BitmapUtilities {
 
     public static final int PIXEL_FORMAT_RGB565 = 1;
 
-    public static String findWinnerLocation(int leftHueTotal,
-                                            int middleHueTotal,
-                                            int rightHueTotal) {
+    public static String findWinnerLocation(int[] leftHueTotal,
+                                            int[] middleHueTotal,
+                                            int[] rightHueTotal) {
+        String winner = "?";
+        int leftColor, middleColor, rightColor;
+        if(leftHueTotal[0]/*yellow counts*/ > leftHueTotal[1]/*white counts*/)
+        {
+            leftColor = Color.YELLOW;
+            winner = "L";
+        }
+        else {
+            leftColor= Color.WHITE;
+        }
 
-        int winnerCount = 0;
-        String winnerLocation = "?";
-        if (winnerCount < leftHueTotal) {
-            winnerCount = leftHueTotal;
-            winnerLocation = "L";
+        if(middleHueTotal[0]/*yellow counts*/ > middleHueTotal[1]/*white counts*/)
+        {
+            middleColor = Color.YELLOW;
+            winner = "M";
         }
-        if (winnerCount < middleHueTotal) {
-            winnerCount = middleHueTotal;
-            winnerLocation = "M";
+        else {
+            middleColor= Color.WHITE;
         }
-        if (winnerCount < rightHueTotal) {
-            winnerCount = rightHueTotal;
-            winnerLocation = "R";
+        if(rightHueTotal[0]/*yellow counts*/ > rightHueTotal[1]/*white counts*/)
+        {
+            rightColor = Color.YELLOW;
+            winner = "R";
         }
-        return winnerLocation;
+        else {
+            rightColor= Color.WHITE;
+        }
+        return winner;
     }
 
-    public static String findWinnerLocation(int middleHueTotal,
-                                            int rightHueTotal) {
+    public static String findWinnerLocation(int[] middleHueTotal,
+                                            int[] rightHueTotal) {
+        String winner = "L";
+        int middleColor, rightColor;
 
-        int winnerCount = 0;
-        String winnerLocation = "?";
 
-        if (winnerCount < rightHueTotal) {
-            winnerLocation = "R";
+        if(middleHueTotal[0]/*yellow counts*/ > middleHueTotal[1]/*white counts*/)
+        {
+            middleColor = Color.YELLOW;
+            winner = "M";
         }
-        if (Math.abs(rightHueTotal - middleHueTotal) < 30) {
-            winnerLocation = "L";
+        else {
+            middleColor= Color.WHITE;
         }
-        return winnerLocation;
+        if(rightHueTotal[0]/*yellow counts*/ > rightHueTotal[1]/*white counts*/)
+        {
+            rightColor = Color.YELLOW;
+            winner = "R";
+        }
+        else {
+            rightColor= Color.WHITE;
+        }
+        return winner;
     }
 
     BaseRoverRuckusAuto.GoldPosition findGoldPosition(int leftHueTotal,

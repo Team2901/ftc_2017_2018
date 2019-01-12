@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.Autonomous;
 
 import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.os.Environment;
 
 //import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cRangeSensor;
@@ -75,11 +76,12 @@ public class SetUpCode2019 extends LinearOpModeJewelCamera {
                     jewelBitmapRight, "jewelHuesRight.txt");
 
 
-            String winner = BitmapUtilities.findWinnerLocation(leftHueTotal[0], middleHueTotal[0], rightHueTotal[0]);
-            FileUtilities.writeWinnerFile(winner, leftHueTotal[0], middleHueTotal[0], rightHueTotal[0]);
 
-             winner = BitmapUtilities.findWinnerLocation(middleHueTotal[0], rightHueTotal[0]);
-            FileUtilities.writeWinnerFile(winner, middleHueTotal[0], rightHueTotal[0]);
+           String winner = BitmapUtilities.findWinnerLocation(leftHueTotal, middleHueTotal, rightHueTotal);
+           FileUtilities.writeWinnerFile(winner, leftHueTotal, middleHueTotal, rightHueTotal);
+
+           winner = BitmapUtilities.findWinnerLocation(middleHueTotal, rightHueTotal);
+           FileUtilities.writeWinnerFile(winner, middleHueTotal, rightHueTotal);
 
 
 

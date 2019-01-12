@@ -64,8 +64,8 @@ public class SetUpCodeDemo extends LinearOpModeJewelCamera {
             int[] middleHueTotal = RoverRuckusUtilities.getJewelHueCount(bitmap, jewelConfigMiddle, jewelBitmapMiddle, "jewelHuesMiddle.txt");
             int[] rightHueTotal = RoverRuckusUtilities.getJewelHueCount(bitmap, jewelConfigRight, jewelBitmapRight, "jewelHuesRight.txt");
 
-            String winner = BitmapUtilities.findWinnerLocation(leftHueTotal[0], middleHueTotal[0], rightHueTotal[0]);
-            FileUtilities.writeWinnerFile(winner, leftHueTotal[0], middleHueTotal[0], rightHueTotal[0]);
+            String winner = BitmapUtilities.findWinnerLocation(leftHueTotal, middleHueTotal, rightHueTotal);
+            FileUtilities.writeWinnerFile(winner, leftHueTotal, middleHueTotal, rightHueTotal);
 
         } catch (Exception e) {
             telemetry.addData("ERROR WRITING TO FILE JEWEL BITMAP", e.getMessage());
