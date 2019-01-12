@@ -100,4 +100,36 @@ public class ColorUtilities {
         return colorCounts;
     }
 
+    public static Bitmap blackWhiteColorDecider (Bitmap bitmap, int minHue, int maxHue)
+    {
+        Bitmap babyBitmapBW = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(),bitmap.getConfig());
+
+        for (int x = 0; x < bitmap.getWidth(); x++) { // replace 200 with x pixel size value
+            for (int y = 0; y < bitmap.getHeight(); y++) {
+                int color = bitmap.getPixel(x, y);
+
+                int red = Color.red(color);
+                int green = Color.green(color);
+                int blue = Color.blue(color);
+
+                float[] HSV = new float[3];
+                Color.RGBToHSV(red, green, blue, HSV);
+                HSV[1] = 1;
+                HSV[2] = 1;
+                int pixel = Color.HSVToColor(HSV);
+
+                int hue = (int) HSV[0];
+
+                // if (HSV[1] <= 0.5 && HSV[2] >= 0.9){
+                // counts[1]++;
+                // }
+                if (minHue <= hue && hue <= maxHue) {
+                    babyBitmapBW.setPixel(x, y, pixel);
+                }
+            }
+        }
+
+        return babyBitmapBW;
+    }
+
 }

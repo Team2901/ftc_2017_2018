@@ -92,6 +92,7 @@ public class FileUtilities {
         return bitmap;
     }
 
+
     public static void writeWinnerFile(String winnerLocation,
                                        int leftHueTotal,
                                        int middleHueTotal,
@@ -164,4 +165,6 @@ public class FileUtilities {
                                     int[] colorCounts) throws IOException {
         //TODO
     }
+
+
 }

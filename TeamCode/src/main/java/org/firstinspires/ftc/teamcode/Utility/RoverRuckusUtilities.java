@@ -21,7 +21,13 @@ public class RoverRuckusUtilities {
             FileUtilities.writeBitmapFile(bitmapFilename, babyBitmap);
             FileUtilities.writeHueFile(hueFilename, babyBitmap);
 
-            int[] hueTotal = ColorUtilities.getColorCount(babyBitmap, 25, 30);
+            Bitmap babyBitmapBW = ColorUtilities.blackWhiteColorDecider(babyBitmap, 25, 40);
+
+            String[] fileNameSplit = bitmapFilename.split(".png");
+            String bwFileName = fileNameSplit[0] + "BW.png";
+            FileUtilities.writeBitmapFile(bwFileName , babyBitmapBW);
+
+            int[] hueTotal = ColorUtilities.getColorCount(babyBitmap, 25, 40);
             return hueTotal;
         } catch (IOException e) {
             throw new RuntimeException(e);

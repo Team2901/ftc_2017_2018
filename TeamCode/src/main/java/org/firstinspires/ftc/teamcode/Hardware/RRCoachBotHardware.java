@@ -15,92 +15,68 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
 public class RRCoachBotHardware extends BaseRRHardware{
 
-    public DcMotor leftFront;
-    public DcMotor leftBack;
-    public DcMotor rightFront;
-    public DcMotor rightBack;
-
+    public DcMotor left;
+    public DcMotor right;
     public RRCoachBotHardware() {
-        super(0.5, 1);
+        super(0.5, 1,12.5 / 2);
     }
 
     @Override
+
     public void init(HardwareMap ahwMap) {
         super.init(ahwMap);
-        leftFront = hardwareMap.dcMotor.get("leftFront");
-        leftBack = hardwareMap.dcMotor.get("leftBack");
-        rightFront = hardwareMap.dcMotor.get("rightFront");
-        rightBack = hardwareMap.dcMotor.get("rightBack");
 
 
-        leftFront.setDirection(DcMotorSimple.Direction.FORWARD);
-        leftBack.setDirection(DcMotorSimple.Direction.FORWARD);
-        rightBack.setDirection(DcMotorSimple.Direction.FORWARD);
-        rightFront.setDirection(DcMotorSimple.Direction.REVERSE);
+        left = hardwareMap.dcMotor.get("left");
+        right = hardwareMap.dcMotor.get("right");
 
 
-        leftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        leftBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        rightFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        rightBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
+        left.setDirection(DcMotorSimple.Direction.REVERSE);
+        right.setDirection(DcMotorSimple.Direction.FORWARD);
 
-        leftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        leftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        rightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        leftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        resetEncoderCounts();
+
+        left.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        right.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
 
     }
 
     @Override
     public void goStraight(double power) {
-        leftFront.setPower(power);
-        leftBack.setPower(power);
-        rightBack.setPower(power);
-        rightFront.setPower(power);
+        left.setPower(power);
+        right.setPower(power);
     }
 
     @Override
     public void turn(double power) {
-        leftFront.setPower(power);
-        leftBack.setPower(power);
-        rightBack.setPower(-power);
-        rightFront.setPower(-power);
+        left.setPower(power);
+        right.setPower(-power);
     }
-
     @Override
     public void resetEncoderCounts() {
-    leftFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-    leftBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-    rightFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-    rightBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        left.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        right.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }
-    @Override
     public void setMode(DcMotor.RunMode runMode) {
-        leftFront.setMode(runMode);
-        leftBack.setMode(runMode);
-        rightFront.setMode(runMode);
-        rightBack.setMode(runMode);
+        left.setMode(runMode);
+        right.setMode(runMode);
     }
 
     @Override
     public void setTargetPosition(int targetPosition) {
-        leftFront.setTargetPosition(targetPosition);
-        leftBack.setTargetPosition(targetPosition);
-        rightFront.setTargetPosition(targetPosition);
-        rightBack.setTargetPosition(targetPosition);
+        left.setTargetPosition(targetPosition);
+        right.setTargetPosition(targetPosition);
     }
 
     @Override
     public boolean isLeftBusy() {
-        return leftFront.isBusy();
+        return left.isBusy();
     }
 
     @Override
     public int getLeftCurrentPosition() {
-        return leftFront.getCurrentPosition();
+        return left.getCurrentPosition();
     }
 }
-
-
-
