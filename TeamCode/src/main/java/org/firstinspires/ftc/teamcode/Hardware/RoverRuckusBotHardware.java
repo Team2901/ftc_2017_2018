@@ -5,6 +5,7 @@ import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.DigitalChannelImpl;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IntegratingGyroscope;
@@ -23,7 +24,6 @@ public class RoverRuckusBotHardware extends BaseRRHardware{
     public DcMotor shoulder;
 
     public CRServo intake;
-
 
     //for never rest 40s
     public static final double ENCODER_COUNTS_PER_REV = 1120;

@@ -22,6 +22,8 @@ public class PresentationBotHardware {
 
     public DcMotor leftMotor = null;
     public DcMotor rightMotor = null;
+
+
     public BNO055IMU imu;
     public IntegratingGyroscope gyroscope;
     public DistanceSensor distanceSensor;
@@ -30,9 +32,9 @@ public class PresentationBotHardware {
     private ElapsedTime period = new ElapsedTime();
     private HardwareMap hwMap = null;
 
-    public void init(HardwareMap ahwMap) {
+    public void init(HardwareMap hwMap) {
 
-        hwMap = ahwMap;
+
 
         // Define and Initialize Motors
         leftMotor = hwMap.dcMotor.get("left_drive");
