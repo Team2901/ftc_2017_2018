@@ -2,14 +2,16 @@ package org.firstinspires.ftc.teamcode.Utility;
 
 import android.graphics.Bitmap;
 
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+
 import java.io.IOException;
 import java.util.List;
 
 public class RoverRuckusUtilities {
     public static int[] getJewelHueCount(Bitmap bitmap,
-                                       String configFilename,
-                                       String bitmapFilename,
-                                       String hueFilename) throws RuntimeException, InterruptedException {
+                                         String configFilename,
+                                         String bitmapFilename,
+                                         String hueFilename, LinearOpMode opMode) throws RuntimeException, InterruptedException {
         try {
             List<Integer> config = FileUtilities.readIntegerConfigFile(configFilename);
             int sampleLeftXPct = config.get(0);
@@ -21,13 +23,13 @@ public class RoverRuckusUtilities {
             FileUtilities.writeBitmapFile(bitmapFilename, babyBitmap);
             FileUtilities.writeHueFile(hueFilename, babyBitmap);
 
-            Bitmap babyBitmapBW = ColorUtilities.blackWhiteColorDecider(babyBitmap, 25, 40);
+            Bitmap babyBitmapBW = ColorUtilities.blackWhiteColorDecider(babyBitmap, 25, 40, opMode);
 
             String[] fileNameSplit = bitmapFilename.split(".png");
             String bwFileName = fileNameSplit[0] + "BW.png";
             FileUtilities.writeBitmapFile(bwFileName , babyBitmapBW);
 
-            int[] hueTotal = ColorUtilities.getColorCount(babyBitmap, 25, 40);
+            int[] hueTotal = ColorUtilities.getColorCount(babyBitmap, 25, 40, opMode);
             return hueTotal;
         } catch (IOException e) {
             throw new RuntimeException(e);

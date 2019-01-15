@@ -7,6 +7,7 @@ import android.os.Environment;
 
 //import com.qualcomm.hardware.modernrobotics.ModernRoboticsI2cRangeSensor;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcontroller.internal.FtcRobotControllerActivity;
 import org.firstinspires.ftc.robotcontroller.internal.JewelFinder;
@@ -69,11 +70,11 @@ public class SetUpCode2019 extends LinearOpModeJewelCamera {
             //FileUtilities.writeHueFile("jewelHuesBig.txt", bitmap);
 
             int[] leftHueTotal = RoverRuckusUtilities.getJewelHueCount(bitmap, jewelConfigLeft,
-                    jewelBitmapLeft, "jewelHuesLeft.txt");
+                    jewelBitmapLeft, "jewelHuesLeft.txt", this );
             int[] middleHueTotal = RoverRuckusUtilities.getJewelHueCount(bitmap, jewelConfigMiddle,
-                    jewelBitmapMiddle, "jewelHuesMiddle.txt");
+                    jewelBitmapMiddle, "jewelHuesMiddle.txt", this);
             int[] rightHueTotal = RoverRuckusUtilities.getJewelHueCount(bitmap, jewelConfigRight,
-                    jewelBitmapRight, "jewelHuesRight.txt");
+                    jewelBitmapRight, "jewelHuesRight.txt", this);
 
 
 
