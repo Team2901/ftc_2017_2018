@@ -73,9 +73,12 @@ public class DemoSetUpCode2019 extends LinearOpModeJewelCamera {
 
             FileUtilities.writeHueFile("jewelHuesBig.txt", bitmap);
 
-            leftHueTotal = RoverRuckusUtilities.getJewelHueCount(bitmap, jewelConfigLeft, jewelBitmapLeft, "jewelHuesLeft.txt");
-            middleHueTotal = RoverRuckusUtilities.getJewelHueCount(bitmap, jewelConfigMiddle, jewelBitmapMiddle, "jewelHuesMiddle.txt");
-            rightHueTotal = RoverRuckusUtilities.getJewelHueCount(bitmap, jewelConfigRight, jewelBitmapRight, "jewelHuesRight.txt");
+            leftHueTotal = RoverRuckusUtilities.getJewelHueCount(bitmap, jewelConfigLeft, jewelBitmapLeft,
+                    "jewelHuesLeft.txt", this);
+            middleHueTotal = RoverRuckusUtilities.getJewelHueCount(bitmap, jewelConfigMiddle, jewelBitmapMiddle,
+                    "jewelHuesMiddle.txt", this);
+            rightHueTotal = RoverRuckusUtilities.getJewelHueCount(bitmap, jewelConfigRight, jewelBitmapRight,
+                    "jewelHuesRight.txt", this);
 
             String winner = BitmapUtilities.findWinnerLocation(leftHueTotal, middleHueTotal, rightHueTotal);
             FileUtilities.writeWinnerFile(winner,leftHueTotal, middleHueTotal, rightHueTotal);
