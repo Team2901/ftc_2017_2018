@@ -15,6 +15,10 @@ public class RoverRuckusBotTeleOp extends OpMode {
         robot.init(hardwareMap);
     }
 
+    double modifier = .1;
+    boolean isAPressed = false;
+    boolean isBPressed = false;
+
     @Override
     public void loop() {
 
@@ -25,10 +29,34 @@ public class RoverRuckusBotTeleOp extends OpMode {
         double g2LeftStick = -gamepad2.left_stick_y;
 
 
+        if (gamepad1.dpad_up) {
+            robot.left.setPower(1);
+            robot.right.setPower(1);
+        } else if (gamepad1.dpad_down) {
+            robot.left.setPower(-1);
+            robot.right.setPower(-1);
+        }
         //Tank COntrols on gamepad 1 sticks
         robot.left.setPower(g1LeftStick);
-        robot.right.setPower(g1RightStick);
+        robot.right.setPower(modifier * g1RightStick);
 
+
+
+
+        if (gamepad1.a) {
+            isAPressed = true;
+
+        } else if (isAPressed) {
+            modifier = modifier + .10;
+            isAPressed = false;
+        }
+
+         if (gamepad1.b) {
+            isBPressed = true;
+        }else if(isBPressed) {
+            modifier = modifier - .1;
+            isBPressed = false;
+        }
 
         /*
         Might Change but lift being limited between the physical restraints of the mechanism and
@@ -71,20 +99,23 @@ public class RoverRuckusBotTeleOp extends OpMode {
         robot.elbow.setPower(g2RightStick);
 
         //Intake Mechanism will be operated off gamepad 2 triggers
-        if (gamepad2.right_trigger > .2){
+        if (gamepad2.right_trigger > .2) {
             robot.intake.setPower(gamepad2.right_trigger);
-        }else if (gamepad2.left_trigger > .2){
+        } else if (gamepad2.left_trigger > .2) {
             robot.intake.setPower(-gamepad2.left_trigger);
-        }else{
+        } else {
             robot.intake.setPower(0);
         }
 
 
-       // telemetry.addData("lift position", robot.lift.getCurrentPosition());
+        // telemetry.addData("lift position", robot.lift.getCurrentPosition());
+        telemetry.addData("Modifier", modifier);
+        telemetry.addData("Joystick Left", g1LeftStick);
+        telemetry.addData("Joystick Right", g1RightStick);
         telemetry.addData("leftMotor", robot.left.getCurrentPosition());
         telemetry.addData("rightMotor", robot.right.getCurrentPosition());
-      //  telemetry.addData("lift", robot.lift.getCurrentPosition());
-       // telemetry.addData("Servo", robot.marker.getPosition());
+        //  telemetry.addData("lift", robot.lift.getCurrentPosition());
+        // telemetry.addData("Servo", robot.marker.getPosition());
         telemetry.update();
     }
 
