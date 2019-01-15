@@ -71,7 +71,7 @@ public class DemoSetUpCode2019 extends LinearOpModeJewelCamera {
         try {
             FileUtilities.writeBitmapFile(jewelBitmap, bitmap);
 
-            FileUtilities.writeHueFile("jewelHuesBig.txt", bitmap);
+         //   FileUtilities.writeHueFile("jewelHuesBig.txt", bitmap);
 
             leftHueTotal = RoverRuckusUtilities.getJewelHueCount(bitmap, jewelConfigLeft, jewelBitmapLeft,
                     "jewelHuesLeft.txt", this);
@@ -82,6 +82,9 @@ public class DemoSetUpCode2019 extends LinearOpModeJewelCamera {
 
             String winner = BitmapUtilities.findWinnerLocation(leftHueTotal, middleHueTotal, rightHueTotal);
             FileUtilities.writeWinnerFile(winner,leftHueTotal, middleHueTotal, rightHueTotal);
+
+            telemetry.addData("winner",winner);
+            telemetry.update();
             if(winner.equals("L"))
             {
                 //turn left box yellow
@@ -122,6 +125,8 @@ public class DemoSetUpCode2019 extends LinearOpModeJewelCamera {
             }});
 
             //winningJewel.post(new Runnable( ) { public void run() {jewel.setBackgroundColor(0x55ffff00);}});
+        telemetry.addData("yo im here", "");
+        telemetry.update();
 
         } catch (Exception e) {
             telemetry.addData("ERROR WRITING TO FILE JEWEL BITMAP", e.getMessage());
