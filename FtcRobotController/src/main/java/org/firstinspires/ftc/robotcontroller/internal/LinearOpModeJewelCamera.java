@@ -15,7 +15,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
  * <p/>
  * Enables control of the robot via the gamepad
  */
-public class LinearOpModeJewelCamera extends LinearOpModeCamera {
+public abstract class LinearOpModeJewelCamera extends MotoLinearOpMode {
 
 
   protected JewelFinder jewel;

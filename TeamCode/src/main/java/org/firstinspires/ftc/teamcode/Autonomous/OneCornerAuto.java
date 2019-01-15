@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcontroller.internal.MotoLinearOpMode;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
 import org.firstinspires.ftc.robotcore.external.matrices.VectorF;
@@ -27,7 +28,7 @@ import java.util.ArrayList;
 
 @Disabled
 @Autonomous (name = "OneCornerAuto")
-public class OneCornerAuto extends LinearOpMode {
+public class OneCornerAuto extends MotoLinearOpMode {
     enum StartPosition {
         CRATER_BLUE, DEPOT_BLUE;
     }

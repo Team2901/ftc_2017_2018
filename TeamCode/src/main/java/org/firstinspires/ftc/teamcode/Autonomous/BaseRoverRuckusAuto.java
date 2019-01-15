@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
+import org.firstinspires.ftc.robotcontroller.internal.MotoLinearOpMode;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
 import org.firstinspires.ftc.robotcore.external.matrices.VectorF;
@@ -28,7 +29,7 @@ import static org.firstinspires.ftc.teamcode.Autonomous.BaseRoverRuckusAuto.Star
 import static org.firstinspires.ftc.teamcode.Autonomous.BaseRoverRuckusAuto.StartCorner.RED_DEPOT;
 
 @SuppressLint("DefaultLocale")
-public class BaseRoverRuckusAuto extends LinearOpMode {
+public class BaseRoverRuckusAuto extends MotoLinearOpMode {
 
     public static final String jewelConfigLeft = "jewelConfigLeft.txt";
     public static final String jewelConfigMiddle = "jewelConfigMiddle.txt";
