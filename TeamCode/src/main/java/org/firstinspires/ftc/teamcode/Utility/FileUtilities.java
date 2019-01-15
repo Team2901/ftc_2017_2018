@@ -159,7 +159,7 @@ public class FileUtilities {
     }
 
     public static void writeHueFile(String filename,
-                                    Bitmap bitmap) throws IOException {
+                                    Bitmap bitmap) throws IOException, InterruptedException {
         int[] colorCounts = ColorUtilities.getColorCounts(bitmap);
 
         final File teamDir = new File(Environment.getExternalStorageDirectory(), TEAM_FOLDER_NAME);

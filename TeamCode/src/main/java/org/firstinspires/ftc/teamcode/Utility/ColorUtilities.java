@@ -3,6 +3,11 @@ package org.firstinspires.ftc.teamcode.Utility;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+
 public class ColorUtilities {
     public static final int HUE_SAMPLE_RATE = 1;
 
@@ -43,10 +48,13 @@ public class ColorUtilities {
         return colorCount;
     }
 
-    public static int[] getColorCount(Bitmap bitmap, int minHue, int maxHue) {
+    public static int[] getColorCount(Bitmap bitmap, int minHue, int maxHue, LinearOpMode opMode) throws InterruptedException{
         int[]counts = {0,0};
         for (int x = 0; x < bitmap.getWidth(); x = x + HUE_SAMPLE_RATE) { // replace 200 with x pixel size value
             for (int y = 0; y < bitmap.getHeight(); y = y + HUE_SAMPLE_RATE) {
+                if (opMode != null && !opMode.opModeIsActive()) {
+                    throw new InterruptedException("");
+                };
                 int color = bitmap.getPixel(x, y);
 
                 int red = Color.red(color);
@@ -75,17 +83,19 @@ public class ColorUtilities {
 
         return counts;
     }
+    public static int[] getColorCount(Bitmap bitmap, int minHue, int maxHue) throws InterruptedException{
+     return getColorCount(bitmap, minHue, maxHue, null);
+    };
 
-    public static int getColorCount(int[] colorCounts, int minHue, int maxHue) {
-        // TODO
-        return 0;
-    }
-
-    public static int[] getColorCounts(Bitmap bitmap) {
+    public static int[] getColorCounts(Bitmap bitmap, LinearOpMode opMode) throws InterruptedException{
         int[] colorCounts = new int[361];
 
         for (int x = 0; x < bitmap.getWidth(); x = x + HUE_SAMPLE_RATE) { // replace 200 with x pixel size value
             for (int y = 0; y < bitmap.getHeight(); y = y + HUE_SAMPLE_RATE) {
+                if (opMode != null && !opMode.opModeIsActive()) {
+                    throw new InterruptedException("");
+                };
+
                 int color = bitmap.getPixel(x, y);
 
                 int red = Color.red(color);
@@ -114,13 +124,19 @@ public class ColorUtilities {
 
         return colorCounts;
     }
+    public static int[] getColorCounts(Bitmap bitmap) throws InterruptedException{
+        return getColorCounts(bitmap, null);
+    }
 
-    public static Bitmap blackWhiteColorDecider (Bitmap bitmap, int minHue, int maxHue)
+    public static Bitmap blackWhiteColorDecider (Bitmap bitmap, int minHue, int maxHue, LinearOpMode opMode) throws InterruptedException
     {
         Bitmap babyBitmapBW = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(),bitmap.getConfig());
         int newColor =0;
         for (int x = 0; x < bitmap.getWidth(); x++) { // replace 200 with x pixel size value
             for (int y = 0; y < bitmap.getHeight(); y++) {
+                if (opMode != null && !opMode.opModeIsActive()) {
+                    throw new InterruptedException("");
+                };
                 int color = bitmap.getPixel(x, y);
 
                 int red = Color.red(color);
@@ -172,6 +188,8 @@ public class ColorUtilities {
 
         return babyBitmapBW;
     }
-
+    public static Bitmap blackWhiteColorDecider (Bitmap bitmap, int minHue, int maxHue) throws InterruptedException{
+        return blackWhiteColorDecider(bitmap, minHue, maxHue, null);
+    }
 
 }

@@ -9,7 +9,7 @@ public class RoverRuckusUtilities {
     public static int[] getJewelHueCount(Bitmap bitmap,
                                        String configFilename,
                                        String bitmapFilename,
-                                       String hueFilename) throws RuntimeException {
+                                       String hueFilename) throws RuntimeException, InterruptedException {
         try {
             List<Integer> config = FileUtilities.readIntegerConfigFile(configFilename);
             int sampleLeftXPct = config.get(0);
