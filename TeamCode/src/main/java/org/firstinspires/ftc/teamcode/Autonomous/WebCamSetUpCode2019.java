@@ -71,11 +71,11 @@ public class WebCamSetUpCode2019 extends LinearOpModeJewelCamera {
                 //FileUtilities.writeHueFile("jewelHuesBig.txt", bitmap);
 
                 int[] leftHueTotal = RoverRuckusUtilities.getJewelHueCount(bitmap, jewelConfigLeft,
-                        jewelBitmapLeft, "jewelHuesLeft.txt");
+                        jewelBitmapLeft, "jewelHuesLeft.txt", this);
                 int[] middleHueTotal = RoverRuckusUtilities.getJewelHueCount(bitmap, jewelConfigMiddle,
-                        jewelBitmapMiddle, "jewelHuesMiddle.txt");
+                        jewelBitmapMiddle, "jewelHuesMiddle.txt", this);
                 int[] rightHueTotal = RoverRuckusUtilities.getJewelHueCount(bitmap, jewelConfigRight,
-                        jewelBitmapRight, "jewelHuesRight.txt");
+                        jewelBitmapRight, "jewelHuesRight.txt", this);
 
 
 
