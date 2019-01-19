@@ -12,6 +12,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.robotcontroller.internal.FtcRobotControllerActivity;
 import org.firstinspires.ftc.robotcontroller.internal.JewelFinder;
 import org.firstinspires.ftc.robotcontroller.internal.LinearOpModeJewelCamera;
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.teamcode.Utility.BitmapUtilities;
 import org.firstinspires.ftc.teamcode.Utility.FileUtilities;
@@ -56,7 +57,25 @@ public class SetUpCode2019 extends LinearOpModeJewelCamera {
 
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier(
                 "cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
-        VuforiaLocalizer.Parameters parameters = VuforiaUtilities.getBackCameraParameters(hardwareMap);
+
+
+        WebcamName webcam = null;
+        try {
+             webcam = hardwareMap.get(WebcamName.class, "webcam");
+        }
+        catch (Exception e) {
+            ;
+        }
+
+       VuforiaLocalizer.Parameters parameters =null;
+        if (webcam != null)
+        {
+            parameters = VuforiaUtilities.getWebCameraParameters(hardwareMap,webcam);
+        }
+        else {
+            parameters = VuforiaUtilities.getBackCameraParameters(hardwareMap);
+        }
+
         vuforia = VuforiaUtilities.getVuforia(parameters);
         activity.setupPreviewLayout(cameraMonitorViewId, this);
 
