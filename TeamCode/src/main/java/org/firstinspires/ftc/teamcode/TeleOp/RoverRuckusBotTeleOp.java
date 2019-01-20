@@ -15,7 +15,7 @@ public class RoverRuckusBotTeleOp extends OpMode {
         robot.init(hardwareMap);
     }
 
-    double modifier = .1;
+    double modifier = 1;
     boolean isAPressed = false;
     boolean isBPressed = false;
 
@@ -27,6 +27,7 @@ public class RoverRuckusBotTeleOp extends OpMode {
         double g1RightStick = -gamepad1.right_stick_y;
         double g2RightStick = -gamepad2.right_stick_y;
         double g2LeftStick = -gamepad2.left_stick_y;
+
 
 
         if (gamepad1.dpad_up) {
@@ -41,8 +42,7 @@ public class RoverRuckusBotTeleOp extends OpMode {
         robot.right.setPower(modifier * g1RightStick);
 
 
-
-
+/*
         if (gamepad1.a) {
             isAPressed = true;
 
@@ -57,7 +57,7 @@ public class RoverRuckusBotTeleOp extends OpMode {
             modifier = modifier - .1;
             isBPressed = false;
         }
-
+*/
         /*
         Might Change but lift being limited between the physical restraints of the mechanism and
           being controlled by left and right trigger. Limit can be reset by hittig y
@@ -68,35 +68,20 @@ public class RoverRuckusBotTeleOp extends OpMode {
 
         }
 
-        if (gamepad1.left_trigger > .02) {
-            if (robot.lift.getCurrentPosition() <= 27000 || gamepad1.y) {
-                robot.lift.setPower(1);
-            } else {
-                robot.lift.setPower(0);
-                telemetry.addData("hit the limit", "!");
-            }
-            //Arm goes down
-        } else if (gamepad1.left_bumper) {
-
-            if (robot.lift.getCurrentPosition() >= 0 || gamepad1.y) {
-                robot.lift.setPower(-1);
-            } else {
-                robot.lift.setPower(0);
-                telemetry.addData("hit the limit", "!!");
-
-            }
-        } else {
-
+        if(gamepad1.left_bumper){
+            robot.lift.setPower(1);
+        }else if (gamepad1.left_trigger > .2){
+            robot.lift.setPower(-1);
+        }else{
             robot.lift.setPower(0);
-
         }
 
         /*Arm controls Currently: Gamepad 2 Right joystick controls elbow left joystick
         controls shoulder
         */
 
-        robot.shoulder.setPower(g2LeftStick);
-        robot.elbow.setPower(g2RightStick);
+        robot.shoulder.setPower(-g2LeftStick);
+        robot.elbow.setPower(-g2RightStick);
 
         //Intake Mechanism will be operated off gamepad 2 triggers
         if (gamepad2.right_trigger > .2) {
@@ -114,8 +99,8 @@ public class RoverRuckusBotTeleOp extends OpMode {
         telemetry.addData("Joystick Right", g1RightStick);
         telemetry.addData("leftMotor", robot.left.getCurrentPosition());
         telemetry.addData("rightMotor", robot.right.getCurrentPosition());
-        //  telemetry.addData("lift", robot.lift.getCurrentPosition());
-        // telemetry.addData("Servo", robot.marker.getPosition());
+        telemetry.addData("lift", robot.lift.getCurrentPosition());
+        //telemetry.addData("Servo", robot.marker.getPosition());
         telemetry.update();
     }
 

@@ -8,8 +8,8 @@ public class RoverRuckusAutonomousBlueCrater extends BaseRoverRuckusAuto {
     public RoverRuckusAutonomousBlueCrater() {
         super();
         startCorner = StartCorner.BLUE_CRATER;
-        xStart = 12;
-        yStart = -12;
+        xStart = 13;
+        yStart = -13;
         angleStart  = -45;
 
     }

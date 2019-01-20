@@ -39,7 +39,7 @@ public class BaseRoverRuckusAuto extends MotoLinearOpMode {
     public static final String jewelBitmapMiddle = "jewelBitmapMiddle.png";
     public static final String jewelBitmapRight = "jewelBitmapRight.png";
 
-    public static final int TARGET_LIFT_TICKS = -1120;
+    public static final int TARGET_LIFT_TICKS = 5000;
 
     public enum StartCorner {
         RED_CRATER, RED_DEPOT, BLUE_CRATER, BLUE_DEPOT;
@@ -86,7 +86,8 @@ public class BaseRoverRuckusAuto extends MotoLinearOpMode {
         BaseRoverRuckusAuto.GoldPosition goldPosition = LEFT;//determineGoldPosition();
 
         //step 1: drop down from lander
-        //dropFromLander();
+        //
+        // dropFromLander();
 
         //step 2: do vuforia to determine position
         // roverRuckus.activate();
@@ -119,7 +120,7 @@ public class BaseRoverRuckusAuto extends MotoLinearOpMode {
 
         goToPosition(x, y, preJewelPosition.x, preJewelPosition.y);
 
-        if (startCorner == BLUE_DEPOT || startCorner == RED_DEPOT){
+        if (startCorner == BLUE_DEPOT || startCorner == RED_DEPOT) {
             runOpModeDepotCorner(goldPosition);
         } else {
             runOpModeCraterCorner(goldPosition);
@@ -131,6 +132,7 @@ public class BaseRoverRuckusAuto extends MotoLinearOpMode {
             idle();
         }
     }
+
     public void runOpModeDepotCorner(BaseRoverRuckusAuto.GoldPosition goldPosition) {
 
         PolarCoord preJewelPosition = getPreJewelPosition(goldPosition, startCorner);
@@ -141,6 +143,7 @@ public class BaseRoverRuckusAuto extends MotoLinearOpMode {
         dropMarker();
         goToPosition(depotPosition, craterPosition);
     }
+
     public void runOpModeCraterCorner(BaseRoverRuckusAuto.GoldPosition goldPosition) {
 
         PolarCoord preJewelPosition = getPreJewelPosition(goldPosition, startCorner);
@@ -168,8 +171,9 @@ public class BaseRoverRuckusAuto extends MotoLinearOpMode {
         }
 
     }
+
     public void dropFromLander() {
-        DcMotor.RunMode originalValue = robot.lift.getMode();
+
         robot.lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.lift.setTargetPosition(TARGET_LIFT_TICKS);
@@ -177,7 +181,7 @@ public class BaseRoverRuckusAuto extends MotoLinearOpMode {
         while (robot.lift.isBusy()) {
             idle();
         }
-        robot.lift.setMode(originalValue);
+
     }
 
     public GoldPosition determineGoldPosition() {
@@ -226,10 +230,10 @@ public class BaseRoverRuckusAuto extends MotoLinearOpMode {
     }
 
     double getPower(double currentPosition, double goal) {
-       /*
-        * If under halfway to the goal, have the robot speed up by .01 for every angle until it is
-        * over halfway there
-        */
+        /*
+         * If under halfway to the goal, have the robot speed up by .01 for every angle until it is
+         * over halfway there
+         */
         if (goal > 0) {
             if (currentPosition < goal / 2) {
 
