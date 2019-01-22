@@ -26,8 +26,8 @@ public class FlagBotHardware {
         leftMotor = hwMap.dcMotor.get("left");
         rightMotor = hwMap.dcMotor.get("right");
         spinMotor = hwMap.dcMotor.get("spin_motor");
-        leftMotor.setDirection(DcMotor.Direction.FORWARD); // Set to REVERSE if using AndyMark motors
-        rightMotor.setDirection(DcMotor.Direction.REVERSE);
+        leftMotor.setDirection(DcMotor.Direction.REVERSE); // Set to REVERSE if using AndyMark motors
+        rightMotor.setDirection(DcMotor.Direction.FORWARD);
 
         leftMotor.setPower(0);
         rightMotor.setPower(0);
