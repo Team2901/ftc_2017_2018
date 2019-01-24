@@ -15,6 +15,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 import org.firstinspires.ftc.teamcode.Hardware.BaseRRHardware;
 import org.firstinspires.ftc.teamcode.Hardware.RRCoachBotHardware;
 import org.firstinspires.ftc.teamcode.Utility.BitmapUtilities;
@@ -52,12 +54,23 @@ public class BaseRoverRuckusAuto extends MotoLinearOpMode {
 
     public final BaseRRHardware robot = new RRCoachBotHardware();
     public VuforiaLocalizer vuforia;
+
+
+    public VuforiaTrackable blue;
+    public VuforiaTrackable red;
+    public VuforiaTrackable front;
+    public VuforiaTrackable back;
+
     public WebcamName webcam;
 
     public StartCorner startCorner;
     public float angleStart;
     public double xStart;
     public double yStart;
+
+    public boolean isVuforiaAcvtive = false;
+    public boolean dropSupported = true;
+    public boolean vuNav = false;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -66,16 +79,17 @@ public class BaseRoverRuckusAuto extends MotoLinearOpMode {
         robot.init(hardwareMap);
 
         // step -1: initialize vuforia
-        /*
-        VuforiaLocalizer.Parameters parameters = VuforiaUtilities.getBackCameraParameters(hardwareMap);
-        vuforia = VuforiaUtilities.getVuforia(parameters);
+        VuforiaTrackables roverRuckus = null;
+        if (isVuforiaAcvtive) {
+            VuforiaLocalizer.Parameters parameters = VuforiaUtilities.getWebCameraParameters(hardwareMap,webcam);
+            vuforia = VuforiaUtilities.getVuforia(parameters);
 
-        VuforiaTrackables roverRuckus = VuforiaUtilities.setUpTrackables(vuforia, parameters);
-        VuforiaTrackable blue = roverRuckus.get(0);
-        VuforiaTrackable red = roverRuckus.get(1);
-        VuforiaTrackable front = roverRuckus.get(2);
-        VuforiaTrackable back = roverRuckus.get(3);
-        */
+            roverRuckus = VuforiaUtilities.setUpTrackables(vuforia, parameters);
+            VuforiaTrackable blue = roverRuckus.get(0);
+            VuforiaTrackable red = roverRuckus.get(1);
+            VuforiaTrackable front = roverRuckus.get(2);
+            VuforiaTrackable back = roverRuckus.get(3);
+        }
 
         telemetry.addData("startCorner", startCorner);
         telemetry.update();
@@ -86,13 +100,22 @@ public class BaseRoverRuckusAuto extends MotoLinearOpMode {
         BaseRoverRuckusAuto.GoldPosition goldPosition = LEFT;//determineGoldPosition();
 
         //step 1: drop down from lander
-        //
-        // dropFromLander();
+        if (dropSupported) {
+            dropFromLander();
+        }
+        //step 1.5 move 2 inches away from lander
+        moveAway();
 
         //step 2: do vuforia to determine position
-        // roverRuckus.activate();
+        if (isVuforiaAcvtive && roverRuckus != null) {
+            roverRuckus.activate();
+        }
 
-        OpenGLMatrix location = null; //  VuforiaUtilities.getLocation(blue, red, front, back);
+        OpenGLMatrix location = null;
+        if (vuNav){
+          location = VuforiaUtilities.getLocation(blue, red, front, back);
+        }
+        //
         if (location == null) {
             location = VuforiaUtilities.getMatrix(0, 0, angleStart,
                     (float) (xStart / VuforiaUtilities.MM_TO_INCHES),
@@ -131,6 +154,12 @@ public class BaseRoverRuckusAuto extends MotoLinearOpMode {
         while (opModeIsActive()) {
             idle();
         }
+    }
+
+    public void moveAway() {
+        robot.setTargetPosition((int) (2 * robot.getInchesToEncoderCounts()));
+        robot.goStraight(1);
+        while(robot.isLeftBusy()){idle();}
     }
 
     public void runOpModeDepotCorner(BaseRoverRuckusAuto.GoldPosition goldPosition) {
