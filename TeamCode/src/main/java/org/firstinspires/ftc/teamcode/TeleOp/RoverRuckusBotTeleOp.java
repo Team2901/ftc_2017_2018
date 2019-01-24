@@ -40,10 +40,6 @@ public class RoverRuckusBotTeleOp extends OpMode {
             robot.left.setPower(g1LeftStick);
             robot.right.setPower(g1RightStick);
         }
-        //Tank COntrols on gamepad 1 sticks
-        robot.left.setPower(g1LeftStick);
-        robot.right.setPower(modifier * g1RightStick);
-
 
 /*
         if (gamepad1.a) {
