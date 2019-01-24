@@ -6,8 +6,8 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.teamcode.Hardware.RoverRuckusBotHardware;
 
-@TeleOp(name="GoForword")
-public class GoForword extends OpMode {
+@TeleOp(name="GoForward")
+public class GoForward extends OpMode {
     RoverRuckusBotHardware robot = new RoverRuckusBotHardware();
 
     @Override
