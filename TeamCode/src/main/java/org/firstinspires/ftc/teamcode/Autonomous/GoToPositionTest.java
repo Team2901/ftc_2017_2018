@@ -2,10 +2,10 @@ package org.firstinspires.ftc.teamcode.Autonomous;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
-@Autonomous(name = "RoverRuckusAutonomous Test", group = "Test")
-public class RoverRuckusAutonomousTest extends BaseRoverRuckusAuto {
+@Autonomous(name = "GoToPositionTest", group = "Test")
+public class GoToPositionTest extends BaseRoverRuckusAuto {
 
-    public RoverRuckusAutonomousTest() {
+    public GoToPositionTest() {
         super();
         startCorner = StartCorner.BLUE_CRATER;
         xStart = 0;

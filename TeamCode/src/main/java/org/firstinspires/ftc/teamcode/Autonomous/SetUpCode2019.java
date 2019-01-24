@@ -22,7 +22,7 @@ import org.firstinspires.ftc.teamcode.Utility.VuforiaUtilities;
 import java.io.File;
 
 @SuppressLint("DefaultLocale")
-@Autonomous(name = "SetUpCode2019")
+@Autonomous(name = "SetUpCode", group = "Setup Code")
 public class SetUpCode2019 extends LinearOpModeJewelCamera {
     VuforiaLocalizer vuforia;
     File sd = Environment.getExternalStorageDirectory();
