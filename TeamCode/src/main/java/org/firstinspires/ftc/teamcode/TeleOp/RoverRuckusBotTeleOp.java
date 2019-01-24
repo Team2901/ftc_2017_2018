@@ -36,6 +36,9 @@ public class RoverRuckusBotTeleOp extends OpMode {
         } else if (gamepad1.dpad_down) {
             robot.left.setPower(-1);
             robot.right.setPower(-1);
+        } else {
+            robot.left.setPower(g1LeftStick);
+            robot.right.setPower(g1RightStick);
         }
         //Tank COntrols on gamepad 1 sticks
         robot.left.setPower(g1LeftStick);
@@ -80,8 +83,8 @@ public class RoverRuckusBotTeleOp extends OpMode {
         controls shoulder
         */
 
-        robot.shoulder.setPower(-g2LeftStick);
-        robot.elbow.setPower(-g2RightStick);
+        robot.shoulder.setPower(-g2LeftStick /4);
+        robot.elbow.setPower(-g2RightStick / 4 );
 
         //Intake Mechanism will be operated off gamepad 2 triggers
         if (gamepad2.right_trigger > .2) {
