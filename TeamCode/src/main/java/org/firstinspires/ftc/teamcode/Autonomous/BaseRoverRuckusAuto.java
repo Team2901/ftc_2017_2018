@@ -157,7 +157,7 @@ public class BaseRoverRuckusAuto extends MotoLinearOpMode {
     }
 
     public void moveAway() {
-        robot.setTargetPosition((int) (2 * robot.getInchesToEncoderCounts()));
+        robot.setTargetPosition((int) (5*Math.sqrt(2) * robot.getInchesToEncoderCounts()));
         robot.goStraight(1);
         while(robot.isLeftBusy()){idle();}
     }
