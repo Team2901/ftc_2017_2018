@@ -228,15 +228,9 @@ public class BaseRoverRuckusAuto extends MotoLinearOpMode {
             int[] rightHueTotal = RoverRuckusUtilities.getJewelHueCount(bitmap, jewelConfigRight, jewelBitmapRight,
                     "jewelHuesRight.txt", this);
 
-            String winner = BitmapUtilities.findWinnerLocation(leftHueTotal, middleHueTotal, rightHueTotal);
+            GoldPosition    winner = BitmapUtilities.findWinnerLocation(leftHueTotal, middleHueTotal, rightHueTotal);
             FileUtilities.writeWinnerFile(winner, leftHueTotal, middleHueTotal, rightHueTotal);
-            if (leftHueTotal[0] > middleHueTotal[0] && middleHueTotal[0] > rightHueTotal[0]) {
-                return LEFT;
-            } else if (rightHueTotal[0] > middleHueTotal[0] && rightHueTotal[0] > leftHueTotal[0]) {
-                return GoldPosition.RIGHT;
-            } else {
-                return GoldPosition.MIDDLE;
-            }
+           return winner;
         } catch (Exception e) {
             telemetry.addData("ERROR WRITING TO FILE JEWEL BITMAP", e.getMessage());
             telemetry.update();

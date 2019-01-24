@@ -17,15 +17,15 @@ public class BitmapUtilities {
 
     public static final int PIXEL_FORMAT_RGB565 = 1;
 
-    public static String findWinnerLocation(int[] leftHueTotal,
-                                            int[] middleHueTotal,
-                                            int[] rightHueTotal) {
-        String winner = "?";
+    public static BaseRoverRuckusAuto.GoldPosition findWinnerLocation(int[] leftHueTotal,
+                                                                      int[] middleHueTotal,
+                                                                      int[] rightHueTotal) {
+        BaseRoverRuckusAuto.GoldPosition winner = BaseRoverRuckusAuto.GoldPosition.MIDDLE;
         int leftColor, middleColor, rightColor;
         if(leftHueTotal[0]/*yellow counts*/ > leftHueTotal[1]/*white counts*/)
         {
             leftColor = Color.YELLOW;
-            winner = "L";
+            winner = BaseRoverRuckusAuto.GoldPosition.LEFT;
         }
         else {
             leftColor= Color.WHITE;
@@ -34,7 +34,7 @@ public class BitmapUtilities {
         if(middleHueTotal[0]/*yellow counts*/ > middleHueTotal[1]/*white counts*/)
         {
             middleColor = Color.YELLOW;
-            winner = "M";
+            winner = BaseRoverRuckusAuto.GoldPosition.MIDDLE;
         }
         else {
             middleColor= Color.WHITE;
@@ -42,24 +42,25 @@ public class BitmapUtilities {
         if(rightHueTotal[0]/*yellow counts*/ > rightHueTotal[1]/*white counts*/)
         {
             rightColor = Color.YELLOW;
-            winner = "R";
+            winner = BaseRoverRuckusAuto.GoldPosition.RIGHT;
         }
         else {
             rightColor= Color.WHITE;
         }
+
         return winner;
     }
 
-    public static String findWinnerLocation(int[] middleHueTotal,
-                                            int[] rightHueTotal) {
-        String winner = "L";
+    public static BaseRoverRuckusAuto.GoldPosition findWinnerLocation(int[] middleHueTotal,
+                                                                      int[] rightHueTotal) {
+        BaseRoverRuckusAuto.GoldPosition winner = BaseRoverRuckusAuto.GoldPosition.LEFT;
         int middleColor, rightColor;
 
 
         if(middleHueTotal[0]/*yellow counts*/ > middleHueTotal[1]/*white counts*/)
         {
             middleColor = Color.YELLOW;
-            winner = "M";
+            winner = BaseRoverRuckusAuto.GoldPosition.MIDDLE;
         }
         else {
             middleColor= Color.WHITE;
@@ -67,7 +68,7 @@ public class BitmapUtilities {
         if(rightHueTotal[0]/*yellow counts*/ > rightHueTotal[1]/*white counts*/)
         {
             rightColor = Color.YELLOW;
-            winner = "R";
+            winner = BaseRoverRuckusAuto.GoldPosition.RIGHT;
         }
         else {
             rightColor= Color.WHITE;

@@ -33,7 +33,7 @@ import java.io.File;
         String jewelBitmapLeft = "jewelBitmapLeft.png";
         String jewelBitmapMiddle = "jewelBitmapMiddle.png";
         String jewelBitmapRight = "jewelBitmapRight.png";
-        String winner ;
+        BaseRoverRuckusAuto.GoldPosition winner ;
         int leftHueTotal[] = {0,0};
         int middleHueTotal[] = {0,0};
         int rightHueTotal[] = {0,0};
@@ -107,21 +107,21 @@ import java.io.File;
 
                 jewelLeft.post(new Runnable( ) { public void run() {
                     jewelLeft.setText(Integer.toString(leftHueTotal[0]));
-                    if (winner == "L"){
+                    if (winner == BaseRoverRuckusAuto.GoldPosition.LEFT){
                         jewelLeft.setBackgroundColor(Color.YELLOW);
                     } else
                         jewelLeft.setBackgroundColor(Color.WHITE);
                 }});
                 jewelMiddle.post(new Runnable( ) { public void run() {
                     jewelMiddle.setText(Integer.toString(middleHueTotal[0]));
-                    if (winner == "M"){
+                    if (winner == BaseRoverRuckusAuto.GoldPosition.MIDDLE){
                         jewelMiddle.setBackgroundColor(Color.YELLOW);
                     } else
                         jewelMiddle.setBackgroundColor(Color.WHITE);
                 }});
                 jewelRight.post(new Runnable( ) { public void run() {
                     jewelRight.setText(Integer.toString(rightHueTotal[0]));
-                    if (winner == "R"){
+                    if (winner == BaseRoverRuckusAuto.GoldPosition.RIGHT){
                         jewelRight.setBackgroundColor(Color.YELLOW);
                     } else
                         jewelRight.setBackgroundColor(Color.WHITE);

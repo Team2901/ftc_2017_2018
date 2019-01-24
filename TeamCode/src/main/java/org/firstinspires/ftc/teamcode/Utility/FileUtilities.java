@@ -4,6 +4,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Environment;
 
+import org.firstinspires.ftc.teamcode.Autonomous.BaseRoverRuckusAuto;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -93,7 +95,7 @@ public class FileUtilities {
     }
 
 
-    public static void writeWinnerFile(String winnerLocation,
+    public static void writeWinnerFile(BaseRoverRuckusAuto.GoldPosition winnerLocation,
                                        int[] leftHueTotal,
                                        int[] middleHueTotal,
                                        int[] rightHueTotal) throws IOException {
@@ -102,7 +104,7 @@ public class FileUtilities {
     }
 
     public static void writeWinnerFile(String fileName,
-                                       String winner,
+                                       BaseRoverRuckusAuto.GoldPosition winner,
                                        int[] leftHueTotal,
                                        int[] middleHueTotal,
                                        int[] rightHueTotal) throws IOException {
@@ -130,14 +132,14 @@ public class FileUtilities {
         }
     }
 
-    public static void writeWinnerFile(String winner,
+    public static void writeWinnerFile(BaseRoverRuckusAuto.GoldPosition winner,
                                        int[] middleHueTotal,
                                        int[] rightHueTotal) throws IOException  {
         writeWinnerFile(WINNER_FILE_NAME_2,winner, middleHueTotal, rightHueTotal);
     }
 
     public static void writeWinnerFile(String fileName,
-                                       String winner,
+                                       BaseRoverRuckusAuto.GoldPosition winner,
                                        int[] middleHueTotal,
                                        int[] rightHueTotal) throws IOException {
         final File teamDir = new File(Environment.getExternalStorageDirectory(), TEAM_FOLDER_NAME);

@@ -79,7 +79,7 @@ public class WebCamSetUpCode2019 extends LinearOpModeJewelCamera {
 
 
 
-                String winner = BitmapUtilities.findWinnerLocation(leftHueTotal, middleHueTotal, rightHueTotal);
+                BaseRoverRuckusAuto.GoldPosition winner = BitmapUtilities.findWinnerLocation(leftHueTotal, middleHueTotal, rightHueTotal);
                 FileUtilities.writeWinnerFile(winner, leftHueTotal, middleHueTotal, rightHueTotal);
 
                 winner = BitmapUtilities.findWinnerLocation(middleHueTotal, rightHueTotal);
