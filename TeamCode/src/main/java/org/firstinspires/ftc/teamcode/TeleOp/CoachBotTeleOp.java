@@ -1,11 +1,13 @@
 package org.firstinspires.ftc.teamcode.TeleOp;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.teamcode.Hardware.RRCoachBotHardware;
 
+@Disabled
 @TeleOp(name="CoachBot")
 public class CoachBotTeleOp extends OpMode {
     RRCoachBotHardware robot = new RRCoachBotHardware();

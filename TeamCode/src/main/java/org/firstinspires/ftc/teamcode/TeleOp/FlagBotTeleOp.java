@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.TeleOp;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -8,6 +9,7 @@ import org.firstinspires.ftc.teamcode.Hardware.FlagBotHardware;
 /**
  * Created by Kearneyg20428 on 2/7/2017.
  */
+@Disabled
 @TeleOp(name="Flagbot", group="TeleOp")
 public class FlagBotTeleOp extends OpMode  {
 
