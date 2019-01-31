@@ -40,10 +40,14 @@ public class JewelFinder extends TextView implements View.OnTouchListener {
     public JewelFinder(Context context, AttributeSet attrs, int defStyle, int color, String location) {
         super(context, attrs, defStyle);
         this.setBackgroundColor( color);
-        //CHANGE THIS TO CHANGE SIZE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         this.setLayoutParams(new FrameLayout.LayoutParams(100,100));
         this.setOnTouchListener(this);
         this.setText(location);
+    }
+    public void moveTo(List<Integer> config, int width, int height){
+        setX(50);
+        setY(50);
+        setLayoutParams(new FrameLayout.LayoutParams(100,100));
     }
 
     @Override

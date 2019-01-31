@@ -10,12 +10,18 @@ import org.firstinspires.ftc.robotcontroller.internal.FtcRobotControllerActivity
 import com.qualcomm.ftcrobotcontroller.R;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+import java.util.List;
+
 /**
  * TeleOp Mode
  * <p/>
  * Enables control of the robot via the gamepad
  */
 public abstract class LinearOpModeJewelCamera extends MotoLinearOpMode {
+
+  public List<Integer> middleConfig;
+  public List<Integer> leftConfig;
+  public List<Integer> rightConfig;
 
 
   protected JewelFinder jewel;

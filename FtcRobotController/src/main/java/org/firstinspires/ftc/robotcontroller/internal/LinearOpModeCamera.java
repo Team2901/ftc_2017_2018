@@ -19,13 +19,16 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.List;
 
 /**
  * TeleOp Mode
  * <p/>
  * Enables control of the robot via the gamepad
  */
-public class LinearOpModeCamera extends LinearOpMode {
+public class LinearOpModeCamera extends MotoLinearOpMode {
+
+
 
   public Camera camera;
   public CameraPreview preview;
@@ -39,6 +42,7 @@ public class LinearOpModeCamera extends LinearOpMode {
   private int looped = 0;
   private String data;
   private int ds = 1; // downsampling parameter
+
 
   @Override
   // should be overwritten by extension class
