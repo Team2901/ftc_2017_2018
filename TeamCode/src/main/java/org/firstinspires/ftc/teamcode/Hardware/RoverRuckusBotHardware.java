@@ -28,10 +28,10 @@ public class RoverRuckusBotHardware extends BaseRRHardware{
     //for never rest 40s
     public static final double ENCODER_COUNTS_PER_REV = 1120;
     //measured may not be exact
-    public static final double INCHES_PER_ROTATION = 7.75;
+    public static final double INCHES_PER_ROTATION = 9.184;
 
     public RoverRuckusBotHardware() {
-        super(0, 0.5, 7.75);
+        super(0, 0.5, INCHES_PER_ROTATION);
     }
 
     public void init(HardwareMap ahwMap) {

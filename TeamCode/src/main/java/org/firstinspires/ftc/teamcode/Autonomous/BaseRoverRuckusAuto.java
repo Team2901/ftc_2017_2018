@@ -82,7 +82,7 @@ public class BaseRoverRuckusAuto extends LinearOpMode {
         // step -1: initialize vuforia
         VuforiaTrackables roverRuckus = null;
         if (isVuforiaAcvtive) {
-            VuforiaLocalizer.Parameters parameters = VuforiaUtilities.getWebCameraParameters(hardwareMap,webcam);
+            VuforiaLocalizer.Parameters parameters = VuforiaUtilities.getWebCameraParameters(hardwareMap, webcam);
             vuforia = VuforiaUtilities.getVuforia(parameters);
 
             roverRuckus = VuforiaUtilities.setUpTrackables(vuforia, parameters);
@@ -106,7 +106,7 @@ public class BaseRoverRuckusAuto extends LinearOpMode {
             dropFromLander();
         }
         //step 1.5 move 2 inches away from lander
-        goToPosition(13,13,xStart,yStart , true);
+        goToPosition(13, 13, xStart, yStart, true);
 
         //step 2: do vuforia to determine position
         if (isVuforiaAcvtive && roverRuckus != null) {
@@ -114,8 +114,8 @@ public class BaseRoverRuckusAuto extends LinearOpMode {
         }
 
         OpenGLMatrix location = null;
-        if (vuNav){
-          location = VuforiaUtilities.getLocation(blue, red, front, back);
+        if (vuNav) {
+            location = VuforiaUtilities.getLocation(blue, red, front, back);
         }
         //
         if (location == null) {
@@ -123,7 +123,7 @@ public class BaseRoverRuckusAuto extends LinearOpMode {
                     (float) (xStart / VuforiaUtilities.MM_TO_INCHES),
                     (float) (yStart / VuforiaUtilities.MM_TO_INCHES), 0);
         }
-         VectorF translation = location.getTranslation();
+        VectorF translation = location.getTranslation();
 
         Orientation orientation = Orientation.getOrientation(location,
                 AxesReference.EXTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES);
@@ -223,9 +223,9 @@ public class BaseRoverRuckusAuto extends LinearOpMode {
             int[] rightHueTotal = RoverRuckusUtilities.getJewelHueCount(bitmap, jewelConfigRight, jewelBitmapRight,
                     "jewelHuesRight.txt", this);
 
-            GoldPosition    winner = BitmapUtilities.findWinnerLocation(leftHueTotal, middleHueTotal, rightHueTotal);
+            GoldPosition winner = BitmapUtilities.findWinnerLocation(leftHueTotal, middleHueTotal, rightHueTotal);
             FileUtilities.writeWinnerFile(winner, leftHueTotal, middleHueTotal, rightHueTotal);
-           return winner;
+            return winner;
         } catch (Exception e) {
             telemetry.addData("ERROR WRITING TO FILE JEWEL BITMAP", e.getMessage());
             telemetry.update();
@@ -243,8 +243,8 @@ public class BaseRoverRuckusAuto extends LinearOpMode {
 
         double relCurrent = AngleUnit.normalizeDegrees(absCurrent - absStart);
         double relGoal = AngleUnit.normalizeDegrees(absGoal - absStart);
-        telemetry.addData("relCurrent" , relCurrent);
-        telemetry.addData("relGoal" , relGoal);
+        telemetry.addData("relCurrent", relCurrent);
+        telemetry.addData("relGoal", relGoal);
         return getPower(relCurrent, relGoal);
 
     }
@@ -276,10 +276,10 @@ public class BaseRoverRuckusAuto extends LinearOpMode {
     }
 
     public void goToPosition(double startX, double startY, double goalX, double goalY) {
-        goToPosition(startX , startY , goalX , goalY , false);
+        goToPosition(startX, startY, goalX, goalY, false);
     }
 
-        public void goToPosition(double startX, double startY, double goalX, double goalY , boolean overide) {
+    public void goToPosition(double startX, double startY, double goalX, double goalY, boolean overide) {
 
         double xDiff = goalX - startX;
         double yDiff = goalY - startY;
@@ -300,7 +300,7 @@ public class BaseRoverRuckusAuto extends LinearOpMode {
                 telemetry.addData("Goal Angle", angleGoal);
                 telemetry.addData("Current Angle", angleCurrent);
                 telemetry.addData("Remaining Angle", AngleUnit.normalizeDegrees(angleGoal - angleCurrent));
-                telemetry.addData("offset" ,robot.offset);
+                telemetry.addData("offset", robot.offset);
                 telemetry.addData("Power", power);
                 telemetry.update();
                 idle();
@@ -446,10 +446,10 @@ public class BaseRoverRuckusAuto extends LinearOpMode {
         switch (startCorner) {
             case BLUE_DEPOT:
             case BLUE_CRATER:
-                return new PolarCoord(60, 60);
+                return new PolarCoord(54, 54);
             case RED_DEPOT:
             case RED_CRATER:
-                return new PolarCoord(-60, -60);
+                return new PolarCoord(-54, -54);
         }
         return new PolarCoord(0, 0);
     }
