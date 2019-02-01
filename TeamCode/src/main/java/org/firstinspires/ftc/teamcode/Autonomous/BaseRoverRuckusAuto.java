@@ -300,6 +300,7 @@ public class BaseRoverRuckusAuto extends LinearOpMode {
                 telemetry.addData("Goal Angle", angleGoal);
                 telemetry.addData("Current Angle", angleCurrent);
                 telemetry.addData("Remaining Angle", AngleUnit.normalizeDegrees(angleGoal - angleCurrent));
+                telemetry.addData("offset" ,robot.offset);
                 telemetry.addData("Power", power);
                 telemetry.update();
                 idle();
