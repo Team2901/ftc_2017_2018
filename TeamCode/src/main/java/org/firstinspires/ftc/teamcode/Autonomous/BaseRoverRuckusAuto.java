@@ -6,7 +6,6 @@ import android.graphics.Bitmap;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
-import org.firstinspires.ftc.robotcontroller.internal.MotoLinearOpMode;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
 import org.firstinspires.ftc.robotcore.external.matrices.VectorF;
@@ -18,7 +17,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 import org.firstinspires.ftc.teamcode.Hardware.BaseRRHardware;
-import org.firstinspires.ftc.teamcode.Hardware.RRCoachBotHardware;
+import org.firstinspires.ftc.teamcode.Hardware.RoverRuckusBotHardware;
 import org.firstinspires.ftc.teamcode.Utility.BitmapUtilities;
 import org.firstinspires.ftc.teamcode.Utility.FileUtilities;
 import org.firstinspires.ftc.teamcode.Utility.PolarCoord;
@@ -31,7 +30,7 @@ import static org.firstinspires.ftc.teamcode.Autonomous.BaseRoverRuckusAuto.Star
 import static org.firstinspires.ftc.teamcode.Autonomous.BaseRoverRuckusAuto.StartCorner.RED_DEPOT;
 
 @SuppressLint("DefaultLocale")
-public class BaseRoverRuckusAuto extends MotoLinearOpMode {
+public class BaseRoverRuckusAuto extends LinearOpMode {
 
     public static final String jewelConfigLeft = "jewelConfigLeft.txt";
     public static final String jewelConfigMiddle = "jewelConfigMiddle.txt";
@@ -52,7 +51,7 @@ public class BaseRoverRuckusAuto extends MotoLinearOpMode {
         LEFT, MIDDLE, RIGHT
     }
 
-    public final BaseRRHardware robot = new RRCoachBotHardware();
+    public final BaseRRHardware robot = new RoverRuckusBotHardware();
     public VuforiaLocalizer vuforia;
 
 
@@ -139,7 +138,6 @@ public class BaseRoverRuckusAuto extends MotoLinearOpMode {
 
         double angleImu = robot.getAngle();
 
-        robot.offset = angleVu - angleImu;
 
         //step 3: go to the cheddar pivot point
         PolarCoord preJewelPosition = getPreJewelPosition(goldPosition, startCorner);
@@ -157,12 +155,6 @@ public class BaseRoverRuckusAuto extends MotoLinearOpMode {
         while (opModeIsActive()) {
             idle();
         }
-    }
-
-    public void moveAway() {
-        robot.setTargetPosition((int) (5*Math.sqrt(2) * robot.getInchesToEncoderCounts()));
-        robot.goStraight(1);
-        while(robot.isLeftBusy()){idle();}
     }
 
     public void runOpModeDepotCorner(BaseRoverRuckusAuto.GoldPosition goldPosition) {
@@ -251,6 +243,8 @@ public class BaseRoverRuckusAuto extends MotoLinearOpMode {
 
         double relCurrent = AngleUnit.normalizeDegrees(absCurrent - absStart);
         double relGoal = AngleUnit.normalizeDegrees(absGoal - absStart);
+        telemetry.addData("relCurrent" , relCurrent);
+        telemetry.addData("relGoal" , relGoal);
         return getPower(relCurrent, relGoal);
 
     }
