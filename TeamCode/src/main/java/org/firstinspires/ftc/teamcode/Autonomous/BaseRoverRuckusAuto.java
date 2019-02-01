@@ -6,7 +6,6 @@ import android.graphics.Bitmap;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
-import org.firstinspires.ftc.robotcontroller.internal.MotoLinearOpMode;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
 import org.firstinspires.ftc.robotcore.external.matrices.VectorF;
@@ -18,7 +17,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 import org.firstinspires.ftc.teamcode.Hardware.BaseRRHardware;
-import org.firstinspires.ftc.teamcode.Hardware.RRCoachBotHardware;
+import org.firstinspires.ftc.teamcode.Hardware.RoverRuckusBotHardware;
 import org.firstinspires.ftc.teamcode.Utility.BitmapUtilities;
 import org.firstinspires.ftc.teamcode.Utility.FileUtilities;
 import org.firstinspires.ftc.teamcode.Utility.PolarCoord;
@@ -31,7 +30,7 @@ import static org.firstinspires.ftc.teamcode.Autonomous.BaseRoverRuckusAuto.Star
 import static org.firstinspires.ftc.teamcode.Autonomous.BaseRoverRuckusAuto.StartCorner.RED_DEPOT;
 
 @SuppressLint("DefaultLocale")
-public class BaseRoverRuckusAuto extends MotoLinearOpMode {
+public class BaseRoverRuckusAuto extends LinearOpMode {
 
     public static final String jewelConfigLeft = "jewelConfigLeft.txt";
     public static final String jewelConfigMiddle = "jewelConfigMiddle.txt";
@@ -52,7 +51,7 @@ public class BaseRoverRuckusAuto extends MotoLinearOpMode {
         LEFT, MIDDLE, RIGHT
     }
 
-    public final BaseRRHardware robot = new RRCoachBotHardware();
+    public final BaseRRHardware robot = new RoverRuckusBotHardware();
     public VuforiaLocalizer vuforia;
 
 
@@ -306,6 +305,7 @@ public class BaseRoverRuckusAuto extends MotoLinearOpMode {
                 telemetry.addData("Goal Angle", angleGoal);
                 telemetry.addData("Current Angle", angleCurrent);
                 telemetry.addData("Remaining Angle", AngleUnit.normalizeDegrees(angleGoal - angleCurrent));
+                telemetry.addData("offset" ,robot.offset);
                 telemetry.addData("Power", power);
                 telemetry.update();
                 idle();
