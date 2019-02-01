@@ -202,6 +202,19 @@ public class FtcRobotControllerActivity extends Activity
                 previewLayout.addView(context.jewelLeft);
                 previewLayout.addView(context.jewelMiddle);
                 previewLayout.addView(context.jewelRight);
+
+                if (context.leftConfig != null) {
+                    context.jewelLeft.moveTo(context.leftConfig, params.width, params.height);
+                }
+
+               if(context.leftConfig != null) {
+                    context.jewelMiddle.moveTo(context.middleConfig, params.width, params.height);
+                }
+
+                if(context.rightConfig != null) {
+                   context.jewelRight.moveTo(context.rightConfig, params.width, params.height);
+                }
+
             }
         });
     }

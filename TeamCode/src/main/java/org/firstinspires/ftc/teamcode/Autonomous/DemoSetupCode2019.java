@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.robotcontroller.internal.FtcRobotControllerActivity;
 import org.firstinspires.ftc.robotcontroller.internal.JewelFinder;
+import org.firstinspires.ftc.robotcontroller.internal.LinearOpModeCamera;
 import org.firstinspires.ftc.robotcontroller.internal.LinearOpModeJewelCamera;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
@@ -18,6 +19,7 @@ import org.firstinspires.ftc.teamcode.Utility.RoverRuckusUtilities;
 import org.firstinspires.ftc.teamcode.Utility.VuforiaUtilities;
 
 import java.io.File;
+import java.io.IOException;
 
 
 @SuppressLint("DefaultLocale")
@@ -52,6 +54,21 @@ public class DemoSetupCode2019 extends LinearOpModeJewelCamera {
     public void runOpMode() throws InterruptedException {
         final FtcRobotControllerActivity activity = (FtcRobotControllerActivity) hardwareMap.appContext;
 
+        try {
+            leftConfig = FileUtilities.readIntegerConfigFile(jewelConfigLeft);
+        } catch (IOException e){
+            leftConfig = null;
+        }
+        try {
+            middleConfig = FileUtilities.readIntegerConfigFile(jewelConfigMiddle);
+        } catch (IOException e){
+            middleConfig = null;
+        }
+        try {
+            rightConfig = FileUtilities.readIntegerConfigFile(jewelConfigRight);
+        } catch (IOException e){
+            rightConfig = null;
+        }
 
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier(
                 "cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
@@ -68,6 +85,8 @@ public class DemoSetupCode2019 extends LinearOpModeJewelCamera {
         } else {
             parameters = VuforiaUtilities.getBackCameraParameters(hardwareMap);
         }
+
+
 
         vuforia = VuforiaUtilities.getVuforia(parameters);
         activity.setupPreviewLayout(cameraMonitorViewId, this);
