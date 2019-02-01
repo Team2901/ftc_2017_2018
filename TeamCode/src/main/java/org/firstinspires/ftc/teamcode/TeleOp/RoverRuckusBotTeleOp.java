@@ -32,16 +32,16 @@ public class RoverRuckusBotTeleOp extends OpMode {
 
         if (gamepad1.dpad_up) {
             robot.left.setPower(1);
-            robot.right.setPower(1);
+            robot.right.setPower(1*modifier);
         } else if (gamepad1.dpad_down) {
             robot.left.setPower(-1);
             robot.right.setPower(-1);
         } else {
             robot.left.setPower(g1LeftStick);
-            robot.right.setPower(g1RightStick);
+            robot.right.setPower(g1RightStick*modifier);
         }
 
-/*
+
         if (gamepad1.a) {
             isAPressed = true;
 
@@ -56,7 +56,7 @@ public class RoverRuckusBotTeleOp extends OpMode {
             modifier = modifier - .1;
             isBPressed = false;
         }
-*/
+
         /*
         Might Change but lift being limited between the physical restraints of the mechanism and
           being controlled by left and right trigger. Limit can be reset by hittig y

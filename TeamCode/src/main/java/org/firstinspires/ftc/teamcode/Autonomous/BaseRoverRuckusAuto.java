@@ -78,6 +78,8 @@ public class BaseRoverRuckusAuto extends MotoLinearOpMode {
         //step -2: initialize hardware
         robot.init(hardwareMap);
 
+        robot.offset = angleStart;
+
         // step -1: initialize vuforia
         VuforiaTrackables roverRuckus = null;
         if (isVuforiaAcvtive) {
@@ -100,11 +102,12 @@ public class BaseRoverRuckusAuto extends MotoLinearOpMode {
         BaseRoverRuckusAuto.GoldPosition goldPosition = LEFT;//determineGoldPosition();
 
         //step 1: drop down from lander
+        dropSupported = false;
         if (dropSupported) {
             dropFromLander();
         }
         //step 1.5 move 2 inches away from lander
-        moveAway();
+        goToPosition(13,13,xStart,yStart , true);
 
         //step 2: do vuforia to determine position
         if (isVuforiaAcvtive && roverRuckus != null) {
@@ -121,7 +124,7 @@ public class BaseRoverRuckusAuto extends MotoLinearOpMode {
                     (float) (xStart / VuforiaUtilities.MM_TO_INCHES),
                     (float) (yStart / VuforiaUtilities.MM_TO_INCHES), 0);
         }
-        VectorF translation = location.getTranslation();
+         VectorF translation = location.getTranslation();
 
         Orientation orientation = Orientation.getOrientation(location,
                 AxesReference.EXTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES);
@@ -278,8 +281,11 @@ public class BaseRoverRuckusAuto extends MotoLinearOpMode {
         goToPosition(startPolarCoord.x, startPolarCoord.y, goalPolarCoord.x, goalPolarCoord.y);
     }
 
-
     public void goToPosition(double startX, double startY, double goalX, double goalY) {
+        goToPosition(startX , startY , goalX , goalY , false);
+    }
+
+        public void goToPosition(double startX, double startY, double goalX, double goalY , boolean overide) {
 
         double xDiff = goalX - startX;
         double yDiff = goalY - startY;
@@ -290,7 +296,7 @@ public class BaseRoverRuckusAuto extends MotoLinearOpMode {
 
         double distanceToGoal = Math.sqrt((Math.pow(yDiff, 2) + Math.pow(xDiff, 2)));
 
-        if (distanceToGoal > 2) {
+        if (distanceToGoal > 2 || overide) {
             while (Math.abs(angleGoal - angleCurrent) > 1) {
                 angleCurrent = robot.getAngle();
                 double power = getPower(angleCurrent, angleGoal, angleStart);
