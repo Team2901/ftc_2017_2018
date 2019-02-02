@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.TeleOp;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 import org.firstinspires.ftc.teamcode.Hardware.RoverRuckusBotHardware;
 
@@ -17,7 +18,7 @@ public class RoverRuckusBotTeleOp extends OpMode {
 
     double modifier = 1;
     boolean isAPressed = false;
-    boolean isBPressed = false;
+    boolean isBackwards = false;
 
     @Override
     public void loop() {
@@ -29,34 +30,30 @@ public class RoverRuckusBotTeleOp extends OpMode {
         double g2LeftStick = -gamepad2.left_stick_y;
 
 
-
         if (gamepad1.dpad_up) {
             robot.left.setPower(1);
-            robot.right.setPower(1*modifier);
+            robot.right.setPower(1 * modifier);
         } else if (gamepad1.dpad_down) {
             robot.left.setPower(-1);
             robot.right.setPower(-1);
         } else {
             robot.left.setPower(g1LeftStick);
-            robot.right.setPower(g1RightStick*modifier);
+            robot.right.setPower(g1RightStick * modifier);
         }
 
 
-        if (gamepad1.a) {
-            isAPressed = true;
-
-        } else if (isAPressed) {
-            modifier = modifier + .10;
-            isAPressed = false;
+        if(gamepad2.a && !isAPressed){
+            if(isBackwards = true){
+                robot.left.setDirection(DcMotorSimple.Direction.REVERSE);
+                robot.right.setDirection(DcMotorSimple.Direction.FORWARD);
+                isBackwards = !isBackwards;
+            }else{
+                robot.left.setDirection(DcMotorSimple.Direction.FORWARD);
+                robot.right.setDirection(DcMotorSimple.Direction.REVERSE);
+                isBackwards = !isBackwards;
+            }
         }
-
-         if (gamepad1.b) {
-            isBPressed = true;
-        }else if(isBPressed) {
-            modifier = modifier - .1;
-            isBPressed = false;
-        }
-
+        isAPressed = gamepad2.a;
         /*
         Might Change but lift being limited between the physical restraints of the mechanism and
           being controlled by left and right trigger. Limit can be reset by hittig y
@@ -67,11 +64,11 @@ public class RoverRuckusBotTeleOp extends OpMode {
 
         }
 
-        if(gamepad1.left_bumper){
+        if (gamepad1.left_bumper) {
             robot.lift.setPower(1);
-        }else if (gamepad1.left_trigger > .2){
+        } else if (gamepad1.left_trigger > .2) {
             robot.lift.setPower(-1);
-        }else{
+        } else {
             robot.lift.setPower(0);
         }
 
@@ -79,8 +76,9 @@ public class RoverRuckusBotTeleOp extends OpMode {
         controls shoulder
         */
 
-        robot.shoulder.setPower(-g2LeftStick /4);
-        robot.elbow.setPower(-g2RightStick / 4 );
+
+        robot.shoulder.setPower(-g2LeftStick / 4);
+        robot.elbow.setPower(-g2RightStick / 4);
 
         //Intake Mechanism will be operated off gamepad 2 triggers
         if (gamepad2.right_trigger > .2) {
