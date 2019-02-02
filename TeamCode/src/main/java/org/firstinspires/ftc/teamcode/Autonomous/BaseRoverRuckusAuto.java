@@ -252,11 +252,15 @@ public class BaseRoverRuckusAuto extends LinearOpMode {
     }
 
     double getPower(double currentPosition, double goal) {
+        double remainingDistance = AngleUnit.normalizeDegrees(goal - currentPosition);
+        double basePower = .01 * remainingDistance;
+        double stallPower = .1 * Math.signum(remainingDistance);
+        return basePower + stallPower;
         /*
          * If under halfway to the goal, have the robot speed up by .01 for every angle until it is
          * over halfway there
          */
-        if (goal > 0) {
+   /*     if (goal > 0) {
             if (currentPosition < goal / 2) {
 
                 return (.01 * currentPosition + (Math.signum((currentPosition == 0) ? goal : currentPosition) * .1));
@@ -270,7 +274,7 @@ public class BaseRoverRuckusAuto extends LinearOpMode {
             } else {
                 return (0.01 * (goal - currentPosition) + (Math.signum((currentPosition == 0) ? goal : currentPosition) * .1));
             }
-        }
+        }   */
     }
 
     public void goToPosition(PolarCoord startPolarCoord, PolarCoord goalPolarCoord) {
