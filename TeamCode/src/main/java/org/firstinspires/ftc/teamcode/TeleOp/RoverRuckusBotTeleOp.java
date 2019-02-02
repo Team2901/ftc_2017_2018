@@ -42,16 +42,15 @@ public class RoverRuckusBotTeleOp extends OpMode {
         }
 
 
-        if(gamepad2.a && !isAPressed){
-            if(isBackwards = true){
+        if (gamepad2.a && !isAPressed){
+            if (isBackwards){
                 robot.left.setDirection(DcMotorSimple.Direction.REVERSE);
                 robot.right.setDirection(DcMotorSimple.Direction.FORWARD);
-                isBackwards = !isBackwards;
-            }else{
+            } else {
                 robot.left.setDirection(DcMotorSimple.Direction.FORWARD);
                 robot.right.setDirection(DcMotorSimple.Direction.REVERSE);
-                isBackwards = !isBackwards;
             }
+            isBackwards = !isBackwards;
         }
         isAPressed = gamepad2.a;
         /*
@@ -97,6 +96,7 @@ public class RoverRuckusBotTeleOp extends OpMode {
         telemetry.addData("leftMotor", robot.left.getCurrentPosition());
         telemetry.addData("rightMotor", robot.right.getCurrentPosition());
         telemetry.addData("lift", robot.lift.getCurrentPosition());
+        telemetry.addData("Backwards?" , isBackwards);
         //telemetry.addData("Servo", robot.marker.getPosition());
         telemetry.update();
     }
