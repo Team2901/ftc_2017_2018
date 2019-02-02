@@ -66,6 +66,8 @@ public class BaseRoverRuckusAuto extends LinearOpMode {
     public float angleStart;
     public double xStart;
     public double yStart;
+    public double dropX;
+    public double dropY;
 
     public boolean isVuforiaAcvtive = false;
     public boolean dropSupported = true;
@@ -106,7 +108,7 @@ public class BaseRoverRuckusAuto extends LinearOpMode {
             dropFromLander();
         }
         //step 1.5 move 2 inches away from lander
-        goToPosition(13, 13, xStart, yStart, true);
+        goToPosition(dropX, dropY, xStart, yStart, true);
 
         //step 2: do vuforia to determine position
         if (isVuforiaAcvtive && roverRuckus != null) {

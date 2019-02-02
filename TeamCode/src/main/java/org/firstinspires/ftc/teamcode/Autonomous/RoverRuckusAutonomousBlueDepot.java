@@ -10,6 +10,8 @@ public class RoverRuckusAutonomousBlueDepot extends BaseRoverRuckusAuto {
     public RoverRuckusAutonomousBlueDepot() {
         super();
         startCorner = BLUE_DEPOT;
+        dropX = 13;
+        dropY = 13;
         xStart = 18;
         yStart = 18;
         angleStart = 45;

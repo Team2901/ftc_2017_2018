@@ -8,6 +8,8 @@ public class RoverRuckusAutonomousRedDepot extends BaseRoverRuckusAuto {
     public RoverRuckusAutonomousRedDepot() {
         super();
         startCorner = StartCorner.RED_DEPOT;
+        dropX = -13;
+        dropY = -13;
         xStart = -18;
         yStart = -18;
         angleStart = -135;
