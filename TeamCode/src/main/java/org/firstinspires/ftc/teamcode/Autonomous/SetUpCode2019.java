@@ -20,6 +20,7 @@ import org.firstinspires.ftc.teamcode.Utility.RoverRuckusUtilities;
 import org.firstinspires.ftc.teamcode.Utility.VuforiaUtilities;
 
 import java.io.File;
+import java.io.IOException;
 
 @SuppressLint("DefaultLocale")
 @Autonomous(name = "SetUpCode", group = "Setup Code")
@@ -67,7 +68,24 @@ public class SetUpCode2019 extends LinearOpModeJewelCamera {
             ;
         }
 
-       VuforiaLocalizer.Parameters parameters =null;
+        try {
+            leftConfig = FileUtilities.readIntegerConfigFile(jewelConfigLeft);
+        } catch (IOException e){
+            leftConfig = null;
+        }
+        try {
+            middleConfig = FileUtilities.readIntegerConfigFile(jewelConfigMiddle);
+        } catch (IOException e){
+            middleConfig = null;
+        }
+        try {
+            rightConfig = FileUtilities.readIntegerConfigFile(jewelConfigRight);
+        } catch (IOException e){
+            rightConfig = null;
+        }
+
+
+        VuforiaLocalizer.Parameters parameters =null;
         if (webcam != null)
         {
             parameters = VuforiaUtilities.getWebCameraParameters(hardwareMap,webcam);

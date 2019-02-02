@@ -44,9 +44,10 @@ public class JewelFinder extends TextView implements View.OnTouchListener {
         this.setOnTouchListener(this);
         this.setText(location);
     }
-    public void moveTo(List<Integer> config, int width, int height){
-        setX(50);
-        setY(50);
+
+    public void moveTo(List<Integer> config, int parentWidth, int parentHeight){
+        setX(config.get(0) / 100.0f * parentWidth);
+        setY(config.get(1) / 100.0f * parentHeight);
         setLayoutParams(new FrameLayout.LayoutParams(100,100));
     }
 
