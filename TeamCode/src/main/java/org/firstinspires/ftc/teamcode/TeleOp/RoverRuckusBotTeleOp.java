@@ -76,8 +76,8 @@ public class RoverRuckusBotTeleOp extends OpMode {
         */
 
 
-        robot.shoulder.setPower(-g2LeftStick / 3);
-        robot.elbow.setPower(-g2RightStick / 3);
+        robot.shoulder.setPower(-g2LeftStick );
+        robot.elbow.setPower(-g2RightStick);
 
         //Intake Mechanism will be operated off gamepad 2 triggers
         if (gamepad2.right_trigger > .2) {
