@@ -52,7 +52,7 @@ public class RoverRuckusBotTeleOp extends OpMode {
             }
             isBackwards = !isBackwards;
         }
-        isAPressed = gamepad1.a;
+        isAPressed = gamepad1 .a;
         /*
         Might Change but lift being limited between the physical restraints of the mechanism and
           being controlled by left and right trigger. Limit can be reset by hittig y
@@ -76,8 +76,8 @@ public class RoverRuckusBotTeleOp extends OpMode {
         */
 
 
-        robot.shoulder.setPower(-g2LeftStick / 4);
-        robot.elbow.setPower(-g2RightStick / 4);
+        robot.shoulder.setPower(-g2LeftStick / 3);
+        robot.elbow.setPower(-g2RightStick / 3);
 
         //Intake Mechanism will be operated off gamepad 2 triggers
         if (gamepad2.right_trigger > .2) {

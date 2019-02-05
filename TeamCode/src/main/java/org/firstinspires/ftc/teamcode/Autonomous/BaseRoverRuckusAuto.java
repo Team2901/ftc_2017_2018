@@ -24,6 +24,8 @@ import org.firstinspires.ftc.teamcode.Utility.PolarCoord;
 import org.firstinspires.ftc.teamcode.Utility.RoverRuckusUtilities;
 import org.firstinspires.ftc.teamcode.Utility.VuforiaUtilities;
 
+import java.security.KeyStore;
+
 import static org.firstinspires.ftc.teamcode.Autonomous.BaseRoverRuckusAuto.GoldPosition.LEFT;
 import static org.firstinspires.ftc.teamcode.Autonomous.BaseRoverRuckusAuto.StartCorner.BLUE_CRATER;
 import static org.firstinspires.ftc.teamcode.Autonomous.BaseRoverRuckusAuto.StartCorner.BLUE_DEPOT;
@@ -103,7 +105,7 @@ public class BaseRoverRuckusAuto extends LinearOpMode {
         BaseRoverRuckusAuto.GoldPosition goldPosition = LEFT;//determineGoldPosition();
 
         //step 1: drop down from lander
-        dropSupported = false;
+        dropSupported = true;
         if (dropSupported) {
             dropFromLander();
         }
