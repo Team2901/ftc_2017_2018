@@ -27,6 +27,8 @@ import org.firstinspires.ftc.teamcode.Utility.VuforiaUtilities;
 import java.security.KeyStore;
 
 import static org.firstinspires.ftc.teamcode.Autonomous.BaseRoverRuckusAuto.GoldPosition.LEFT;
+import static org.firstinspires.ftc.teamcode.Autonomous.BaseRoverRuckusAuto.GoldPosition.MIDDLE;
+import static org.firstinspires.ftc.teamcode.Autonomous.BaseRoverRuckusAuto.GoldPosition.RIGHT;
 import static org.firstinspires.ftc.teamcode.Autonomous.BaseRoverRuckusAuto.StartCorner.BLUE_CRATER;
 import static org.firstinspires.ftc.teamcode.Autonomous.BaseRoverRuckusAuto.StartCorner.BLUE_DEPOT;
 import static org.firstinspires.ftc.teamcode.Autonomous.BaseRoverRuckusAuto.StartCorner.RED_DEPOT;
@@ -102,10 +104,10 @@ public class BaseRoverRuckusAuto extends LinearOpMode {
         waitForStart();
 
         //step 0: locate cheddar
-        BaseRoverRuckusAuto.GoldPosition goldPosition = LEFT;//determineGoldPosition();
+        BaseRoverRuckusAuto.GoldPosition goldPosition = RIGHT;//determineGoldPosition();
 
         //step 1: drop down from lander
-        dropSupported = true;
+        dropSupported = false;
         if (dropSupported) {
             dropFromLander();
         }
@@ -169,7 +171,13 @@ public class BaseRoverRuckusAuto extends LinearOpMode {
 
         goToPosition(preJewelPosition, depotPosition);
         dropMarker();
-        goToPosition(depotPosition, craterPosition);
+
+        if (startCorner == BLUE_DEPOT) {
+            goToPosition(depotPosition.x, depotPosition.y, 57, 36);
+        }else{
+            goToPosition(depotPosition.x, depotPosition.y, -57, -36);
+        }
+        goToPosition(60,-12, craterPosition.x,craterPosition.y);
     }
 
     public void runOpModeCraterCorner(BaseRoverRuckusAuto.GoldPosition goldPosition) {
@@ -245,13 +253,17 @@ public class BaseRoverRuckusAuto extends LinearOpMode {
 
     double getPower(double absCurrent, double absGoal, double absStart) {
 
-        double relCurrent = AngleUnit.normalizeDegrees(absCurrent - absStart);
-        double relGoal = AngleUnit.normalizeDegrees(absGoal - absStart);
+        double offset = (absStart + 360)%360;
+
+        double relCurrent = ((AngleUnit.normalizeDegrees(absCurrent - absStart) +360) %360)-offset; //AngleUnit.normalizeDegrees(absCurrent - absStart);
+        double relGoal = ((AngleUnit.normalizeDegrees(absGoal - absStart)+360)%360)-offset;//AngleUnit.normalizeDegrees(absGoal - absStart);
         telemetry.addData("relCurrent", relCurrent);
         telemetry.addData("relGoal", relGoal);
         return getPower(relCurrent, relGoal);
 
     }
+
+    //  Math.mod(AngleUnit.normalize(angle)+360, 360)
 
     double getPower(double currentPosition, double goal) {
         double remainingDistance = AngleUnit.normalizeDegrees(goal - currentPosition);
@@ -301,7 +313,7 @@ public class BaseRoverRuckusAuto extends LinearOpMode {
         if (distanceToGoal > 2 || overide) {
             while (Math.abs(angleGoal - angleCurrent) > 1) {
                 angleCurrent = robot.getAngle();
-                double power = getPower(angleCurrent, angleGoal, angleStart);
+                double power = Math.abs(getPower(angleCurrent, angleGoal, angleStart));
                 robot.turn(-power);
 
                 telemetry.addData("Start Angle", angleStart);

@@ -41,6 +41,11 @@ public class RoverRuckusBotTeleOp extends OpMode {
             robot.right.setPower(g1RightStick * modifier);
         }
 
+        if (gamepad2.a){
+            robot.marker.setPosition(1);
+        }else if (gamepad2.b){
+            robot.marker.setPosition(0);
+        }
 
         if (gamepad1.a && !isAPressed){
             if (isBackwards){
