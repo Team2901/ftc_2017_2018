@@ -86,9 +86,9 @@ public class RoverRuckusBotTeleOp extends OpMode {
 
         //Intake Mechanism will be operated off gamepad 2 triggers
         if (gamepad2.right_trigger > .2) {
-            robot.intake.setPower(gamepad2.right_trigger);
+            robot.intake.setPower(1);
         } else if (gamepad2.left_trigger > .2) {
-            robot.intake.setPower(-gamepad2.left_trigger);
+            robot.intake.setPower(-1);
         } else {
             robot.intake.setPower(0);
         }
