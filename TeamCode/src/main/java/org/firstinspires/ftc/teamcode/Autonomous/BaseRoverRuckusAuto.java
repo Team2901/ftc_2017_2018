@@ -178,6 +178,23 @@ public class BaseRoverRuckusAuto extends LinearOpMode {
             goToPosition(depotPosition.x, depotPosition.y, -57, -36);
         }
         goToPosition(60,-12, craterPosition.x,craterPosition.y);
+
+        telemetry.addData("start   ", formatMovement(dropX, dropY, xStart, yStart));
+        telemetry.addData("preJewel", formatMovement(xStart, yStart, preJewelPosition.x, preJewelPosition.y));
+        telemetry.addData("depot   ", formatMovement(preJewelPosition.x, preJewelPosition.y, depotPosition.x, depotPosition.y));
+        telemetry.addData("crater  ", formatMovement(depotPosition.x, depotPosition.y, craterPosition.x, craterPosition.y));
+        telemetry.addData("angle   ", String.format("%.1f", robot.getAngle()));
+        telemetry.update();
+    }
+
+    public String formatMovement(double xStart, double yStart, double xEnd, double yEnd) {
+        double xDiff = xEnd - xStart;
+        double yDiff = yEnd - yStart;
+
+        double angleGoal = Math.atan2(yDiff, xDiff) * (180 / Math.PI);
+        double distanceToGoal = Math.sqrt((Math.pow(yDiff, 2) + Math.pow(xDiff, 2)));
+
+        return String.format("(%.1f, %.1f) %.0f %.1f", xEnd, yEnd, angleGoal, distanceToGoal);
     }
 
     public void runOpModeCraterCorner(BaseRoverRuckusAuto.GoldPosition goldPosition) {
