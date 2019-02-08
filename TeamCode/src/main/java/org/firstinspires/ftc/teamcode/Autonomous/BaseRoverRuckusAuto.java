@@ -217,7 +217,7 @@ public class BaseRoverRuckusAuto extends LinearOpMode {
 
         robot.setTargetPosition((int) (distance * robot.getInchesToEncoderCounts()));
 
-        robot.goStraight(-0.75);
+        robot.goStraight(0.75);
 
         while (robot.isLeftBusy()) {
             telemetry.addData("distance to goal", distance);
@@ -227,6 +227,13 @@ public class BaseRoverRuckusAuto extends LinearOpMode {
 
         }
         robot.goStraight(0);
+
+        telemetry.addData("start   ", formatMovement(dropX, dropY, xStart, yStart));
+        telemetry.addData("preJewel", formatMovement(xStart, yStart, preJewelPosition.x, preJewelPosition.y));
+        telemetry.addData("depot   ", formatMovement(preJewelPosition.x, preJewelPosition.y, jewelPosition.x, jewelPosition.y));
+        telemetry.addData("backup  ", distance);
+        telemetry.addData("angle   ", String.format("%.1f", robot.getAngle()));
+        telemetry.update();
     }
 
     public void dropFromLander() {
