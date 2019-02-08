@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
@@ -55,7 +56,7 @@ public class BaseRoverRuckusAuto extends LinearOpMode {
         LEFT, MIDDLE, RIGHT
     }
 
-    public final BaseRRHardware robot = new RoverRuckusBotHardware();
+    public final RoverRuckusBotHardware robot = new RoverRuckusBotHardware();
     public VuforiaLocalizer vuforia;
 
 
@@ -85,7 +86,6 @@ public class BaseRoverRuckusAuto extends LinearOpMode {
 
         robot.offset = angleStart;
 
-        robot.marker.setPosition(.5);
         // step -1: initialize vuforia
         VuforiaTrackables roverRuckus = null;
         if (isVuforiaAcvtive) {
@@ -172,14 +172,16 @@ public class BaseRoverRuckusAuto extends LinearOpMode {
 
         goToPosition(preJewelPosition, depotPosition);
         dropMarker();
-/*
+
+        PolarCoord postDepotPosition;
         if (startCorner == BLUE_DEPOT) {
-            goToPosition(depotPosition.x, depotPosition.y, 57, 36);
-        }else{
-            goToPosition(depotPosition.x, depotPosition.y, -57, -36);
+            postDepotPosition = new PolarCoord(61, 36);
+        }else {
+            postDepotPosition = new PolarCoord(-61, -36);
         }
-        */
-        goToPosition(depotPosition,craterPosition);
+
+        goToPosition(depotPosition,postDepotPosition);
+        goToPosition(postDepotPosition,craterPosition);
 
         telemetry.addData("start   ", formatMovement(dropX, dropY, xStart, yStart));
         telemetry.addData("preJewel", formatMovement(xStart, yStart, preJewelPosition.x, preJewelPosition.y));
@@ -268,6 +270,12 @@ public class BaseRoverRuckusAuto extends LinearOpMode {
     public void dropMarker() {
         robot.marker.setPosition(1);
 
+        robot.intake.setPower(-1);
+        ElapsedTime timer = new ElapsedTime();
+        while(timer.seconds() < 1) {
+            idle();
+        }
+        robot.intake.setPower(1);
     }
 
     double getPower(double absCurrent, double absGoal, double absStart) {

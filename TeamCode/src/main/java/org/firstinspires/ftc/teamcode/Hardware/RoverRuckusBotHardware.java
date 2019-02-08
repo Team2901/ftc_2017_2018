@@ -1,20 +1,9 @@
 package org.firstinspires.ftc.teamcode.Hardware;
 
-import com.qualcomm.hardware.bosch.BNO055IMU;
-import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.DigitalChannelImpl;
-import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.IntegratingGyroscope;
-import com.qualcomm.robotcore.hardware.Servo;
-
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
-import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
 public class RoverRuckusBotHardware extends BaseRRHardware{
 
@@ -31,7 +20,7 @@ public class RoverRuckusBotHardware extends BaseRRHardware{
     public static final double INCHES_PER_ROTATION = 9.184;
 
     public RoverRuckusBotHardware() {
-        super(0, 0.5, INCHES_PER_ROTATION);
+        super(0, 1, INCHES_PER_ROTATION);
     }
 
     public void init(HardwareMap ahwMap) {
