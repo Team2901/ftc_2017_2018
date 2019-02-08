@@ -212,11 +212,12 @@ public class BaseRoverRuckusAuto extends LinearOpMode {
         double distance = PolarCoord.getDistanceBetween(jewelPosition, preJewelPosition);
         //back up to prejewel position
 
-        robot.resetEncoderCounts();
-
+        robot.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
         robot.setTargetPosition((int) (distance * robot.getInchesToEncoderCounts()));
+
+        robot.goStraight(-0.75);
 
         while (robot.isLeftBusy()) {
             telemetry.addData("distance to goal", distance);
@@ -224,9 +225,8 @@ public class BaseRoverRuckusAuto extends LinearOpMode {
             telemetry.addData("encoders", robot.getLeftCurrentPosition());
             telemetry.update();
 
-            robot.goStraight(1);
         }
-
+        robot.goStraight(0);
     }
 
     public void dropFromLander() {
