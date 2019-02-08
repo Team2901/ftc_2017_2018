@@ -85,6 +85,7 @@ public class BaseRoverRuckusAuto extends LinearOpMode {
 
         robot.offset = angleStart;
 
+        robot.marker.setPosition(.5);
         // step -1: initialize vuforia
         VuforiaTrackables roverRuckus = null;
         if (isVuforiaAcvtive) {
@@ -171,13 +172,14 @@ public class BaseRoverRuckusAuto extends LinearOpMode {
 
         goToPosition(preJewelPosition, depotPosition);
         dropMarker();
-
+/*
         if (startCorner == BLUE_DEPOT) {
             goToPosition(depotPosition.x, depotPosition.y, 57, 36);
         }else{
             goToPosition(depotPosition.x, depotPosition.y, -57, -36);
         }
-        goToPosition(60,-12, craterPosition.x,craterPosition.y);
+        */
+        goToPosition(depotPosition,craterPosition);
 
         telemetry.addData("start   ", formatMovement(dropX, dropY, xStart, yStart));
         telemetry.addData("preJewel", formatMovement(xStart, yStart, preJewelPosition.x, preJewelPosition.y));
@@ -265,7 +267,7 @@ public class BaseRoverRuckusAuto extends LinearOpMode {
 
     public void dropMarker() {
         robot.marker.setPosition(1);
-        robot.marker.setPosition(0);
+
     }
 
     double getPower(double absCurrent, double absGoal, double absStart) {
@@ -495,7 +497,7 @@ public class BaseRoverRuckusAuto extends LinearOpMode {
         switch (startCorner) {
             case BLUE_DEPOT:
             case BLUE_CRATER:
-                return new PolarCoord(60, -60);
+                return new PolarCoord(60, -24);
             case RED_DEPOT:
             case RED_CRATER:
                 return new PolarCoord(-60, 60);
