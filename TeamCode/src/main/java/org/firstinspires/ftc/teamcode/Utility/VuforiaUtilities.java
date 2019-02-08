@@ -7,6 +7,7 @@ import com.vuforia.Vuforia;
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
+import org.firstinspires.ftc.robotcore.external.matrices.VectorF;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
@@ -96,6 +97,10 @@ public class VuforiaUtilities {
         return OpenGLMatrix.translation(dx, dy, dz).multiplied
                 (Orientation.getRotationMatrix(AxesReference.EXTRINSIC,
                         AxesOrder.XYZ, AngleUnit.DEGREES, ax, ay, az));
+    }
+
+    public static OpenGLMatrix getLocation(VuforiaTrackables roverRuckus) {
+        return getLocation(roverRuckus.get(0), roverRuckus.get(1), roverRuckus.get(2), roverRuckus.get(3));
     }
 
     public static OpenGLMatrix getLocation(VuforiaTrackable blue, VuforiaTrackable red,

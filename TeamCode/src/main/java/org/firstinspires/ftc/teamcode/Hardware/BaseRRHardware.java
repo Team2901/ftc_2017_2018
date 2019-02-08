@@ -11,23 +11,22 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
+import org.firstinspires.ftc.teamcode.Utility.AngleUtilities;
 
 public abstract class BaseRRHardware {
+
+    public static final double ENCODER_COUNTS_PER_REV = 1120; // For neverRest 40s
+
     protected HardwareMap hardwareMap = null;
-
-    public static final double ENCODER_COUNTS_PER_REV = 1120; //for never rest 40s
-
     public DcMotor lift;
-
     public Servo marker;
-
     public BNO055IMU imu;
     public IntegratingGyroscope gyroscope;
     public double offset = 0;
 
-    public double markerInitPosition = 0;
-    public double markerDropPosition = 0;
-    public double inchesPerRotation = 0;
+    public final double markerInitPosition;
+    public final double markerDropPosition;
+    public final double inchesPerRotation;
 
     public BaseRRHardware(double markerInitPosition, double markerDropPosition, double inchesPerRotation) {
         this.markerInitPosition = markerInitPosition;
@@ -66,7 +65,7 @@ public abstract class BaseRRHardware {
 
     public double getAngle() {
         Orientation orientation = gyroscope.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
-        return AngleUnit.normalizeDegrees(orientation.firstAngle + offset);
+        return AngleUtilities.getNormalizedAngle(orientation.firstAngle + offset);
     }
 
     public abstract void goStraight(double power);
@@ -74,10 +73,13 @@ public abstract class BaseRRHardware {
     public abstract void turn(double power);
 
     public abstract void resetEncoderCounts();
+
     public abstract void setMode(DcMotor.RunMode runMode);
 
     public abstract void setTargetPosition(int targetPosition);
+
     public abstract boolean isLeftBusy();
+
     public abstract int getLeftCurrentPosition();
 
     public double getInchesToEncoderCounts() {
