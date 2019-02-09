@@ -12,6 +12,13 @@ public class RoverRuckusUtilities {
                                          String configFilename,
                                          String bitmapFilename,
                                          String hueFilename, LinearOpMode opMode) throws RuntimeException, InterruptedException {
+        return getJewelHueCount(bitmap, configFilename, bitmapFilename, hueFilename, opMode, true);
+    }
+    public static int[] getJewelHueCount(Bitmap bitmap,
+                                         String configFilename,
+                                         String bitmapFilename,
+                                         String hueFilename, LinearOpMode opMode,
+                                         boolean writeFiles) throws RuntimeException, InterruptedException {
         try {
             List<Integer> config = FileUtilities.readIntegerConfigFile(configFilename);
             int sampleLeftXPct = config.get(0);
@@ -20,15 +27,18 @@ public class RoverRuckusUtilities {
             int sampleBotYPct = config.get(3);
 
             Bitmap babyBitmap = BitmapUtilities.getBabyBitmap(bitmap, sampleLeftXPct, sampleTopYPct, sampleRightXPct, sampleBotYPct);
-            FileUtilities.writeBitmapFile(bitmapFilename, babyBitmap);
-            FileUtilities.writeHueFile(hueFilename, babyBitmap);
 
-            Bitmap babyBitmapBW = ColorUtilities.blackWhiteColorDecider(babyBitmap, 25, 40, opMode);
+            if (writeFiles) {
+                FileUtilities.writeBitmapFile(bitmapFilename, babyBitmap);
+                FileUtilities.writeHueFile(hueFilename, babyBitmap);
+            }
 
-            String[] fileNameSplit = bitmapFilename.split(".png");
-            String bwFileName = fileNameSplit[0] + "BW.png";
-            FileUtilities.writeBitmapFile(bwFileName , babyBitmapBW);
-
+            if (writeFiles) {
+                Bitmap babyBitmapBW = ColorUtilities.blackWhiteColorDecider(babyBitmap, 25, 40, opMode);
+                String[] fileNameSplit = bitmapFilename.split(".png");
+                String bwFileName = fileNameSplit[0] + "BW.png";
+                FileUtilities.writeBitmapFile(bwFileName, babyBitmapBW);
+            }
             int[] hueTotal = ColorUtilities.getColorCount(babyBitmap, 25, 40, opMode);
             return hueTotal;
         } catch (IOException e) {

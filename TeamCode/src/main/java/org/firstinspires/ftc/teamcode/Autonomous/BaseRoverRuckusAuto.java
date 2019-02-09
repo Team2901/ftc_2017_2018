@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcontroller.internal.MotoLinearOpMode;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
@@ -25,7 +26,7 @@ import static org.firstinspires.ftc.teamcode.Autonomous.BaseRoverRuckusAuto.Star
 import static org.firstinspires.ftc.teamcode.Autonomous.BaseRoverRuckusAuto.StartCorner.RED_DEPOT;
 
 @SuppressLint("DefaultLocale")
-public class BaseRoverRuckusAuto extends LinearOpMode {
+public class BaseRoverRuckusAuto extends MotoLinearOpMode {
 
     public enum StartCorner {
         RED_CRATER, RED_DEPOT, BLUE_CRATER, BLUE_DEPOT
@@ -44,6 +45,8 @@ public class BaseRoverRuckusAuto extends LinearOpMode {
 
     public VuforiaLocalizer vuforia;
     public WebcamName webcam;
+
+    public boolean writeFiles = false;
 
     // Default goldPosition to use if determineGoldPosition = false
     public GoldPosition goldPosition = MIDDLE;
@@ -65,15 +68,6 @@ public class BaseRoverRuckusAuto extends LinearOpMode {
     }
 
     @Override
-    public void waitForStart() {
-        // From MotoLinearOpmode so we can run with onbot java
-        while (!opModeIsActive() && !isStopRequested()) {
-            telemetry.addData("status", "waiting for start command...");
-            telemetry.update();
-        }
-    }
-
-    @Override
     public void runOpMode() throws InterruptedException {
 
         telemetry.addData("startCorner", startCorner);
@@ -82,18 +76,29 @@ public class BaseRoverRuckusAuto extends LinearOpMode {
         //step -2: initialize hardware
         robot.init(hardwareMap);
 
-        robot.offset = startPosition.theta;
+        robot.offset = dropPosition.theta;
+
+        telemetry.addData("begin setup vuforia", "");
+        telemetry.update();
 
         // step -1: initialize vuforia
         VuforiaTrackables roverRuckus = null;
+
         if (isVuforiaActive) {
             webcam = hardwareMap.get(WebcamName.class, "webcam");
             VuforiaLocalizer.Parameters parameters = VuforiaUtilities.getWebCameraParameters(hardwareMap, webcam);
             vuforia = VuforiaUtilities.getVuforia(parameters);
-            roverRuckus = VuforiaUtilities.setUpTrackables(vuforia, parameters);
+            if (vuNav) {
+                roverRuckus = VuforiaUtilities.setUpTrackables(vuforia, parameters);
+            }
         }
 
+        telemetry.addData("I setup vuforia", vuforia != null);
+        telemetry.update();
         waitForStart();
+
+        telemetry.addData("starting determine goldPosition", "");
+        telemetry.update();
 
         //step 0: locate cheddar
         if (determineGoldPosition) {
@@ -213,22 +218,36 @@ public class BaseRoverRuckusAuto extends LinearOpMode {
     public GoldPosition determineGoldPosition() {
 
         Bitmap bitmap = BitmapUtilities.getVuforiaImage(vuforia);
-        try {
-            FileUtilities.writeBitmapFile("jewelBitmap.png", bitmap);
-            FileUtilities.writeHueFile("jewelHuesBig.txt", bitmap);
+        telemetry.addData("bitmap found", bitmap != null);
+        telemetry.update();
+        if (bitmap != null) {
+            try {
+                if (writeFiles) {
+                    FileUtilities.writeBitmapFile("jewelBitmap.png", bitmap);
+                    FileUtilities.writeHueFile("jewelHuesBig.txt", bitmap);
+                }
 
-            int[] leftHueTotal = RoverRuckusUtilities.getJewelHueCount(bitmap, "jewelConfigLeft.txt", "jewelBitmapLeft.png",
-                    "jewelHuesLeft.txt", this);
-            int[] middleHueTotal = RoverRuckusUtilities.getJewelHueCount(bitmap, "jewelConfigMiddle.txt", "jewelBitmapMiddle.png",
-                    "jewelHuesMiddle.txt", this);
-            int[] rightHueTotal = RoverRuckusUtilities.getJewelHueCount(bitmap, "jewelConfigRight.txt", "jewelBitmapRight.png",
-                    "jewelHuesRight.txt", this);
+                int[] leftHueTotal = RoverRuckusUtilities.getJewelHueCount(bitmap, "jewelConfigLeft.txt", "jewelBitmapLeft.png",
+                        "jewelHuesLeft.txt", this, writeFiles);
+                int[] middleHueTotal = RoverRuckusUtilities.getJewelHueCount(bitmap, "jewelConfigMiddle.txt", "jewelBitmapMiddle.png",
+                        "jewelHuesMiddle.txt", this, writeFiles);
+                int[] rightHueTotal = RoverRuckusUtilities.getJewelHueCount(bitmap, "jewelConfigRight.txt", "jewelBitmapRight.png",
+                        "jewelHuesRight.txt", this, writeFiles);
+                telemetry.addData("getJewelHueCount complete", "");
+                telemetry.update();
+                GoldPosition winner = BitmapUtilities.findWinnerLocation(leftHueTotal, middleHueTotal, rightHueTotal);
 
-            GoldPosition winner = BitmapUtilities.findWinnerLocation(leftHueTotal, middleHueTotal, rightHueTotal);
-            FileUtilities.writeWinnerFile(winner, leftHueTotal, middleHueTotal, rightHueTotal);
-            return winner;
-        } catch (Exception e) {
-            telemetry.addData("ERROR WRITING TO FILE JEWEL BITMAP", e.getMessage());
+                if (writeFiles) {
+                    FileUtilities.writeWinnerFile(winner, leftHueTotal, middleHueTotal, rightHueTotal);
+                }
+                return winner;
+            } catch (Exception e) {
+                telemetry.addData("ERROR WRITING TO FILE JEWEL BITMAP", e.getMessage());
+                telemetry.update();
+                return GoldPosition.MIDDLE;
+            }
+        } else {
+            telemetry.addData("ERROR reading bitmap", "");
             telemetry.update();
             return GoldPosition.MIDDLE;
         }
