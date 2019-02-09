@@ -235,7 +235,7 @@ public class BaseRoverRuckusAuto extends MotoLinearOpMode {
                         "jewelHuesRight.txt", this, writeFiles);
                 telemetry.addData("getJewelHueCount complete", "");
                 telemetry.update();
-                GoldPosition winner = BitmapUtilities.findWinnerLocation(leftHueTotal, middleHueTotal, rightHueTotal);
+                GoldPosition winner = BitmapUtilities.findWinnerLocation(middleHueTotal, rightHueTotal);
 
                 if (writeFiles) {
                     FileUtilities.writeWinnerFile(winner, leftHueTotal, middleHueTotal, rightHueTotal);
