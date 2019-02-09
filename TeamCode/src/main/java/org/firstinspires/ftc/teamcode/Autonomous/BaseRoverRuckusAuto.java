@@ -47,11 +47,11 @@ public class BaseRoverRuckusAuto extends LinearOpMode {
 
     // Default goldPosition to use if determineGoldPosition = false
     public GoldPosition goldPosition = MIDDLE;
-    public boolean determineGoldPosition = false;
+    public boolean determineGoldPosition = true;
 
-    public boolean dropSupported = false;
+    public boolean dropSupported = true;
 
-    public boolean isVuforiaActive = false;
+    public boolean isVuforiaActive = true;
     public boolean vuNav = false;
 
     public final StartCorner startCorner;
@@ -87,6 +87,7 @@ public class BaseRoverRuckusAuto extends LinearOpMode {
         // step -1: initialize vuforia
         VuforiaTrackables roverRuckus = null;
         if (isVuforiaActive) {
+            webcam = hardwareMap.get(WebcamName.class, "webcam");
             VuforiaLocalizer.Parameters parameters = VuforiaUtilities.getWebCameraParameters(hardwareMap, webcam);
             vuforia = VuforiaUtilities.getVuforia(parameters);
             roverRuckus = VuforiaUtilities.setUpTrackables(vuforia, parameters);
@@ -111,7 +112,7 @@ public class BaseRoverRuckusAuto extends LinearOpMode {
         PolarCoord currentPosition = goToPosition(dropPosition, startPosition, true);
 
         //step 2: do vuforia to determine position
-        if (isVuforiaActive && roverRuckus != null) {
+        if (vuNav && roverRuckus != null) {
             roverRuckus.activate();
         }
 

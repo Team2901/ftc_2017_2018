@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import static org.firstinspires.ftc.teamcode.Autonomous.BaseRoverRuckusAuto.StartCorner.BLUE_CRATER;
 
-@Autonomous(name = "RoverRuckusAutonomous Blue Crater", group = "Blue")
+@Autonomous(name = "RoverRuckusAutonomous Crater", group = "Blue")
 public class RoverRuckusAutonomousBlueCrater extends BaseRoverRuckusAuto {
 
     public RoverRuckusAutonomousBlueCrater() {
