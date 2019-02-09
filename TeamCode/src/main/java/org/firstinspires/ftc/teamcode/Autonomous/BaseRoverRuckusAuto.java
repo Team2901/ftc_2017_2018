@@ -508,10 +508,10 @@ public class BaseRoverRuckusAuto extends MotoLinearOpMode {
         switch (this.startCorner) {
             case BLUE_DEPOT:
             case BLUE_CRATER:
-                return new PolarCoord(60, -24);
+                return new PolarCoord(60, -28);
             case RED_DEPOT:
             case RED_CRATER:
-                return new PolarCoord(-60, 24);
+                return new PolarCoord(-60, 28);
         }
         return new PolarCoord(0, 0);
     }
