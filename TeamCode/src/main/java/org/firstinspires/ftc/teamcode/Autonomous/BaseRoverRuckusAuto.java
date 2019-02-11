@@ -84,13 +84,20 @@ public class BaseRoverRuckusAuto extends MotoLinearOpMode {
         // step -1: initialize vuforia
         VuforiaTrackables roverRuckus = null;
 
-        if (isVuforiaActive) {
-            webcam = hardwareMap.get(WebcamName.class, "webcam");
-            VuforiaLocalizer.Parameters parameters = VuforiaUtilities.getWebCameraParameters(hardwareMap, webcam);
-            vuforia = VuforiaUtilities.getVuforia(parameters);
-            if (vuNav) {
-                roverRuckus = VuforiaUtilities.setUpTrackables(vuforia, parameters);
+
+        try {
+            if (isVuforiaActive) {
+                webcam = hardwareMap.get(WebcamName.class, "webcam");
+                if (webcam != null) {
+                    VuforiaLocalizer.Parameters parameters = VuforiaUtilities.getWebCameraParameters(hardwareMap, webcam);
+                    vuforia = VuforiaUtilities.getVuforia(parameters);
+                    if (vuNav) {
+                        roverRuckus = VuforiaUtilities.setUpTrackables(vuforia, parameters);
+                    }
+                }
             }
+        } catch (Exception e) {
+
         }
 
         telemetry.addData("I setup vuforia", vuforia != null);
@@ -112,7 +119,7 @@ public class BaseRoverRuckusAuto extends MotoLinearOpMode {
         if (dropSupported) {
             dropFromLander();
         }
-
+/*
         //step 1.5 move 2 inches away from lander
         PolarCoord currentPosition = goToPosition(dropPosition, startPosition, true);
 
@@ -133,7 +140,7 @@ public class BaseRoverRuckusAuto extends MotoLinearOpMode {
         } else {
             currentPosition = runOpModeCraterCorner(currentPosition);
         }
-
+*/
         while (opModeIsActive()) {
             idle();
         }
@@ -217,38 +224,42 @@ public class BaseRoverRuckusAuto extends MotoLinearOpMode {
 
     public GoldPosition determineGoldPosition() {
 
-        Bitmap bitmap = BitmapUtilities.getVuforiaImage(vuforia);
-        telemetry.addData("bitmap found", bitmap != null);
-        telemetry.update();
-        if (bitmap != null) {
-            try {
-                if (writeFiles) {
-                    FileUtilities.writeBitmapFile("jewelBitmap.png", bitmap);
-                    FileUtilities.writeHueFile("jewelHuesBig.txt", bitmap);
-                }
+        try {
+            Bitmap bitmap = BitmapUtilities.getVuforiaImage(vuforia);
+            telemetry.addData("bitmap found", bitmap != null);
+            telemetry.update();
+            if (bitmap != null) {
+                try {
+                    if (writeFiles) {
+                        FileUtilities.writeBitmapFile("jewelBitmap.png", bitmap);
+                        FileUtilities.writeHueFile("jewelHuesBig.txt", bitmap);
+                    }
 
-                int[] leftHueTotal = RoverRuckusUtilities.getJewelHueCount(bitmap, "jewelConfigLeft.txt", "jewelBitmapLeft.png",
-                        "jewelHuesLeft.txt", this, writeFiles);
-                int[] middleHueTotal = RoverRuckusUtilities.getJewelHueCount(bitmap, "jewelConfigMiddle.txt", "jewelBitmapMiddle.png",
-                        "jewelHuesMiddle.txt", this, writeFiles);
-                int[] rightHueTotal = RoverRuckusUtilities.getJewelHueCount(bitmap, "jewelConfigRight.txt", "jewelBitmapRight.png",
-                        "jewelHuesRight.txt", this, writeFiles);
-                telemetry.addData("getJewelHueCount complete", "");
-                telemetry.update();
-                GoldPosition winner = BitmapUtilities.findWinnerLocation(middleHueTotal, rightHueTotal);
+                    int[] leftHueTotal = RoverRuckusUtilities.getJewelHueCount(bitmap, "jewelConfigLeft.txt", "jewelBitmapLeft.png",
+                            "jewelHuesLeft.txt", this, writeFiles);
+                    int[] middleHueTotal = RoverRuckusUtilities.getJewelHueCount(bitmap, "jewelConfigMiddle.txt", "jewelBitmapMiddle.png",
+                            "jewelHuesMiddle.txt", this, writeFiles);
+                    int[] rightHueTotal = RoverRuckusUtilities.getJewelHueCount(bitmap, "jewelConfigRight.txt", "jewelBitmapRight.png",
+                            "jewelHuesRight.txt", this, writeFiles);
+                    telemetry.addData("getJewelHueCount complete", "");
+                    telemetry.update();
+                    GoldPosition winner = BitmapUtilities.findWinnerLocation(middleHueTotal, rightHueTotal);
 
-                if (writeFiles) {
-                    FileUtilities.writeWinnerFile(winner, leftHueTotal, middleHueTotal, rightHueTotal);
+                    if (writeFiles) {
+                        FileUtilities.writeWinnerFile(winner, leftHueTotal, middleHueTotal, rightHueTotal);
+                    }
+                    return winner;
+                } catch (Exception e) {
+                    telemetry.addData("ERROR WRITING TO FILE JEWEL BITMAP", e.getMessage());
+                    telemetry.update();
+                    return GoldPosition.MIDDLE;
                 }
-                return winner;
-            } catch (Exception e) {
-                telemetry.addData("ERROR WRITING TO FILE JEWEL BITMAP", e.getMessage());
+            } else {
+                telemetry.addData("ERROR reading bitmap", "");
                 telemetry.update();
                 return GoldPosition.MIDDLE;
             }
-        } else {
-            telemetry.addData("ERROR reading bitmap", "");
-            telemetry.update();
+        } catch (Exception e) {
             return GoldPosition.MIDDLE;
         }
     }
