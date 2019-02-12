@@ -77,8 +77,8 @@ public class BitmapUtilities {
     }
 
     BaseRoverRuckusAuto.GoldPosition findGoldPosition(int leftHueTotal,
-                                                        int middleHueTotal,
-                                                        int rightHueTotal) {
+                                                      int middleHueTotal,
+                                                      int rightHueTotal) {
         //TODO
         return null;
     }
