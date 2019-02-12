@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
+import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcontroller.internal.MotoLinearOpMode;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
@@ -40,6 +41,7 @@ public class BaseRoverRuckusAuto extends MotoLinearOpMode {
     public static final int GO_TO_ANGLE_BUFFER = 3;
     public static final int GO_TO_POSITION_BUFFER = 2;
     public static final int TARGET_LIFT_TICKS = 5000;
+    static final double P_DRIVE_COEFF = 0.05;
 
     public final RoverRuckusBotHardware robot = new RoverRuckusBotHardware();
 
@@ -115,6 +117,9 @@ public class BaseRoverRuckusAuto extends MotoLinearOpMode {
         telemetry.addData("goldPosition", goldPosition);
         telemetry.update();
 
+
+      //      goToDistance(120,.75);
+
         //step 1: drop down from lander
         if (dropSupported) {
             dropFromLander();
@@ -187,14 +192,14 @@ public class BaseRoverRuckusAuto extends MotoLinearOpMode {
         currentPosition = goToPosition(currentPosition, preJewelPosition);
 
         goToPosition(preJewelPosition, jewelPosition);
-        goToDistance(-PolarCoord.getDistanceBetween(jewelPosition, preJewelPosition));
+        goToDistance(-PolarCoord.getDistanceBetween(jewelPosition, preJewelPosition), .75);
 
         currentPosition = goToPosition(currentPosition, safePosition);
         currentPosition = goToPosition(currentPosition, preDepot);
 
         goToPosition(preDepot, depotPosition);
         dropMarker();
-        goToDistance(-PolarCoord.getDistanceBetween(depotPosition, preDepot));
+        goToDistance(-PolarCoord.getDistanceBetween(depotPosition, preDepot),.75);
 
         currentPosition = goToPosition(currentPosition, craterPosition);
 
@@ -295,7 +300,7 @@ public class BaseRoverRuckusAuto extends MotoLinearOpMode {
 
         if (goalDistance > GO_TO_POSITION_BUFFER || override) {
             goToAngle(angleStart, angleGoal);
-            goToDistance(goalDistance);
+            goToDistance(goalDistance , .75);
         } else {
             telemetry.addData("Too close. Skipped turning and moving", "");
             telemetry.update();
@@ -324,28 +329,105 @@ public class BaseRoverRuckusAuto extends MotoLinearOpMode {
         robot.goStraight(0);
     }
 
-    public void goToDistance(double goalDistance) {
-        final int ticksToGoal = (int) (robot.getInchesToEncoderCounts() * goalDistance);
+    /*
+        public void goToDistance(double goalDistance) {
+            final int ticksToGoal = (int) (robot.getInchesToEncoderCounts() * goalDistance);
 
-        robot.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.setTargetPosition(ticksToGoal);
+            robot.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            robot.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            robot.setTargetPosition(ticksToGoal);
 
-        robot.goStraight(0.75);
+            robot.goStraight(0.75);
 
-        while (robot.isLeftBusy()) {
-            double currentTicks = robot.getLeftCurrentPosition();
-            telemetry.addData("Goal Dist    ", "%.2f", goalDistance);
-            telemetry.addData("Current Dist ", "%.2f", currentTicks / robot.getInchesToEncoderCounts());
-            telemetry.addData("Goal Ticks   ", ticksToGoal);
-            telemetry.addData("Current Ticks", currentTicks);
-            telemetry.update();
-            idle();
+            while (robot.isLeftBusy()) {
+                double currentTicks = robot.getLeftCurrentPosition();
+                telemetry.addData("Goal Dist    ", "%.2f", goalDistance);
+                telemetry.addData("Current Dist ", "%.2f", currentTicks / robot.getInchesToEncoderCounts());
+                telemetry.addData("Goal Ticks   ", ticksToGoal);
+                telemetry.addData("Current Ticks", currentTicks);
+                telemetry.update();
+                idle();
+            }
+
+            robot.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            robot.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            robot.goStraight(0);
         }
+        */
+    public void goToDistance(double speed,
+                             double distance) {
 
-        robot.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robot.goStraight(0);
+        int newLeftTarget;
+        int newRightTarget;
+        int moveCounts;
+        double max;
+        double error;
+        double steer;
+        double leftSpeed;
+        double rightSpeed;
+        double angle = robot.getAngle();
+        // Ensure that the opmode is still active
+        if (opModeIsActive()) {
+
+            // Determine new target position, and pass to motor controller
+            moveCounts = (int) (distance * robot.getInchesToEncoderCounts());
+            newLeftTarget = robot.left.getCurrentPosition() + moveCounts;
+            newRightTarget = robot.right.getCurrentPosition() + moveCounts;
+
+            // Set Target and Turn On RUN_TO_POSITION
+            robot.left.setTargetPosition(newLeftTarget);
+            robot.right.setTargetPosition(newRightTarget);
+
+            robot.left.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            robot.right.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+            // start motion.
+            speed = Range.clip(Math.abs(speed), 0.0, 1.0);
+            robot.left.setPower(speed);
+            robot.right.setPower(speed);
+
+            // keep looping while we are still active, and BOTH motors are running.
+            while (opModeIsActive() &&
+                    (robot.left.isBusy() && robot.right.isBusy())) {
+
+                // adjust relative speed based on heading error.
+                error = AngleUtilities.getNormalizedAngle(robot.getAngle() - angle);
+                steer = Range.clip(error * P_DRIVE_COEFF, -1, 1);
+
+                // if driving in reverse, the motor correction also needs to be reversed
+                if (distance < 0)
+                    steer *= -1.0;
+
+                leftSpeed = speed - steer;
+                rightSpeed = speed + steer;
+
+                // Normalize speeds if either one exceeds +/- 1.0;
+                max = Math.max(Math.abs(leftSpeed), Math.abs(rightSpeed));
+                if (max > 1.0) {
+                    leftSpeed /= max;
+                    rightSpeed /= max;
+                }
+
+                robot.left.setPower(leftSpeed);
+                robot.right.setPower(rightSpeed);
+
+                // Display drive status for the driver.
+                telemetry.addData("Err/St", "%5.1f/%5.1f", error, steer);
+                telemetry.addData("Target", "%7d:%7d", newLeftTarget, newRightTarget);
+                telemetry.addData("Actual", "%7d:%7d", robot.left.getCurrentPosition(),
+                        robot.right.getCurrentPosition());
+                telemetry.addData("Speed", "%5.2f:%5.2f", leftSpeed, rightSpeed);
+                telemetry.update();
+            }
+
+            // Stop all motion;
+            robot.left.setPower(0);
+            robot.right.setPower(0);
+
+            // Turn off RUN_TO_POSITION
+            robot.left.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            robot.right.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        }
     }
 
     public double getPower(double absCurrent, double absGoal, double absStart) {
