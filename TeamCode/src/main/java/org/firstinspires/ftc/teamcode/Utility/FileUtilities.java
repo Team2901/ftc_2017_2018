@@ -135,7 +135,7 @@ public class FileUtilities {
     public static void writeWinnerFile(BaseRoverRuckusAuto.GoldPosition winner,
                                        int[] middleHueTotal,
                                        int[] rightHueTotal) throws IOException  {
-        writeWinnerFile(WINNER_FILE_NAME_2,winner, middleHueTotal, rightHueTotal);
+        writeWinnerFile(WINNER_FILE_NAME_2, winner, middleHueTotal, rightHueTotal);
     }
 
     public static void writeWinnerFile(String fileName,
