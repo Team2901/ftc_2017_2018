@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcontroller.internal.MotoLinearOpMode;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
@@ -21,6 +22,8 @@ import org.firstinspires.ftc.teamcode.Utility.RoverRuckusUtilities;
 import org.firstinspires.ftc.teamcode.Utility.VuforiaUtilities;
 
 import static org.firstinspires.ftc.teamcode.Autonomous.BaseRoverRuckusAuto.GoldPosition.MIDDLE;
+import static org.firstinspires.ftc.teamcode.Autonomous.BaseRoverRuckusAuto.StartCorner.BLUE_DEPOT;
+import static org.firstinspires.ftc.teamcode.Autonomous.BaseRoverRuckusAuto.StartCorner.RED_DEPOT;
 
 @SuppressLint("DefaultLocale")
 public class BaseRoverRuckusAuto extends MotoLinearOpMode {
@@ -37,7 +40,7 @@ public class BaseRoverRuckusAuto extends MotoLinearOpMode {
     public static final int GO_TO_ANGLE_BUFFER = 3;
     public static final int GO_TO_POSITION_BUFFER = 2;
     public static final int TARGET_LIFT_TICKS = 5000;
-    static final double P_DRIVE_COEFF = 0.05;
+    public static final double P_DRIVE_COEFF = 0.05;
 
     public final RoverRuckusBotHardware robot = new RoverRuckusBotHardware();
 
@@ -82,7 +85,6 @@ public class BaseRoverRuckusAuto extends MotoLinearOpMode {
         // step -1: initialize vuforia
         VuforiaTrackables roverRuckus = null;
 
-
         try {
             if (isVuforiaActive) {
                 webcam = hardwareMap.get(WebcamName.class, "webcam");
@@ -113,23 +115,18 @@ public class BaseRoverRuckusAuto extends MotoLinearOpMode {
         telemetry.addData("goldPosition", goldPosition);
         telemetry.update();
 
-
-        //      goToDistance(120,.75);
-
         //step 1: drop down from lander
         if (dropSupported) {
             dropFromLander();
         }
-/*
+
         //step 1.5 move 2 inches away from lander
         PolarCoord currentPosition = goToPosition(dropPosition, startPosition, true);
 
         //step 2: do vuforia to determine position
         if (vuNav && roverRuckus != null) {
             roverRuckus.activate();
-        }
 
-        if (vuNav && roverRuckus != null) {
             OpenGLMatrix location = VuforiaUtilities.getLocation(roverRuckus);
             if (location != null) {
                 currentPosition = new PolarCoord(location);
@@ -141,7 +138,7 @@ public class BaseRoverRuckusAuto extends MotoLinearOpMode {
         } else {
             currentPosition = runOpModeCraterCorner(currentPosition);
         }
-*/
+
         while (opModeIsActive()) {
             idle();
         }
@@ -236,11 +233,14 @@ public class BaseRoverRuckusAuto extends MotoLinearOpMode {
                         FileUtilities.writeHueFile("jewelHuesBig.txt", bitmap);
                     }
 
-                    int[] leftHueTotal = RoverRuckusUtilities.getJewelHueCount(bitmap, "jewelConfigLeft.txt", "jewelBitmapLeft.png",
+                    int[] leftHueTotal = RoverRuckusUtilities.getJewelHueCount(bitmap,
+                            "jewelConfigLeft.txt", "jewelBitmapLeft.png",
                             "jewelHuesLeft.txt", this, writeFiles);
-                    int[] middleHueTotal = RoverRuckusUtilities.getJewelHueCount(bitmap, "jewelConfigMiddle.txt", "jewelBitmapMiddle.png",
+                    int[] middleHueTotal = RoverRuckusUtilities.getJewelHueCount(bitmap,
+                            "jewelConfigMiddle.txt", "jewelBitmapMiddle.png",
                             "jewelHuesMiddle.txt", this, writeFiles);
-                    int[] rightHueTotal = RoverRuckusUtilities.getJewelHueCount(bitmap, "jewelConfigRight.txt", "jewelBitmapRight.png",
+                    int[] rightHueTotal = RoverRuckusUtilities.getJewelHueCount(bitmap,
+                            "jewelConfigRight.txt", "jewelBitmapRight.png",
                             "jewelHuesRight.txt", this, writeFiles);
                     telemetry.addData("getJewelHueCount complete", "");
                     telemetry.update();
@@ -302,7 +302,7 @@ public class BaseRoverRuckusAuto extends MotoLinearOpMode {
             telemetry.update();
         }
 
-        return new PolarCoord(goalX, goalY);
+        return new PolarCoord(goalX, goalY, robot.getAngle());
     }
 
     public void goToAngle(double angleStart, double angleGoal) {
@@ -324,7 +324,6 @@ public class BaseRoverRuckusAuto extends MotoLinearOpMode {
 
         robot.goStraight(0);
     }
-
 
     public void goToDistance(double goalDistance) {
         final int ticksToGoal = (int) (robot.getInchesToEncoderCounts() * goalDistance);
@@ -420,8 +419,8 @@ public class BaseRoverRuckusAuto extends MotoLinearOpMode {
     }
 
     public double getPower(double absCurrent, double absGoal, double absStart) {
-        double relCurrent = AngleUtilities.getPositiveNormalizedAngle(absCurrent - absStart); //AngleUtilities.getNormalizedAngle(absCurrent - absStart);
-        double relGoal = AngleUtilities.getPositiveNormalizedAngle(absGoal - absStart); //AngleUtilities.getNormalizedAngle(absGoal - absStart);
+        double relCurrent = AngleUtilities.getPositiveNormalizedAngle(absCurrent - absStart);
+        double relGoal = AngleUtilities.getPositiveNormalizedAngle(absGoal - absStart);
         return getPower(relCurrent, relGoal);
     }
 
@@ -430,26 +429,6 @@ public class BaseRoverRuckusAuto extends MotoLinearOpMode {
         double basePower = .01 * remainingDistance;
         double stallPower = .1 * Math.signum(remainingDistance);
         return basePower + stallPower;
-        /*
-         * If under halfway to the goal, have the robot speed up by .01 for every angle until it is
-         * over halfway there
-         */
-        /*
-        if (goal > 0) {
-            if (currentPosition < goal / 2) {
-                return (.01 * currentPosition + (Math.signum((currentPosition == 0) ? goal : currentPosition) * .1));
-            } else {
-                // Starts to slow down by .01 per angle closer to the goal.
-                return (.01 * (goal - currentPosition) + (Math.signum((currentPosition == 0) ? goal : currentPosition) * .1));
-            }
-        } else {
-            if (currentPosition > goal / 2) {
-                return (0.01 * currentPosition + (Math.signum((currentPosition == 0) ? goal : currentPosition) * .1));
-            } else {
-                return (0.01 * (goal - currentPosition) + (Math.signum((currentPosition == 0) ? goal : currentPosition) * .1));
-            }
-        }
-        */
     }
 
     public PolarCoord getDropPosition() {
