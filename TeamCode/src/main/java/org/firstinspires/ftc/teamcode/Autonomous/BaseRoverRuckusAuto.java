@@ -424,13 +424,13 @@ public class BaseRoverRuckusAuto extends MotoLinearOpMode {
     }
 
     public double getPower(double absCurrent, double absGoal, double absStart) {
-        double relCurrent = AngleUtilities.getPositiveNormalizedAngle(absCurrent - absStart);
-        double relGoal = AngleUtilities.getPositiveNormalizedAngle(absGoal - absStart);
+        double relCurrent = AngleUtilities.getNormalizedAngle(absCurrent - absStart);
+        double relGoal = AngleUtilities.getNormalizedAngle(absGoal - absStart);
         return getPower(relCurrent, relGoal);
     }
 
     public double getPower(double currentPosition, double goal) {
-        double remainingDistance = AngleUnit.normalizeDegrees(goal - currentPosition);
+        double remainingDistance = AngleUtilities.getNormalizedAngle(goal - currentPosition);
         double basePower = .01 * remainingDistance;
         double stallPower = .1 * Math.signum(remainingDistance);
         return basePower + stallPower;
