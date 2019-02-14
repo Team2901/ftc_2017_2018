@@ -139,9 +139,14 @@ public class BaseRoverRuckusAuto extends MotoLinearOpMode {
             currentPosition = runOpModeCraterCorner(currentPosition);
         }
 
-        while (opModeIsActive()) {
+        while (
+
+                opModeIsActive())
+
+        {
             idle();
         }
+
     }
 
     public PolarCoord runOpModeDepotCorner(PolarCoord currentPosition) {
@@ -192,7 +197,7 @@ public class BaseRoverRuckusAuto extends MotoLinearOpMode {
 
         goToPosition(preDepot, depotPosition);
         dropMarker();
-        goToDistance(-PolarCoord.getDistanceBetween(depotPosition, preDepot),.75);
+        goToDistance(-PolarCoord.getDistanceBetween(depotPosition, preDepot), .75);
 
         currentPosition = goToPosition(currentPosition, craterPosition);
 
@@ -296,7 +301,7 @@ public class BaseRoverRuckusAuto extends MotoLinearOpMode {
 
         if (goalDistance > GO_TO_POSITION_BUFFER || override) {
             goToAngle(angleStart, angleGoal);
-            goToDistance(goalDistance , .75);
+            goToDistance(goalDistance, .75);
         } else {
             telemetry.addData("Too close. Skipped turning and moving", "");
             telemetry.update();
