@@ -67,6 +67,12 @@ public class BaseRoverRuckusAuto extends MotoLinearOpMode {
         dropPosition = getDropPosition();
         startPosition = getStartPosition();
     }
+    public BaseRoverRuckusAuto(StartCorner startCorner, GoldPosition goldPosition) {
+        this.startCorner = startCorner;
+        dropPosition = getDropPosition();
+        startPosition = getStartPosition();
+        this.goldPosition = goldPosition;
+    }
 
     @Override
     public void runOpMode() throws InterruptedException {
