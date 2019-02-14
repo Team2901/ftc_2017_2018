@@ -119,7 +119,7 @@ public class DemoSetupCode2019 extends LinearOpModeJewelCamera {
 
             jewelLeft.post(new Runnable() {
                 public void run() {
-                    jewelLeft.setText(String.format("Y:%d,W:%d",rightHueTotal[0],rightHueTotal[1]));
+                    jewelLeft.setText(String.format("Y:%d,W:%d", leftHueTotal[0],leftHueTotal[1]));
                     if (winner == BaseRoverRuckusAuto.GoldPosition.LEFT) {
                         jewelLeft.setBackgroundColor(Color.YELLOW);
                     } else
@@ -128,7 +128,7 @@ public class DemoSetupCode2019 extends LinearOpModeJewelCamera {
             });
             jewelMiddle.post(new Runnable() {
                 public void run() {
-                    jewelMiddle.setText(String.format("Y:%d,W:%d",rightHueTotal[0],rightHueTotal[1]));
+                    jewelMiddle.setText(String.format("Y:%d,W:%d",middleHueTotal[0],middleHueTotal[1]));
                     if (winner == BaseRoverRuckusAuto.GoldPosition.MIDDLE) {
                         jewelMiddle.setBackgroundColor(Color.YELLOW);
                     } else
