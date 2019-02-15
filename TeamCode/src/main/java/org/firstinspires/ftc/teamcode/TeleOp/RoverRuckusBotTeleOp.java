@@ -1,11 +1,11 @@
 package org.firstinspires.ftc.teamcode.TeleOp;
 
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
+        import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+        import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+        import com.qualcomm.robotcore.hardware.DcMotor;
+        import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
-import org.firstinspires.ftc.teamcode.Hardware.RoverRuckusBotHardware;
+        import org.firstinspires.ftc.teamcode.Hardware.RoverRuckusBotHardware;
 
 @TeleOp(name="RoverRuckusBot")
 public class RoverRuckusBotTeleOp extends OpMode {
@@ -96,8 +96,8 @@ public class RoverRuckusBotTeleOp extends OpMode {
 
         // telemetry.addData("lift position", robot.lift.getCurrentPosition());
         telemetry.addData("Modifier", modifier);
-        telemetry.addData("Joystick Left", g1LeftStick);
-        telemetry.addData("Joystick Right", g1RightStick);
+        // telemetry.addData("Joystick Left", g1LeftStick);
+        //telemetry.addData("Joystick Right", g1RightStick);
         telemetry.addData("leftMotor", robot.left.getCurrentPosition());
         telemetry.addData("rightMotor", robot.right.getCurrentPosition());
         telemetry.addData("lift", robot.lift.getCurrentPosition());

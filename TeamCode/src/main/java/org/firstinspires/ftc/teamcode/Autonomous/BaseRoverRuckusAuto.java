@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.Autonomous;
 
 import android.annotation.SuppressLint;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import android.graphics.Bitmap;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -21,6 +22,7 @@ import org.firstinspires.ftc.teamcode.Utility.PolarCoord;
 import org.firstinspires.ftc.teamcode.Utility.RoverRuckusUtilities;
 import org.firstinspires.ftc.teamcode.Utility.VuforiaUtilities;
 
+import static org.firstinspires.ftc.teamcode.Autonomous.BaseRoverRuckusAuto.GoldPosition.LEFT;
 import static org.firstinspires.ftc.teamcode.Autonomous.BaseRoverRuckusAuto.GoldPosition.MIDDLE;
 import static org.firstinspires.ftc.teamcode.Autonomous.BaseRoverRuckusAuto.StartCorner.BLUE_DEPOT;
 import static org.firstinspires.ftc.teamcode.Autonomous.BaseRoverRuckusAuto.StartCorner.RED_DEPOT;
@@ -170,7 +172,7 @@ public class BaseRoverRuckusAuto extends MotoLinearOpMode {
 
         currentPosition = goToPosition(currentPosition, postDepotPosition);
         currentPosition = goToPosition(currentPosition, craterPosition);
-
+/*
         telemetry.addData("Start     ", formatMovement(dropPosition, startPosition));
         telemetry.addData("PreJewel  ", formatMovement(startPosition, preJewelPosition));
         telemetry.addData("Depot     ", formatMovement(preJewelPosition, depotPosition));
@@ -179,7 +181,7 @@ public class BaseRoverRuckusAuto extends MotoLinearOpMode {
         telemetry.addData("Angle     ", String.format("%.1f", robot.getAngle()));
         telemetry.addData("JewelPos  ", goldPosition);
         telemetry.update();
-
+*/
         return currentPosition;
     }
 
@@ -196,14 +198,14 @@ public class BaseRoverRuckusAuto extends MotoLinearOpMode {
         currentPosition = goToPosition(currentPosition, preJewelPosition);
 
         goToPosition(preJewelPosition, jewelPosition);
-        goToDistance(-PolarCoord.getDistanceBetween(jewelPosition, preJewelPosition), .75);
+        goToDistance(-PolarCoord.getDistanceBetween(jewelPosition, preJewelPosition));
 
         currentPosition = goToPosition(currentPosition, safePosition);
         currentPosition = goToPosition(currentPosition, preDepot);
 
         goToPosition(preDepot, depotPosition);
         dropMarker();
-        goToDistance(-PolarCoord.getDistanceBetween(depotPosition, preDepot), .75);
+        goToDistance(-PolarCoord.getDistanceBetween(depotPosition, preDepot));
 
         currentPosition = goToPosition(currentPosition, craterPosition);
 
@@ -307,7 +309,7 @@ public class BaseRoverRuckusAuto extends MotoLinearOpMode {
 
         if (goalDistance > GO_TO_POSITION_BUFFER || override) {
             goToAngle(angleStart, angleGoal);
-            goToDistance(goalDistance, .75);
+            goToDistance(goalDistance);
         } else {
             telemetry.addData("Too close. Skipped turning and moving", "");
             telemetry.update();
@@ -321,7 +323,7 @@ public class BaseRoverRuckusAuto extends MotoLinearOpMode {
 
         while (Math.abs(angleGoal - angleCurrent) > GO_TO_ANGLE_BUFFER) {
             angleCurrent = robot.getAngle();
-            double power = Math.abs(getPower(angleCurrent, angleGoal, angleStart));
+            double power = getPower(angleCurrent, angleGoal, angleStart);
             robot.turn(-power);
 
             telemetry.addData("Start Angle ", "%.1f", angleStart);
@@ -343,7 +345,7 @@ public class BaseRoverRuckusAuto extends MotoLinearOpMode {
         robot.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.setTargetPosition(ticksToGoal);
 
-        robot.goStraight(0.75);
+        robot.goStraight(1);
 
         while (robot.isLeftBusy()) {
             double currentTicks = robot.getLeftCurrentPosition();
@@ -354,10 +356,10 @@ public class BaseRoverRuckusAuto extends MotoLinearOpMode {
             telemetry.update();
             idle();
         }
-
+        robot.goStraight(0);
         robot.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        robot.goStraight(0);
+
     }
 
     public void goToDistance(double distance,
@@ -388,7 +390,7 @@ public class BaseRoverRuckusAuto extends MotoLinearOpMode {
 
         // keep looping while we are still active, and BOTH motors are running.
         while (opModeIsActive() &&
-                (robot.left.isBusy() && robot.right.isBusy())) {
+                (robot.left.isBusy())) {
 
             // adjust relative speed based on heading error.
             double error = AngleUtilities.getNormalizedAngle(robot.getAngle() - angle);
@@ -412,6 +414,7 @@ public class BaseRoverRuckusAuto extends MotoLinearOpMode {
             robot.right.setPower(rightSpeed);
 
             // Display drive status for the driver.
+         /*
             telemetry.addData("Error/Steer  ", "%5.1f/%5.1f", error, steer);
             telemetry.addData("Goal Distance", "%5.2f", distance);
             telemetry.addData("Goal    Ticks", "%7d:%7d", targetTicks);
@@ -419,6 +422,7 @@ public class BaseRoverRuckusAuto extends MotoLinearOpMode {
                     robot.right.getCurrentPosition());
             telemetry.addData("Speed", "%5.2f:%5.2f", leftSpeed, rightSpeed);
             telemetry.update();
+        */
         }
 
         // Stop all motion;

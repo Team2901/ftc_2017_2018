@@ -24,6 +24,7 @@ public class TicksPerINCH extends LinearOpMode {
         robot.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.goStraight(1);
 
-        while(robot.isLeftBusy());
+        while(robot.isLeftBusy()){idle();}
+        while (opModeIsActive())     ;
     }
 }
