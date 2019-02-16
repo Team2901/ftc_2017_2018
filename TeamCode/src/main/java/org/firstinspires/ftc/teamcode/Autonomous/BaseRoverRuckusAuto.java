@@ -87,6 +87,7 @@ public class BaseRoverRuckusAuto extends MotoLinearOpMode {
 
         robot.offset = dropPosition.theta;
 
+
         telemetry.addData("begin setup vuforia", "");
         telemetry.update();
 
@@ -127,7 +128,7 @@ public class BaseRoverRuckusAuto extends MotoLinearOpMode {
         if (dropSupported) {
             dropFromLander();
         }
-
+        robot.tiltOffset = -robot.getTilt();
         //step 1.5 move 2 inches away from lander
         PolarCoord currentPosition = goToPosition(dropPosition, startPosition, true);
 
@@ -321,7 +322,7 @@ public class BaseRoverRuckusAuto extends MotoLinearOpMode {
     public void goToAngle(double angleStart, double angleGoal) {
         double angleCurrent = angleStart;
 
-        while (Math.abs(angleGoal - angleCurrent) > GO_TO_ANGLE_BUFFER) {
+        while (Math.abs(angleGoal - angleCurrent) > GO_TO_ANGLE_BUFFER && !robot.isTiltedToRedCard() && opModeIsActive()) {
             angleCurrent = robot.getAngle();
             double power = getPower(angleCurrent, angleGoal, angleStart);
             robot.turn(-power);
@@ -347,7 +348,7 @@ public class BaseRoverRuckusAuto extends MotoLinearOpMode {
 
         robot.goStraight(1);
 
-        while (robot.isLeftBusy()) {
+        while (robot.isLeftBusy() && !robot.isTiltedToRedCard() && opModeIsActive()) {
             double currentTicks = robot.getLeftCurrentPosition();
             telemetry.addData("Goal Dist    ", "%.2f", goalDistance);
             telemetry.addData("Current Dist ", "%.2f", currentTicks / robot.getInchesToEncoderCounts());
@@ -390,7 +391,7 @@ public class BaseRoverRuckusAuto extends MotoLinearOpMode {
 
         // keep looping while we are still active, and BOTH motors are running.
         while (opModeIsActive() &&
-                (robot.left.isBusy())) {
+                (robot.left.isBusy())&& !robot.isTiltedToRedCard()) {
 
             // adjust relative speed based on heading error.
             double error = AngleUtilities.getNormalizedAngle(robot.getAngle() - angle);

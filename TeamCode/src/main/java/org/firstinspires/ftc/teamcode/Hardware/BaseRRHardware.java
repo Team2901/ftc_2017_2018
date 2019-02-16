@@ -23,6 +23,7 @@ public abstract class BaseRRHardware {
     public BNO055IMU imu;
     public IntegratingGyroscope gyroscope;
     public double offset = 0;
+    public double tiltOffset= 0;
 
     public final double markerInitPosition;
     public final double markerDropPosition;
@@ -68,6 +69,18 @@ public abstract class BaseRRHardware {
         return AngleUtilities.getNormalizedAngle(orientation.firstAngle + offset);
     }
 
+    public double getTilt() {
+        Orientation orientation = gyroscope.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+        return AngleUtilities.getNormalizedAngle(orientation.secondAngle + tiltOffset);
+    }
+
+    public boolean isTiltedToRedCard(){
+        if (getTilt()>= 45){
+            goStraight(0);
+            return true;
+        }
+        return false;
+    }
     public abstract void goStraight(double power);
 
     public abstract void turn(double power);
