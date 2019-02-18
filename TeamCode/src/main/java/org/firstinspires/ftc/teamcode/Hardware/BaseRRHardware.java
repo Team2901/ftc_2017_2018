@@ -75,7 +75,7 @@ public abstract class BaseRRHardware {
     }
 
     public boolean isTiltedToRedCard(){
-        if (getTilt()>= 45){
+        if (getTilt()>= 35){
             goStraight(0);
             return true;
         }
