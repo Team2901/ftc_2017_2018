@@ -47,17 +47,7 @@ public class RoverRuckusBotTeleOp extends OpMode {
             robot.marker.setPosition(0);
         }
 
-        if (gamepad1.a && !isAPressed){
-            if (isBackwards){
-                robot.left.setDirection(DcMotorSimple.Direction.REVERSE);
-                robot.right.setDirection(DcMotorSimple.Direction.FORWARD);
-            } else {
-                robot.left.setDirection(DcMotorSimple.Direction.FORWARD);
-                robot.right.setDirection(DcMotorSimple.Direction.REVERSE);
-            }
-            isBackwards = !isBackwards;
-        }
-        isAPressed = gamepad1 .a;
+
         /*
         Might Change but lift being limited between the physical restraints of the mechanism and
           being controlled by left and right trigger. Limit can be reset by hittig y
