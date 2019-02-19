@@ -14,15 +14,14 @@ public class GoToDistanceTest extends BaseRoverRuckusAuto {
     @Override
     public void runOpMode() throws InterruptedException {
         robot.init(hardwareMap);
-        robot.tiltOffset = robot.rawTilt();
-        waitForStart();
-
-        goToDistance(6*12,.75);
-        while (opModeIsActive()){
-            telemetry.addData("angle: " + robot.getAngle(), "");
-            telemetry.addData("tilt: " + robot.getTilt(), "");
-            telemetry.addData("rawTilt: " + robot.rawTiltOffset, "");
-            telemetry.update();
+          robot.tiltOffset = -robot.rawTilt();
+          waitForStart();
+          goToDistance(6*12,.75);
+          while (opModeIsActive()){
+              telemetry.addData("angle: " + robot.getAngle(), "");
+              telemetry.addData("tilt: " + robot.getTilt(), "");
+              telemetry.addData("rawTilt: " + robot.rawTiltOffset, "");
+              telemetry.update();
         }
     }
 }
