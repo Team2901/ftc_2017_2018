@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.Utility.PolarCoord;
 
-@Autonomous(name = "GoToDistanceTest", group = "Test")
+@Autonomous(name = "GoToDistanceTest:V2", group = "Test")
 public class GoToDistanceTest extends BaseRoverRuckusAuto {
 
     public GoToDistanceTest() {
@@ -14,7 +14,14 @@ public class GoToDistanceTest extends BaseRoverRuckusAuto {
     @Override
     public void runOpMode() throws InterruptedException {
         robot.init(hardwareMap);
-
-        goToDistance(6*12,.75);
+          robot.tiltOffset = -robot.rawTilt();
+          waitForStart();
+          goToDistance(6*12,.75);
+          while (opModeIsActive()){
+              telemetry.addData("angle: " + robot.getAngle(), "");
+              telemetry.addData("tilt: " + robot.getTilt(), "");
+              telemetry.addData("rawTilt: " + robot.rawTiltOffset, "");
+              telemetry.update();
+        }
     }
 }
