@@ -24,6 +24,7 @@ public abstract class BaseRRHardware {
     public IntegratingGyroscope gyroscope;
     public double offset = 0;
     public double tiltOffset= 0;
+    public double rawTiltOffset=0;
 
     public final double markerInitPosition;
     public final double markerDropPosition;
@@ -72,6 +73,10 @@ public abstract class BaseRRHardware {
     public double getTilt() {
         Orientation orientation = gyroscope.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
         return AngleUtilities.getNormalizedAngle(orientation.secondAngle + tiltOffset);
+    }
+    public double rawTilt(){
+        Orientation orientation = gyroscope.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+        return AngleUtilities.getNormalizedAngle(orientation.secondAngle);
     }
 
     public boolean isTiltedToRedCard(){

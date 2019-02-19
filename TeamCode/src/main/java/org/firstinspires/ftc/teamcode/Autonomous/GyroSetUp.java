@@ -18,9 +18,10 @@ public class GyroSetUp extends BaseRoverRuckusAuto {
      robot.init(hardwareMap);
        waitForStart();
         while(opModeIsActive()){
-         
+
            telemetry.addData("angle" , robot.getAngle());
            telemetry.addData("tilt" , robot.getTilt());
+           telemetry.addData("rawTilt",robot.rawTilt());
            telemetry.update();
        }
     }
