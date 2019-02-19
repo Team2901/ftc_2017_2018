@@ -401,8 +401,8 @@ public class BaseRoverRuckusAuto extends MotoLinearOpMode {
             if (distance < 0)
                 steer *= -1.0;
 
-            double leftSpeed = speed - steer;
-            double rightSpeed = speed + steer;
+            double leftSpeed = speed + steer;
+            double rightSpeed = speed - steer;
 
             // Normalize speeds if either one exceeds +/- 1.0;
             double max = Math.max(Math.abs(leftSpeed), Math.abs(rightSpeed));
@@ -415,15 +415,15 @@ public class BaseRoverRuckusAuto extends MotoLinearOpMode {
             robot.right.setPower(rightSpeed);
 
             // Display drive status for the driver.
-         /*
+
             telemetry.addData("Error/Steer  ", "%5.1f/%5.1f", error, steer);
             telemetry.addData("Goal Distance", "%5.2f", distance);
-            telemetry.addData("Goal    Ticks", "%7d:%7d", targetTicks);
+            telemetry.addData("Goal    Ticks", "%7d:%7d", targetTicks, targetTicks);
             telemetry.addData("Current Ticks", "%7d:%7d", robot.left.getCurrentPosition(),
                     robot.right.getCurrentPosition());
             telemetry.addData("Speed", "%5.2f:%5.2f", leftSpeed, rightSpeed);
             telemetry.update();
-        */
+
         }
 
         // Stop all motion;
