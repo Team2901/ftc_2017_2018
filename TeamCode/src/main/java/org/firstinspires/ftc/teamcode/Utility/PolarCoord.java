@@ -24,6 +24,11 @@ public class PolarCoord {
         this.y = y;
     }
 
+    @Override
+    public String toString() {
+        return String.format("x:%.2f y:%.2f theta: %.2f" , x, y , theta);
+    }
+
     public PolarCoord(final OpenGLMatrix location) {
         VectorF translation = location.getTranslation();
         Orientation orientation = Orientation.getOrientation(location,

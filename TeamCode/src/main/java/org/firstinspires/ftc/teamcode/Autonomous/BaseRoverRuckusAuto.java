@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcontroller.internal.MotoLinearOpMode;
+import org.firstinspires.ftc.robotcore.external.Func;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
@@ -60,15 +61,23 @@ public class BaseRoverRuckusAuto extends MotoLinearOpMode {
     public boolean isVuforiaActive = true;
     public boolean vuNav = false;
 
+    public double orientation;
+    public double tilt;
+
     public final StartCorner startCorner;
     public final PolarCoord dropPosition;
     public final PolarCoord startPosition;
+
+    public String step;
+
+    PolarCoord currentPosition;
 
     public BaseRoverRuckusAuto(StartCorner startCorner) {
         this.startCorner = startCorner;
         dropPosition = getDropPosition();
         startPosition = getStartPosition();
     }
+
     public BaseRoverRuckusAuto(StartCorner startCorner, GoldPosition goldPosition) {
         this.startCorner = startCorner;
         dropPosition = getDropPosition();
@@ -82,9 +91,10 @@ public class BaseRoverRuckusAuto extends MotoLinearOpMode {
         telemetry.addData("startCorner", startCorner);
         telemetry.update();
 
+        step = "init";
         //step -2: initialize hardware
         robot.init(hardwareMap);
-
+        composeTelemetry();
         robot.offset = dropPosition.theta;
 
 
@@ -127,10 +137,12 @@ public class BaseRoverRuckusAuto extends MotoLinearOpMode {
         //step 1: drop down from lander
         if (dropSupported) {
             dropFromLander();
+            step = "Drop From Lander";
         }
         robot.rawTiltOffset = -robot.rawTilt();
         //step 1.5 move 2 inches away from lander
-        PolarCoord currentPosition = goToPosition(dropPosition, startPosition, true);
+        step = "go to Start";
+        currentPosition = goToPosition(dropPosition, startPosition, true);
 
         //step 2: do vuforia to determine position
         if (vuNav && roverRuckus != null) {
@@ -166,12 +178,16 @@ public class BaseRoverRuckusAuto extends MotoLinearOpMode {
         final PolarCoord postDepotPosition = getPostDepotPosition();
         final PolarCoord craterPosition = getCraterPosition();
 
+        step = "going to preJewel";
         currentPosition = goToPosition(currentPosition, preJewelPosition);
+        step = "going to depot";
         currentPosition = goToPosition(currentPosition, depotPosition);
-
+        step = "drop marker";
         dropMarker();
 
+        step = "go to Post Depot Position";
         currentPosition = goToPosition(currentPosition, postDepotPosition);
+        step = "go to Crater Position";
         currentPosition = goToPosition(currentPosition, craterPosition);
 /*
         telemetry.addData("Start     ", formatMovement(dropPosition, startPosition));
@@ -196,18 +212,24 @@ public class BaseRoverRuckusAuto extends MotoLinearOpMode {
         final PolarCoord depotPosition = getDepotPosition();
         final PolarCoord craterPosition = getCraterPosition();
 
+        step = "going to PreJewel Position";
         currentPosition = goToPosition(currentPosition, preJewelPosition);
 
+        step = "go to jewel Position";
         goToPosition(preJewelPosition, jewelPosition);
+        step = "go to pre jewel Position";
         goToDistance(-PolarCoord.getDistanceBetween(jewelPosition, preJewelPosition));
-
+        step = "safe posion";
         currentPosition = goToPosition(currentPosition, safePosition);
+        step = "go to predepot";
         currentPosition = goToPosition(currentPosition, preDepot);
-
+        step = "got to deopot position";
         goToPosition(preDepot, depotPosition);
+        step = "drop marker";
         dropMarker();
+        step = "go to preDepot";
         goToDistance(-PolarCoord.getDistanceBetween(depotPosition, preDepot));
-
+        step = "go to Crater Position";
         currentPosition = goToPosition(currentPosition, craterPosition);
 
         telemetry.addData("Start   ", formatMovement(dropPosition, startPosition));
@@ -391,7 +413,7 @@ public class BaseRoverRuckusAuto extends MotoLinearOpMode {
 
         // keep looping while we are still active, and BOTH motors are running.
         while (opModeIsActive() &&
-                (robot.left.isBusy())&& !robot.isTiltedToRedCard()) {
+                (robot.left.isBusy()) && !robot.isTiltedToRedCard()) {
 
             // adjust relative speed based on heading error.
             double error = AngleUtilities.getNormalizedAngle(robot.getAngle() - angle);
@@ -650,4 +672,43 @@ public class BaseRoverRuckusAuto extends MotoLinearOpMode {
 
         return String.format("(%.1f, %.1f)   %.0f     %.1f", endPosition.x, endPosition.y, angleGoal, distanceToGoal);
     }
+
+    public void composeTelemetry() {
+        telemetry.addAction(new Runnable() {
+            @Override
+            public void run() {
+                orientation = robot.getAngle();
+                tilt = robot.getTilt();
+            }
+        });
+        telemetry.addLine()
+                .addData("Orientation:", new Func<String>() {
+                    @Override
+                    public String value() {
+                        return String.valueOf(orientation);
+                    }
+                });
+        telemetry.addLine()
+                .addData("Tilt:", new Func<String>() {
+                    @Override
+                    public String value() {
+                        return String.valueOf(tilt);
+                    }
+                });
+        telemetry.addLine()
+                .addData("Current Posision:", new Func<String>() {
+                    @Override
+                    public String value() {
+                        return String.valueOf(currentPosition);
+                    }
+                });
+        telemetry.addLine()
+                .addData("Step:", new Func<String>() {
+                    @Override
+                    public String value() {
+                        return String.valueOf(step);
+                    }
+                });
+    }
+
 }
