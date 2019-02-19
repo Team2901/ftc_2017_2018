@@ -20,7 +20,7 @@ public class GoToDistanceTest extends BaseRoverRuckusAuto {
           while (opModeIsActive()){
               telemetry.addData("angle: " + robot.getAngle(), "");
               telemetry.addData("tilt: " + robot.getTilt(), "");
-              telemetry.addData("rawTilt: " + robot.rawTiltOffset, "");
+              telemetry.addData("rawTilt: " + robot.tiltOffset, "");
               telemetry.update();
         }
     }

@@ -139,7 +139,7 @@ public class BaseRoverRuckusAuto extends MotoLinearOpMode {
             dropFromLander();
             step = "Drop From Lander";
         }
-        robot.rawTiltOffset = -robot.rawTilt();
+        robot.tiltOffset = -robot.rawTilt();
         //step 1.5 move 2 inches away from lander
         step = "go to Start";
         currentPosition = goToPosition(dropPosition, startPosition, true);
