@@ -86,13 +86,12 @@ public class RoverRuckusBotTeleOp extends OpMode {
 
         // telemetry.addData("lift position", robot.lift.getCurrentPosition());
         telemetry.addData("Modifier", modifier);
-        // telemetry.addData("Joystick Left", g1LeftStick);
-        //telemetry.addData("Joystick Right", g1RightStick);
+        telemetry.addData("Joystick Left", g1LeftStick);
+        telemetry.addData("Joystick Right", g1RightStick);
         telemetry.addData("leftMotor", robot.left.getCurrentPosition());
         telemetry.addData("rightMotor", robot.right.getCurrentPosition());
         telemetry.addData("lift", robot.lift.getCurrentPosition());
-        telemetry.addData("Backwards?" , isBackwards);
-        //telemetry.addData("Servo", robot.marker.getPosition());
+        telemetry.addData("Servo", robot.marker.getPosition());
         telemetry.update();
     }
 
