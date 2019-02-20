@@ -54,7 +54,7 @@ public class BaseRoverRuckusAuto extends LinearOpMode {
     public GoldPosition goldPosition = MIDDLE;  // Default goldPosition to use if useWebCam = false
     public boolean dropSupported = true;
     public boolean useWebCam = true;
-    public boolean vuNav = false;
+    public boolean useVuforiaNav = false;
 
     public double orientation;
     public double tilt;
@@ -66,6 +66,37 @@ public class BaseRoverRuckusAuto extends LinearOpMode {
     public String step;
 
     PolarCoord currentPosition;
+    public BaseRoverRuckusAuto(StartCorner startCorner,
+                               boolean dropSupported,
+                               boolean useWebCam,
+                               boolean useVuforiaNav) {
+        this.startCorner = startCorner;
+        this.goldPosition = goldPosition;
+        this.dropSupported = dropSupported;
+        this.useWebCam = useWebCam;
+        this.useVuforiaNav = useVuforiaNav;
+
+        this.dropPosition = getDropPosition();
+        this.startPosition = getStartPosition();
+        robot.offset = dropPosition.theta;
+    }
+
+
+    public BaseRoverRuckusAuto(StartCorner startCorner,
+                               GoldPosition goldPosition,
+                               boolean dropSupported,
+                               boolean useWebCam,
+                               boolean useVuforiaNav) {
+        this.startCorner = startCorner;
+        this.goldPosition = goldPosition;
+        this.dropSupported = dropSupported;
+        this.useWebCam = useWebCam;
+        this.useVuforiaNav = useVuforiaNav;
+
+        this.dropPosition = getDropPosition();
+        this.startPosition = getStartPosition();
+        robot.offset = dropPosition.theta;
+    }
 
     public BaseRoverRuckusAuto(StartCorner startCorner) {
         this.startCorner = startCorner;
@@ -86,7 +117,7 @@ public class BaseRoverRuckusAuto extends LinearOpMode {
             telemetry.addData("goldPosition", goldPosition);
             telemetry.addData("dropSupported", dropSupported);
             telemetry.addData("useWebCam", useWebCam);
-            telemetry.addData("vuNav", vuNav);
+            telemetry.addData("useVuforiaNav", useVuforiaNav);
             telemetry.addData("writeFiles", writeFiles);
             telemetry.update();
         }
@@ -117,35 +148,23 @@ public class BaseRoverRuckusAuto extends LinearOpMode {
         }
 
         robot.tiltOffset = -robot.getRawTilt();
+    }
 
-        // Move 2 inches away from lander
+    public PolarCoord runOpModeDepotCorner() {
+
+        final PolarCoord preJewelPosition = getPreJewelPosition();
+        final PolarCoord depotPosition = getDepotPosition();
+        final PolarCoord postDepotPosition = getPostDepotPosition();
+        final PolarCoord craterPosition = getCraterPosition();
+
         currentPosition = goToPosition(dropPosition, startPosition, true);
 
-        if (vuNav) {
+        if (useVuforiaNav) {
             PolarCoord vuforiaCurrentPosition = getVuforiaCurrentPosition();
             if (vuforiaCurrentPosition != null) {
                 currentPosition = vuforiaCurrentPosition;
             }
         }
-
-        if (startCorner == BLUE_DEPOT || startCorner == RED_DEPOT) {
-            currentPosition = runOpModeDepotCorner(currentPosition);
-        } else {
-            currentPosition = runOpModeCraterCorner(currentPosition);
-        }
-
-        while (opModeIsActive()) {
-            idle();
-        }
-    }
-
-    public PolarCoord runOpModeDepotCorner(PolarCoord currentPosition) {
-
-        final PolarCoord startPosition = currentPosition;
-        final PolarCoord preJewelPosition = getPreJewelPosition();
-        final PolarCoord depotPosition = getDepotPosition();
-        final PolarCoord postDepotPosition = getPostDepotPosition();
-        final PolarCoord craterPosition = getCraterPosition();
 
         currentPosition = goToPosition(currentPosition, preJewelPosition);
         currentPosition = goToPosition(currentPosition, depotPosition);
@@ -163,15 +182,22 @@ public class BaseRoverRuckusAuto extends LinearOpMode {
         return currentPosition;
     }
 
-    public PolarCoord runOpModeCraterCorner(PolarCoord currentPosition) {
-
-        final PolarCoord startPosition = currentPosition;
+    public PolarCoord runOpModeCraterCorner() {
         final PolarCoord preJewelPosition = getPreJewelPosition();
         final PolarCoord jewelPosition = getJewelPosition();
         final PolarCoord safePosition = getSafePosition();
         final PolarCoord preDepot = getPreDepotPosition();
         final PolarCoord depotPosition = getDepotPosition();
         final PolarCoord craterPosition = getCraterPosition();
+
+        currentPosition = goToPosition(dropPosition, startPosition, true);
+
+        if (useVuforiaNav) {
+            PolarCoord vuforiaCurrentPosition = getVuforiaCurrentPosition();
+            if (vuforiaCurrentPosition != null) {
+                currentPosition = vuforiaCurrentPosition;
+            }
+        }
 
         currentPosition = goToPosition(currentPosition, preJewelPosition);
 
@@ -205,7 +231,7 @@ public class BaseRoverRuckusAuto extends LinearOpMode {
             VuforiaLocalizer.Parameters parameters = getWebCameraParameters(hardwareMap, robot.webcam);
             vuforia = VuforiaUtilities.getVuforia(parameters);
 
-            if (vuNav) {
+            if (useVuforiaNav) {
                 roverRuckus = setUpTrackables(vuforia, parameters);
             }
         }
