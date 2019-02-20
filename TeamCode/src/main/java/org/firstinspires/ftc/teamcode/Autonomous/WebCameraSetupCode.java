@@ -121,7 +121,6 @@ public class WebCameraSetupCode extends LinearOpModeJewelCamera {
     public void saveConfigFile() {
 
         try {
-            JewelFinder jewelLeft = jewelLeft();
             FileUtilities.writeConfigFile(jewelConfigLeft,jewelLeft.getBoxPct() );
 
         } catch (Exception e) {
@@ -130,7 +129,6 @@ public class WebCameraSetupCode extends LinearOpModeJewelCamera {
         }
 
         try {
-            JewelFinder jewelMiddle = jewelMiddle();
             FileUtilities.writeConfigFile(jewelConfigMiddle,jewelMiddle.getBoxPct() );
 
         } catch (Exception e) {
@@ -139,9 +137,7 @@ public class WebCameraSetupCode extends LinearOpModeJewelCamera {
         }
 
         try  {
-            JewelFinder jewelRight = jewelRight();
             FileUtilities.writeConfigFile(jewelConfigRight, jewelRight.getBoxPct());
-
         } catch (Exception e) {
             telemetry.addData("ERROR WRITING TO CONFIG FILE JEWEL RIGHT", e.getMessage());
             telemetry.update();

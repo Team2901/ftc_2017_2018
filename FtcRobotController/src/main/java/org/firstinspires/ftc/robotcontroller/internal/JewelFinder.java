@@ -20,7 +20,7 @@ import java.util.List;
 public class JewelFinder extends TextView implements View.OnTouchListener {
     private int pWidth;
     private int pHeight;
-
+    private String name;
     private float dx, dy;
 
     // Pct is = to box percentage location.
@@ -29,20 +29,21 @@ public class JewelFinder extends TextView implements View.OnTouchListener {
     public int boxTopYPct = 0;
     public int boxBotYPct = 20;
 
-    public JewelFinder(Context context, int color, String location) {
-        this(context, null, color, location);
+    public JewelFinder(Context context, int color, String name) {
+        this(context, null, color, name);
     }
 
-    public JewelFinder(Context context, AttributeSet attrs, int color, String location) {
-        this(context, attrs,  0, color, location );
+    public JewelFinder(Context context, AttributeSet attrs, int color, String name) {
+        this(context, attrs,  0, color, name );
     }
 
-    public JewelFinder(Context context, AttributeSet attrs, int defStyle, int color, String location) {
+    public JewelFinder(Context context, AttributeSet attrs, int defStyle, int color, String name) {
         super(context, attrs, defStyle);
         this.setBackgroundColor( color);
         this.setLayoutParams(new FrameLayout.LayoutParams(100,100));
         this.setOnTouchListener(this);
-        this.setText(location);
+        this.name = name;
+        this.setText(name != null && !name.isEmpty() ? name.substring(0,1) : "Unknown");
     }
 
     public void moveTo(List<Integer> config, int parentWidth, int parentHeight){
@@ -138,6 +139,10 @@ public class JewelFinder extends TextView implements View.OnTouchListener {
         return y;
     }
 
+    public String getName() {
+        return name;
+    }
+
     public int getBoxLeftXPct() {
         return boxLeftXPct;
     }
@@ -153,6 +158,7 @@ public class JewelFinder extends TextView implements View.OnTouchListener {
     public int getBoxBotYPct() {
         return boxBotYPct;
     }
+
 
     public List<Integer> getBoxPct()
     {

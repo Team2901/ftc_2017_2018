@@ -195,9 +195,9 @@ public class FtcRobotControllerActivity extends Activity
 
                 previewLayout.removeAllViews();
 
-                context.jewelRight = new JewelFinder(FtcRobotControllerActivity.this, COLOR_BLUE, "R");
-                context.jewelMiddle = new JewelFinder( FtcRobotControllerActivity.this, COLOR_GREEN, "M");
-                context.jewelLeft= new JewelFinder(FtcRobotControllerActivity.this, COLOR_PINK, "L");
+                context.jewelRight = new JewelFinder(FtcRobotControllerActivity.this, COLOR_BLUE, "Right");
+                context.jewelMiddle = new JewelFinder( FtcRobotControllerActivity.this, COLOR_GREEN, "Middle");
+                context.jewelLeft= new JewelFinder(FtcRobotControllerActivity.this, COLOR_PINK, "Left");
 
                 previewLayout.addView(context.jewelLeft);
                 previewLayout.addView(context.jewelMiddle);

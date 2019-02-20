@@ -145,4 +145,9 @@ public class VuforiaUtilities {
 
         return location;
     }
+
+    public static int getCameraMonitorViewId(HardwareMap hardwareMap) {
+        return hardwareMap.appContext.getResources().getIdentifier(
+                "cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+    }
 }

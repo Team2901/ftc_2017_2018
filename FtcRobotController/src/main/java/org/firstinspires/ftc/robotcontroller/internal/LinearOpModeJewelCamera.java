@@ -23,25 +23,7 @@ public abstract class LinearOpModeJewelCamera extends MotoLinearOpMode {
   public List<Integer> leftConfig;
   public List<Integer> rightConfig;
 
-
-  protected JewelFinder jewel;
   public JewelFinder jewelLeft;
-
-  public JewelFinder jewelLeft(){
-    return jewelLeft;
-  }
   public JewelFinder jewelMiddle;
-  public JewelFinder jewelMiddle(){
-    return jewelMiddle;
-  }
   public JewelFinder jewelRight;
-  public JewelFinder jewelRight(){
-    return jewelRight;
-  }
-
-
-
-  public JewelFinder getJewel() {
-    return jewel;
-  }
 }

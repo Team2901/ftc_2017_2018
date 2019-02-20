@@ -137,16 +137,13 @@ public class SetUpCode2019 extends LinearOpModeJewelCamera {
     public void saveConfigFile() {
 
         try {
-            JewelFinder jewelLeft = jewelLeft();
             FileUtilities.writeConfigFile(jewelConfigLeft,jewelLeft.getBoxPct() );
-
         } catch (Exception e) {
             telemetry.addData("ERROR WRITING TO FILE JEWEL LEFT", e.getMessage());
             telemetry.update();
         }
 
         try {
-            JewelFinder jewelMiddle = jewelMiddle();
             FileUtilities.writeConfigFile(jewelConfigMiddle,jewelMiddle.getBoxPct() );
 
         } catch (Exception e) {
@@ -155,7 +152,6 @@ public class SetUpCode2019 extends LinearOpModeJewelCamera {
         }
 
         try  {
-            JewelFinder jewelRight = jewelRight();
             FileUtilities.writeConfigFile(jewelConfigRight, jewelRight.getBoxPct());
 
         } catch (Exception e) {

@@ -242,15 +242,9 @@ public class BaseRoverRuckusAuto extends LinearOpMode {
         int[] rightHueTotal = {0, 0};
 
         try {
-            leftHueTotal = RoverRuckusUtilities.getJewelHueCount(bitmap,
-                    "jewelConfigLeft.txt", "jewelBitmapLeft.png",
-                    "jewelHuesLeft.txt", this, writeFiles);
-            middleHueTotal = RoverRuckusUtilities.getJewelHueCount(bitmap,
-                    "jewelConfigMiddle.txt", "jewelBitmapMiddle.png",
-                    "jewelHuesMiddle.txt", this, writeFiles);
-            rightHueTotal = RoverRuckusUtilities.getJewelHueCount(bitmap,
-                    "jewelConfigRight.txt", "jewelBitmapRight.png",
-                    "jewelHuesRight.txt", this, writeFiles);
+            leftHueTotal = RoverRuckusUtilities.getJewelHueCount(bitmap,"Left",this, writeFiles);
+            middleHueTotal = RoverRuckusUtilities.getJewelHueCount(bitmap,"Middle", this, writeFiles);
+            rightHueTotal = RoverRuckusUtilities.getJewelHueCount(bitmap,"Right",this, writeFiles);
         } catch (InterruptedException e) {
             telemetry.addData("Error getJewelHueCounts", e);
             telemetry.update();
