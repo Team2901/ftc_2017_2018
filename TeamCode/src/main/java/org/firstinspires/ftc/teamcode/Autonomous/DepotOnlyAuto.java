@@ -27,6 +27,6 @@ public class DepotOnlyAuto extends BaseRoverRuckusAuto {
         dropMarker();
         telemetry.addData("moving back for opponents", "");
         telemetry.update();
-        goToDistance(-20);
+        goToDistance(-20, .75, "");
     }
 }
