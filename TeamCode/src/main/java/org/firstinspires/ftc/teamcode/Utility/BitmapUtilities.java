@@ -121,25 +121,26 @@ public class BitmapUtilities {
     }
 
     public static Bitmap getVuforiaImage(VuforiaLocalizer vuforia) {
-        try {
-            VuforiaLocalizer.CloseableFrame closeableFrame = vuforia.getFrameQueue().take();
-            for (int i = 0; i < closeableFrame.getNumImages(); i++) {
-                Image image = closeableFrame.getImage(i);
-                if (image.getFormat() == PIXEL_FORMAT_RGB565) {
-                    Bitmap bitmap = Bitmap.createBitmap(image.getWidth(),
-                            image.getHeight(),
-                            Bitmap.Config.RGB_565);
-                    bitmap.copyPixelsFromBuffer(image.getPixels());
-                    Matrix matrix = new Matrix();
-                    matrix.postRotate(90);
+        if (vuforia != null) {
+            try {
+                VuforiaLocalizer.CloseableFrame closeableFrame = vuforia.getFrameQueue().take();
+                for (int i = 0; i < closeableFrame.getNumImages(); i++) {
+                    Image image = closeableFrame.getImage(i);
+                    if (image.getFormat() == PIXEL_FORMAT_RGB565) {
+                        Bitmap bitmap = Bitmap.createBitmap(image.getWidth(),
+                                image.getHeight(),
+                                Bitmap.Config.RGB_565);
+                        bitmap.copyPixelsFromBuffer(image.getPixels());
+                        Matrix matrix = new Matrix();
+                        matrix.postRotate(90);
 
-                    return Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+                        return Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+                    }
                 }
+            } catch (Exception e) {
+                return null;
             }
-        } catch (Exception e) {
-            return null;
         }
-
         return null;
     }
 }

@@ -1,13 +1,10 @@
 package org.firstinspires.ftc.teamcode.Utility;
 
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.vuforia.PIXEL_FORMAT;
-import com.vuforia.Vuforia;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
-import org.firstinspires.ftc.robotcore.external.matrices.VectorF;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
@@ -35,28 +32,49 @@ public class VuforiaUtilities {
             "lSUCeXJrC4g6bEldHlmTc51nRpix6i1sGfvNuxlATzuRf5dtX/YlQm2WvvG9TilHbz";
 
     public static VuforiaLocalizer.Parameters getBackCameraParameters(HardwareMap hardwareMap) {
-        int cameraMonitorViewId = hardwareMap.appContext.getResources()
-                .getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
-        VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
-        parameters.vuforiaLicenseKey = VUFORIA_KEY;
+        return getBackCameraParameters(hardwareMap, true);
+    }
+
+    public static VuforiaLocalizer.Parameters getBackCameraParameters(HardwareMap hardwareMap,
+                                                                      boolean withView) {
+        VuforiaLocalizer.Parameters parameters = getParameters(hardwareMap, withView);
         parameters.cameraDirection = VuforiaLocalizer.CameraDirection.BACK;
         return parameters;
     }
 
     public static VuforiaLocalizer.Parameters getWebCameraParameters(HardwareMap hardwareMap,
                                                                      WebcamName webcamName) {
-        int cameraMonitorViewId = hardwareMap.appContext.getResources()
-                .getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
-        VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
-        parameters.vuforiaLicenseKey = VUFORIA_KEY;
+        return getWebCameraParameters(hardwareMap, webcamName, true);
+    }
+
+    public static VuforiaLocalizer.Parameters getWebCameraParameters(HardwareMap hardwareMap,
+                                                                     WebcamName webcamName,
+                                                                     boolean withView) {
+        VuforiaLocalizer.Parameters parameters = getParameters(hardwareMap, withView);
         parameters.cameraName = webcamName;
+        return parameters;
+    }
+
+    public static VuforiaLocalizer.Parameters getParameters(HardwareMap hardwareMap,
+                                                            boolean withView) {
+        VuforiaLocalizer.Parameters parameters;
+        if (withView) {
+            int cameraMonitorViewId = hardwareMap.appContext.getResources()
+                    .getIdentifier("cameraMonitorViewId", "id",
+                            hardwareMap.appContext.getPackageName());
+            parameters = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
+        } else {
+            parameters = new VuforiaLocalizer.Parameters();
+        }
+
+        parameters.vuforiaLicenseKey = VUFORIA_KEY;
         return parameters;
     }
 
     public static VuforiaLocalizer getVuforia(VuforiaLocalizer.Parameters parameters) {
         VuforiaLocalizer vuforia = ClassFactory.getInstance().createVuforia(parameters);
         vuforia.setFrameQueueCapacity(1);
-        Vuforia.setFrameFormat(PIXEL_FORMAT_RGB565, true);
+        vuforia.enableConvertFrameToBitmap();
         return vuforia;
     }
 

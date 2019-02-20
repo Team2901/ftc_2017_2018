@@ -7,6 +7,8 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IntegratingGyroscope;
 import com.qualcomm.robotcore.hardware.Servo;
+
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
@@ -20,6 +22,7 @@ public abstract class BaseRRHardware {
     protected HardwareMap hardwareMap = null;
     public DcMotor lift;
     public Servo marker;
+    public WebcamName webcam = null;
     public BNO055IMU imu;
     public IntegratingGyroscope gyroscope;
     public double offset = 0;
@@ -62,6 +65,12 @@ public abstract class BaseRRHardware {
 
         imu = ahwMap.get(BNO055IMU.class, "imu");
         imu.initialize(parameters);
+
+        try {
+            webcam = hardwareMap.get(WebcamName.class, "webcam");
+        } catch (IllegalArgumentException e) {
+            webcam = null;
+        }
     }
 
     public double getAngle() {
@@ -73,6 +82,7 @@ public abstract class BaseRRHardware {
         Orientation orientation = gyroscope.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
         return AngleUtilities.getNormalizedAngle(orientation.secondAngle + tiltOffset);
     }
+
     public double rawTilt(){
         Orientation orientation = gyroscope.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
         return AngleUtilities.getNormalizedAngle(orientation.secondAngle);
@@ -85,6 +95,7 @@ public abstract class BaseRRHardware {
         }
         return false;
     }
+
     public abstract void goStraight(double power);
 
     public abstract void turn(double power);
