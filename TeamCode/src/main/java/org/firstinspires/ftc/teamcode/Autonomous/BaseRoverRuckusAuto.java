@@ -95,43 +95,36 @@ public class BaseRoverRuckusAuto extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-
         updateStep("init");
         robot.init(hardwareMap);
 
-        telemetry.addData("begin setup vuforia", "");
-        telemetry.update();
-
-        if (useWebCam && robot.webcam != null) {
-            updateStep("Setup vuforia");
-            VuforiaLocalizer.Parameters parameters = getWebCameraParameters(hardwareMap, robot.webcam);
-            vuforia = VuforiaUtilities.getVuforia(parameters);
-
-            if (vuNav) {
-                roverRuckus = setUpTrackables(vuforia, parameters);
-            }
+        // Setup Vuforia (if using the camera)
+        if (useWebCam) {
+            setupVuforia();
         }
 
+        updateStep("Wait for start");
         waitForStart();
 
-        //step 0: locate cheddar
-        goldPosition = determineGoldPosition();
+        // Get gold position (if using the camera)
+        if (useWebCam) {
+            goldPosition = determineGoldPosition();
+        }
 
-        //step 1: drop down from lander (if supported)
-        dropFromLander();
+        // Drop from lander (if supported)
+        if (dropSupported) {
+            dropFromLander();
+        }
 
         robot.tiltOffset = -robot.getRawTilt();
 
-        //step 1.5 move 2 inches away from lander
+        // Move 2 inches away from lander
         currentPosition = goToPosition(dropPosition, startPosition, true);
 
-        //step 2: do vuforia to determine position
-        if (vuNav && roverRuckus != null) {
-            roverRuckus.activate();
-
-            OpenGLMatrix location = VuforiaUtilities.getLocation(roverRuckus);
-            if (location != null) {
-                currentPosition = new PolarCoord(location);
+        if (vuNav) {
+            PolarCoord vuforiaCurrentPosition = getVuforiaCurrentPosition();
+            if (vuforiaCurrentPosition != null) {
+                currentPosition = vuforiaCurrentPosition;
             }
         }
 
@@ -206,15 +199,14 @@ public class BaseRoverRuckusAuto extends LinearOpMode {
         return currentPosition;
     }
 
-    public void dropFromLander() {
-        if (dropSupported && opModeIsActive()) {
-            updateStep("Drop From Lander");
-            robot.lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            robot.lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            robot.lift.setTargetPosition(TARGET_LIFT_TICKS);
-            robot.lift.setPower(1);
-            while (robot.lift.isBusy()) {
-                idle();
+    public void setupVuforia() {
+        if (robot.webcam != null) {
+            updateStep("Setup vuforia");
+            VuforiaLocalizer.Parameters parameters = getWebCameraParameters(hardwareMap, robot.webcam);
+            vuforia = VuforiaUtilities.getVuforia(parameters);
+
+            if (vuNav) {
+                roverRuckus = setUpTrackables(vuforia, parameters);
             }
         }
     }
@@ -223,7 +215,7 @@ public class BaseRoverRuckusAuto extends LinearOpMode {
 
         GoldPosition winner = goldPosition;
 
-        if (!useWebCam || !opModeIsActive()) {
+        if (!opModeIsActive()) {
             return winner;
         }
 
@@ -265,6 +257,33 @@ public class BaseRoverRuckusAuto extends LinearOpMode {
         }
 
         return winner;
+    }
+
+    public void dropFromLander() {
+        if (opModeIsActive()) {
+            updateStep("Drop From Lander");
+            robot.lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            robot.lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            robot.lift.setTargetPosition(TARGET_LIFT_TICKS);
+            robot.lift.setPower(1);
+            while (robot.lift.isBusy()) {
+                idle();
+            }
+        }
+    }
+
+    public PolarCoord getVuforiaCurrentPosition() {
+        if (roverRuckus != null && opModeIsActive()) {
+            updateStep("getVuforiaCurrentPosition");
+            roverRuckus.activate();
+            OpenGLMatrix location = VuforiaUtilities.getLocation(roverRuckus);
+            roverRuckus.deactivate();
+            if (location != null) {
+                return new PolarCoord(location);
+            }
+        }
+
+        return null;
     }
 
     public void dropMarker() {
