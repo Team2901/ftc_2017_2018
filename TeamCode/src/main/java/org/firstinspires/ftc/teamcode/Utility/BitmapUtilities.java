@@ -12,6 +12,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.teamcode.Autonomous.BaseRoverRuckusAuto;
 
 import java.io.IOException;
+import java.util.List;
 
 public class BitmapUtilities {
 
@@ -87,6 +88,10 @@ public class BitmapUtilities {
                                                       int rightHueTotal) {
         //TODO
         return null;
+    }
+
+    public static Bitmap getBabyBitmap(Bitmap bitmap,List<Integer> config) {
+        return getBabyBitmap(bitmap, config.get(0), config.get(1), config.get(2), config.get(3));
     }
 
     public static Bitmap getBabyBitmap(Bitmap bitmap,

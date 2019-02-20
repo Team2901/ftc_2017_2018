@@ -17,7 +17,7 @@ import java.util.List;
  * <p/>
  * Enables control of the robot via the gamepad
  */
-public abstract class LinearOpModeJewelCamera extends MotoLinearOpMode {
+public abstract class LinearOpModeJewelCamera extends LinearOpMode {
 
   public List<Integer> middleConfig;
   public List<Integer> leftConfig;

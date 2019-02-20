@@ -35,7 +35,6 @@ import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
-import android.hardware.Camera;
 import android.hardware.usb.UsbDevice;
 import android.hardware.usb.UsbManager;
 import android.net.wifi.WifiManager;
@@ -168,12 +167,12 @@ public class FtcRobotControllerActivity extends Activity
 
     public static final int COLOR_BLUE = 0x5533ccff;
     public static final int COLOR_GREEN = 0x5500ff00;
-    public static final int COLOR_PINK= 0x55ff3399;
+    public static final int COLOR_PINK = 0x55ff3399;
     public static final int COLOR_YELLOW = 0x55ffff00;
     public static final int COLOR_WHITE = 0x55ffffff;
 
 
-    public void setupPreviewLayout(final int cameraMonitorViewIdParent, final LinearOpModeJewelCamera context){
+    public void setupPreviewLayout(final int cameraMonitorViewIdParent, final LinearOpModeJewelCamera context) {
         final View parentView = findViewById(cameraMonitorViewIdParent);
         final View cameraView = ((ViewGroup) parentView).getChildAt(0);
         final int cWidth = cameraView.getWidth();
@@ -183,11 +182,11 @@ public class FtcRobotControllerActivity extends Activity
     }
 
     // ADDED FOR CAMERA!!!
-    public void setupPreviewLayout(final int cameraWidth, final int cameraHeight, final LinearOpModeJewelCamera context){
-        runOnUiThread (new Runnable(){
+    public void setupPreviewLayout(final int cameraWidth, final int cameraHeight, final LinearOpModeJewelCamera context) {
+        runOnUiThread(new Runnable() {
             @Override
-            public void run(){
-                FrameLayout previewLayout= (FrameLayout) findViewById(R.id.previewLayout);
+            public void run() {
+                FrameLayout previewLayout = (FrameLayout) findViewById(R.id.previewLayout);
                 ViewGroup.LayoutParams params = previewLayout.getLayoutParams();
                 params.width = cameraWidth;
                 params.height = cameraHeight;
@@ -196,8 +195,8 @@ public class FtcRobotControllerActivity extends Activity
                 previewLayout.removeAllViews();
 
                 context.jewelRight = new JewelFinder(FtcRobotControllerActivity.this, COLOR_BLUE, "Right");
-                context.jewelMiddle = new JewelFinder( FtcRobotControllerActivity.this, COLOR_GREEN, "Middle");
-                context.jewelLeft= new JewelFinder(FtcRobotControllerActivity.this, COLOR_PINK, "Left");
+                context.jewelMiddle = new JewelFinder(FtcRobotControllerActivity.this, COLOR_GREEN, "Middle");
+                context.jewelLeft = new JewelFinder(FtcRobotControllerActivity.this, COLOR_PINK, "Left");
 
                 previewLayout.addView(context.jewelLeft);
                 previewLayout.addView(context.jewelMiddle);
@@ -207,54 +206,18 @@ public class FtcRobotControllerActivity extends Activity
                     context.jewelLeft.moveTo(context.leftConfig, params.width, params.height);
                 }
 
-               if(context.leftConfig != null) {
+                if (context.leftConfig != null) {
                     context.jewelMiddle.moveTo(context.middleConfig, params.width, params.height);
                 }
 
-                if(context.rightConfig != null) {
-                   context.jewelRight.moveTo(context.rightConfig, params.width, params.height);
+                if (context.rightConfig != null) {
+                    context.jewelRight.moveTo(context.rightConfig, params.width, params.height);
                 }
-
             }
         });
     }
 
-    public void removeJewelFinder (final LinearOpModeJewelCamera context) {
-        runOnUiThread (new Runnable() {
-            @Override
-            public void run() {
-                FrameLayout previewLayout = (FrameLayout) findViewById(R.id.previewLayout);
-                previewLayout.removeAllViews();
-
-            }
-        });
-    }
-
-    public void initPreview(final Camera camera, final OpModeCamera context, final Camera.PreviewCallback previewCallback) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                context.preview = new CameraPreview(FtcRobotControllerActivity.this, camera, previewCallback);
-                FrameLayout previewLayout = (FrameLayout) findViewById(R.id.previewLayout);
-                previewLayout.addView(context.preview);
-            }
-        });
-    }
-
-    // poor coding style here.  Shouldn't have to duplicate these routines for regular and linear OpModes.
-    public void initPreviewLinear(final Camera camera, final LinearOpModeCamera context, final Camera.PreviewCallback previewCallback) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                context.preview = new CameraPreview(FtcRobotControllerActivity.this, camera, previewCallback);
-                FrameLayout previewLayout = (FrameLayout) findViewById(R.id.previewLayout);
-                previewLayout.addView(context.preview);
-            }
-        });
-    }
-
-
-    public void removePreview(final OpModeCamera context) {
+    public void removeJewelFinder() {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -263,19 +226,6 @@ public class FtcRobotControllerActivity extends Activity
             }
         });
     }
-
-    public void removePreviewLinear(final LinearOpModeCamera context) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                FrameLayout previewLayout = (FrameLayout) findViewById(R.id.previewLayout);
-                previewLayout.removeAllViews();
-            }
-        });
-    }
-
-    /*public void Bitmap(org.firstinspires.ftc.teamcode.Utility.RobotSetup robotSetup) {
-    } */
 
     // END CAMERA ADD!!!
     //////////////////////////////////////////////

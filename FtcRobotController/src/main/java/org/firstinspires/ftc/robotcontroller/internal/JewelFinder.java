@@ -18,6 +18,11 @@ import java.util.List;
  */
 @SuppressLint("DefaultLocale")
 public class JewelFinder extends TextView implements View.OnTouchListener {
+    public static final String JEWEL_CONFIG_FILE_FORMAT = "jewelConfig%s.txt";
+    public static final String JEWEL_BITMAP_FILE_FORMAT = "jewelBitmap%s.png";
+    public static final String JEWEL_BITMAP_BW_FILE_FORMAT = "jewelBitmapBW%s.png";
+    public static final String JEWEL_HUE_FILE_FORMAT = "jewelHues%s.txt";
+
     private int pWidth;
     private int pHeight;
     private String name;
@@ -34,26 +39,23 @@ public class JewelFinder extends TextView implements View.OnTouchListener {
     }
 
     public JewelFinder(Context context, AttributeSet attrs, int color, String name) {
-        this(context, attrs,  0, color, name );
+        this(context, attrs, 0, color, name);
     }
 
     public JewelFinder(Context context, AttributeSet attrs, int defStyle, int color, String name) {
         super(context, attrs, defStyle);
-        this.setBackgroundColor( color);
-        this.setLayoutParams(new FrameLayout.LayoutParams(100,100));
+        this.setBackgroundColor(color);
+        this.setLayoutParams(new FrameLayout.LayoutParams(100, 100));
         this.setOnTouchListener(this);
         this.name = name;
-        this.setText(name != null && !name.isEmpty() ? name.substring(0,1) : "Unknown");
+        this.setText(name != null && !name.isEmpty() ? name.substring(0, 1) : "Unknown");
     }
 
-    public void moveTo(List<Integer> config, int parentWidth, int parentHeight){
-        boxLeftXPct = config.get(0);
-        boxTopYPct = config.get(1);
-        boxRightXPct = config.get(2);
-        boxBotYPct = config.get(3);
-        setX(config.get(0) / 100.0f * parentWidth);
-        setY(config.get(1) / 100.0f * parentHeight);
-        setLayoutParams(new FrameLayout.LayoutParams(100,100));
+    public void moveTo(List<Integer> config, int parentWidth, int parentHeight) {
+        setBoxPct(config);
+        setX(boxLeftXPct / 100.0f * parentWidth);
+        setY(boxTopYPct / 100.0f * parentHeight);
+        setLayoutParams(new FrameLayout.LayoutParams(100, 100));
     }
 
     @Override
@@ -93,13 +95,10 @@ public class JewelFinder extends TextView implements View.OnTouchListener {
             float x = getXBound(rawX + dx);
             float y = getYBound(rawY + dy);
 
-            boxLeftXPct = (int) ((x/pWidth)*100);
-            boxRightXPct = (int) (((x + this.getWidth())/pWidth)*100);
-            boxTopYPct = (int) ((y/pHeight)*100);
-            boxBotYPct = (int) (((y + this.getHeight())/pHeight)*100);
-
-
-
+            boxLeftXPct = (int) ((x / pWidth) * 100);
+            boxRightXPct = (int) (((x + this.getWidth()) / pWidth) * 100);
+            boxTopYPct = (int) ((y / pHeight) * 100);
+            boxBotYPct = (int) (((y + this.getHeight()) / pHeight) * 100);
 
             v.animate()
                     .x(x)
@@ -111,62 +110,55 @@ public class JewelFinder extends TextView implements View.OnTouchListener {
         return false;
     }
 
-    private float getXBound(float valueX){
-
-        float x;
-
-        if(valueX > pWidth - this.getWidth()) {// box x size
-            x = pWidth - this.getWidth();
-        } else if (valueX  < 0) {
-            x = 0;
+    private float getXBound(float valueX) {
+        if (valueX > pWidth - this.getWidth()) {// box x size
+            return pWidth - this.getWidth();
+        } else if (valueX < 0) {
+            return 0;
         } else {
-            x = valueX;
+            return valueX;
         }
-        return x;
     }
 
-    private float getYBound(float valueY){
-
-        float y;
-
-        if(valueY > pHeight - this.getHeight()) //half box y size
-            y = pHeight - this.getHeight() ;
-        else if(valueY  < 0)
-            y = 0 ;
-        else
-            y  = valueY;
-
-        return y;
+    private float getYBound(float valueY) {
+        if (valueY > pHeight - this.getHeight()) {//half box y size
+            return pHeight - this.getHeight();
+        } else if (valueY < 0) {
+            return 0;
+        } else {
+            return valueY;
+        }
     }
 
     public String getName() {
         return name;
     }
 
-    public int getBoxLeftXPct() {
-        return boxLeftXPct;
+    public void setBoxPct(List<Integer> config) {
+        boxLeftXPct = config.get(0);
+        boxTopYPct = config.get(1);
+        boxRightXPct = config.get(2);
+        boxBotYPct = config.get(3);
     }
 
-    public int getBoxRightXPct() {
-        return boxRightXPct;
+    public List<Integer> getBoxPct() {
+        List<Integer> configValues = new ArrayList<>();
+        configValues.add(boxLeftXPct);
+        configValues.add(boxTopYPct);
+        configValues.add(boxRightXPct);
+        configValues.add(boxBotYPct);
+        return configValues;
     }
 
-    public int getBoxTopYPct() {
-        return boxTopYPct;
+    public String getConfigFileName() {
+        return  String.format(JEWEL_CONFIG_FILE_FORMAT, getName());
     }
 
-    public int getBoxBotYPct() {
-        return boxBotYPct;
+    public String getHueFileName() {
+        return  String.format(JEWEL_HUE_FILE_FORMAT, getName());
     }
 
-
-    public List<Integer> getBoxPct()
-    {
-       List<Integer> configValues = new ArrayList<>();
-       configValues.add(boxLeftXPct);
-       configValues.add(boxTopYPct);
-       configValues.add(boxRightXPct);
-       configValues.add(boxBotYPct);
-       return configValues;
+    public String getBitmapFileName() {
+        return  String.format(JEWEL_BITMAP_FILE_FORMAT, getName());
     }
 }
