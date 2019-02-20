@@ -1,20 +1,19 @@
 package org.firstinspires.ftc.teamcode.Autonomous;
 
 import android.annotation.SuppressLint;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import android.graphics.Bitmap;
 
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
-import org.firstinspires.ftc.robotcontroller.internal.MotoLinearOpMode;
 import org.firstinspires.ftc.robotcore.external.Func;
-import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
+import org.firstinspires.ftc.teamcode.Hardware.BaseRRHardware;
 import org.firstinspires.ftc.teamcode.Hardware.RoverRuckusBotHardware;
 import org.firstinspires.ftc.teamcode.Utility.AngleUtilities;
 import org.firstinspires.ftc.teamcode.Utility.BitmapUtilities;
@@ -23,20 +22,20 @@ import org.firstinspires.ftc.teamcode.Utility.PolarCoord;
 import org.firstinspires.ftc.teamcode.Utility.RoverRuckusUtilities;
 import org.firstinspires.ftc.teamcode.Utility.VuforiaUtilities;
 
-import static org.firstinspires.ftc.teamcode.Autonomous.BaseRoverRuckusAuto.GoldPosition.LEFT;
 import static org.firstinspires.ftc.teamcode.Autonomous.BaseRoverRuckusAuto.GoldPosition.MIDDLE;
 import static org.firstinspires.ftc.teamcode.Autonomous.BaseRoverRuckusAuto.StartCorner.BLUE_DEPOT;
 import static org.firstinspires.ftc.teamcode.Autonomous.BaseRoverRuckusAuto.StartCorner.RED_DEPOT;
+import static org.firstinspires.ftc.teamcode.Utility.VuforiaUtilities.getWebCameraParameters;
+import static org.firstinspires.ftc.teamcode.Utility.VuforiaUtilities.setUpTrackables;
 
 @SuppressLint("DefaultLocale")
-public class BaseRoverRuckusAuto extends MotoLinearOpMode {
+public class BaseRoverRuckusAuto extends LinearOpMode {
 
     public enum StartCorner {
         RED_CRATER, RED_DEPOT, BLUE_CRATER, BLUE_DEPOT
     }
 
     public enum GoldPosition {
-
         LEFT, MIDDLE, RIGHT
     }
 
@@ -45,20 +44,16 @@ public class BaseRoverRuckusAuto extends MotoLinearOpMode {
     public static final int TARGET_LIFT_TICKS = 5000;
     public static final double P_DRIVE_COEFF = 0.05;
 
-    public final RoverRuckusBotHardware robot = new RoverRuckusBotHardware();
+    public final BaseRRHardware robot = new RoverRuckusBotHardware();
 
     public VuforiaLocalizer vuforia;
-    public WebcamName webcam;
+    VuforiaTrackables roverRuckus;
 
     public boolean writeFiles = false;
 
-    // Default goldPosition to use if determineGoldPosition = false
-    public GoldPosition goldPosition = MIDDLE;
-    public boolean determineGoldPosition = true;
-
+    public GoldPosition goldPosition = MIDDLE;  // Default goldPosition to use if useWebCam = false
     public boolean dropSupported = true;
-
-    public boolean isVuforiaActive = true;
+    public boolean useWebCam = true;
     public boolean vuNav = false;
 
     public double orientation;
@@ -76,72 +71,58 @@ public class BaseRoverRuckusAuto extends MotoLinearOpMode {
         this.startCorner = startCorner;
         dropPosition = getDropPosition();
         startPosition = getStartPosition();
+        robot.offset = dropPosition.theta;
     }
 
     public BaseRoverRuckusAuto(StartCorner startCorner, GoldPosition goldPosition) {
-        this.startCorner = startCorner;
-        dropPosition = getDropPosition();
-        startPosition = getStartPosition();
+        this(startCorner);
         this.goldPosition = goldPosition;
+    }
+
+    @Override
+    public void waitForStart() {
+        while (!opModeIsActive() && !isStopRequested()) {
+            telemetry.addData("startCorner", startCorner);
+            telemetry.addData("goldPosition", goldPosition);
+            telemetry.addData("dropSupported", dropSupported);
+            telemetry.addData("useWebCam", useWebCam);
+            telemetry.addData("vuNav", vuNav);
+            telemetry.addData("writeFiles", writeFiles);
+            telemetry.update();
+        }
+        composeTelemetry();
     }
 
     @Override
     public void runOpMode() throws InterruptedException {
 
-        telemetry.addData("startCorner", startCorner);
-        telemetry.update();
-
-        step = "init";
-        //step -2: initialize hardware
+        updateStep("init");
         robot.init(hardwareMap);
-        composeTelemetry();
-        robot.offset = dropPosition.theta;
-
 
         telemetry.addData("begin setup vuforia", "");
         telemetry.update();
 
-        // step -1: initialize vuforia
-        VuforiaTrackables roverRuckus = null;
+        if (useWebCam && robot.webcam != null) {
+            updateStep("Setup vuforia");
+            VuforiaLocalizer.Parameters parameters = getWebCameraParameters(hardwareMap, robot.webcam);
+            vuforia = VuforiaUtilities.getVuforia(parameters);
 
-        try {
-            if (isVuforiaActive) {
-                webcam = hardwareMap.get(WebcamName.class, "webcam");
-                if (webcam != null) {
-                    VuforiaLocalizer.Parameters parameters = VuforiaUtilities.getWebCameraParameters(hardwareMap, webcam);
-                    vuforia = VuforiaUtilities.getVuforia(parameters);
-                    if (vuNav) {
-                        roverRuckus = VuforiaUtilities.setUpTrackables(vuforia, parameters);
-                    }
-                }
+            if (vuNav) {
+                roverRuckus = setUpTrackables(vuforia, parameters);
             }
-        } catch (Exception e) {
-
         }
 
-        telemetry.addData("I setup vuforia", vuforia != null);
-        telemetry.update();
         waitForStart();
 
-        telemetry.addData("starting determine goldPosition", "");
-        telemetry.update();
-
         //step 0: locate cheddar
-        if (determineGoldPosition) {
-            goldPosition = determineGoldPosition();
-        }
+        goldPosition = determineGoldPosition();
 
-        telemetry.addData("goldPosition", goldPosition);
-        telemetry.update();
+        //step 1: drop down from lander (if supported)
+        dropFromLander();
 
-        //step 1: drop down from lander
-        if (dropSupported) {
-            dropFromLander();
-            step = "Drop From Lander";
-        }
-        robot.tiltOffset = -robot.rawTilt();
+        robot.tiltOffset = -robot.getRawTilt();
+
         //step 1.5 move 2 inches away from lander
-        step = "go to Start";
         currentPosition = goToPosition(dropPosition, startPosition, true);
 
         //step 2: do vuforia to determine position
@@ -160,14 +141,9 @@ public class BaseRoverRuckusAuto extends MotoLinearOpMode {
             currentPosition = runOpModeCraterCorner(currentPosition);
         }
 
-        while (
-
-                opModeIsActive())
-
-        {
+        while (opModeIsActive()) {
             idle();
         }
-
     }
 
     public PolarCoord runOpModeDepotCorner(PolarCoord currentPosition) {
@@ -178,27 +154,19 @@ public class BaseRoverRuckusAuto extends MotoLinearOpMode {
         final PolarCoord postDepotPosition = getPostDepotPosition();
         final PolarCoord craterPosition = getCraterPosition();
 
-        step = "going to preJewel";
         currentPosition = goToPosition(currentPosition, preJewelPosition);
-        step = "going to depot";
         currentPosition = goToPosition(currentPosition, depotPosition);
-        step = "drop marker";
         dropMarker();
-
-        step = "go to Post Depot Position";
         currentPosition = goToPosition(currentPosition, postDepotPosition);
-        step = "go to Crater Position";
         currentPosition = goToPosition(currentPosition, craterPosition);
-/*
-        telemetry.addData("Start     ", formatMovement(dropPosition, startPosition));
-        telemetry.addData("PreJewel  ", formatMovement(startPosition, preJewelPosition));
-        telemetry.addData("Depot     ", formatMovement(preJewelPosition, depotPosition));
-        telemetry.addData("PostDepot ", formatMovement(depotPosition, postDepotPosition));
-        telemetry.addData("Crater    ", formatMovement(postDepotPosition, craterPosition));
-        telemetry.addData("Angle     ", String.format("%.1f", robot.getAngle()));
-        telemetry.addData("JewelPos  ", goldPosition);
+
+        telemetry.addData(String.format("%10s", startPosition.name), formatMovement(dropPosition, startPosition));
+        telemetry.addData(String.format("%10s", preJewelPosition.name), formatMovement(startPosition, preJewelPosition));
+        telemetry.addData(String.format("%10s", depotPosition.name), formatMovement(preJewelPosition, depotPosition));
+        telemetry.addData(String.format("%10s", postDepotPosition.name), formatMovement(depotPosition, postDepotPosition));
+        telemetry.addData(String.format("%10s", craterPosition.name), formatMovement(postDepotPosition, craterPosition));
         telemetry.update();
-*/
+
         return currentPosition;
     }
 
@@ -212,100 +180,106 @@ public class BaseRoverRuckusAuto extends MotoLinearOpMode {
         final PolarCoord depotPosition = getDepotPosition();
         final PolarCoord craterPosition = getCraterPosition();
 
-        step = "going to PreJewel Position";
         currentPosition = goToPosition(currentPosition, preJewelPosition);
 
-        step = "go to jewel Position";
         goToPosition(preJewelPosition, jewelPosition);
-        step = "go to pre jewel Position";
-        goToDistance(-PolarCoord.getDistanceBetween(jewelPosition, preJewelPosition));
-        step = "safe posion";
+        goToDistance(-PolarCoord.getDistanceBetween(jewelPosition, preJewelPosition), 1, preJewelPosition.name);
+
         currentPosition = goToPosition(currentPosition, safePosition);
-        step = "go to predepot";
         currentPosition = goToPosition(currentPosition, preDepot);
-        step = "got to deopot position";
+
         goToPosition(preDepot, depotPosition);
-        step = "drop marker";
         dropMarker();
-        step = "go to preDepot";
-        goToDistance(-PolarCoord.getDistanceBetween(depotPosition, preDepot));
-        step = "go to Crater Position";
+        goToDistance(-PolarCoord.getDistanceBetween(depotPosition, preDepot), 1, preDepot.name);
+
         currentPosition = goToPosition(currentPosition, craterPosition);
 
-        telemetry.addData("Start   ", formatMovement(dropPosition, startPosition));
-        telemetry.addData("PreJewel", formatMovement(startPosition, preJewelPosition));
-        telemetry.addData("Jewel   ", formatMovement(preJewelPosition, jewelPosition));
-        telemetry.addData("Safe    ", formatMovement(preJewelPosition, safePosition));
-        telemetry.addData("preDepot", formatMovement(safePosition, preDepot));
-        telemetry.addData("Depot   ", formatMovement(preDepot, depotPosition));
-        telemetry.addData("Crater  ", formatMovement(preDepot, craterPosition));
-        telemetry.addData("Angle   ", String.format("%.1f", robot.getAngle()));
-        telemetry.addData("JewelPos  ", goldPosition);
+        telemetry.addData(String.format("%10s", startPosition.name), formatMovement(dropPosition, startPosition));
+        telemetry.addData(String.format("%10s", preJewelPosition.name), formatMovement(startPosition, preJewelPosition));
+        telemetry.addData(String.format("%10s", jewelPosition.name), formatMovement(preJewelPosition, jewelPosition));
+        telemetry.addData(String.format("%10s", safePosition.name), formatMovement(preJewelPosition, safePosition));
+        telemetry.addData(String.format("%10s", preDepot.name), formatMovement(safePosition, preDepot));
+        telemetry.addData(String.format("%10s", depotPosition.name), formatMovement(preDepot, depotPosition));
+        telemetry.addData(String.format("%10s", craterPosition.name), formatMovement(preDepot, craterPosition));
         telemetry.update();
 
         return currentPosition;
     }
 
     public void dropFromLander() {
-        robot.lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.lift.setTargetPosition(TARGET_LIFT_TICKS);
-        robot.lift.setPower(1);
-        while (robot.lift.isBusy()) {
-            idle();
+        if (dropSupported && opModeIsActive()) {
+            updateStep("Drop From Lander");
+            robot.lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            robot.lift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            robot.lift.setTargetPosition(TARGET_LIFT_TICKS);
+            robot.lift.setPower(1);
+            while (robot.lift.isBusy()) {
+                idle();
+            }
         }
     }
 
     public GoldPosition determineGoldPosition() {
 
-        try {
-            Bitmap bitmap = BitmapUtilities.getVuforiaImage(vuforia);
-            telemetry.addData("bitmap found", bitmap != null);
-            telemetry.update();
-            if (bitmap != null) {
-                try {
-                    if (writeFiles) {
-                        FileUtilities.writeBitmapFile("jewelBitmap.png", bitmap);
-                        FileUtilities.writeHueFile("jewelHuesBig.txt", bitmap);
-                    }
+        GoldPosition winner = goldPosition;
 
-                    int[] leftHueTotal = RoverRuckusUtilities.getJewelHueCount(bitmap,
-                            "jewelConfigLeft.txt", "jewelBitmapLeft.png",
-                            "jewelHuesLeft.txt", this, writeFiles);
-                    int[] middleHueTotal = RoverRuckusUtilities.getJewelHueCount(bitmap,
-                            "jewelConfigMiddle.txt", "jewelBitmapMiddle.png",
-                            "jewelHuesMiddle.txt", this, writeFiles);
-                    int[] rightHueTotal = RoverRuckusUtilities.getJewelHueCount(bitmap,
-                            "jewelConfigRight.txt", "jewelBitmapRight.png",
-                            "jewelHuesRight.txt", this, writeFiles);
-                    telemetry.addData("getJewelHueCount complete", "");
-                    telemetry.update();
-                    GoldPosition winner = BitmapUtilities.findWinnerLocation(middleHueTotal, rightHueTotal);
-
-                    if (writeFiles) {
-                        FileUtilities.writeWinnerFile(winner, leftHueTotal, middleHueTotal, rightHueTotal);
-                    }
-                    return winner;
-                } catch (Exception e) {
-                    telemetry.addData("ERROR WRITING TO FILE JEWEL BITMAP", e.getMessage());
-                    telemetry.update();
-                    return GoldPosition.MIDDLE;
-                }
-            } else {
-                telemetry.addData("ERROR reading bitmap", "");
-                telemetry.update();
-                return GoldPosition.MIDDLE;
-            }
-        } catch (Exception e) {
-            return GoldPosition.MIDDLE;
+        if (!useWebCam || !opModeIsActive()) {
+            return winner;
         }
+
+        updateStep("determineGoldPosition");
+
+        final Bitmap bitmap = BitmapUtilities.getVuforiaImage(vuforia);
+
+        if (bitmap == null) {
+            telemetry.addData("Error reading bitmap", "");
+            telemetry.update();
+            return winner;
+        }
+
+        int[] leftHueTotal = {0, 0};
+        int[] middleHueTotal = {0, 0};
+        int[] rightHueTotal = {0, 0};
+
+        try {
+            leftHueTotal = RoverRuckusUtilities.getJewelHueCount(bitmap,
+                    "jewelConfigLeft.txt", "jewelBitmapLeft.png",
+                    "jewelHuesLeft.txt", this, writeFiles);
+            middleHueTotal = RoverRuckusUtilities.getJewelHueCount(bitmap,
+                    "jewelConfigMiddle.txt", "jewelBitmapMiddle.png",
+                    "jewelHuesMiddle.txt", this, writeFiles);
+            rightHueTotal = RoverRuckusUtilities.getJewelHueCount(bitmap,
+                    "jewelConfigRight.txt", "jewelBitmapRight.png",
+                    "jewelHuesRight.txt", this, writeFiles);
+        } catch (InterruptedException e) {
+            telemetry.addData("Error getJewelHueCounts", e);
+            telemetry.update();
+            return winner;
+        }
+
+        winner = BitmapUtilities.findWinnerLocation(middleHueTotal, rightHueTotal);
+
+        if (writeFiles) {
+            try {
+                FileUtilities.writeBitmapFile("jewelBitmap.png", bitmap);
+                FileUtilities.writeHueFile("jewelHuesBig.txt", bitmap);
+                FileUtilities.writeWinnerFile(winner, leftHueTotal, middleHueTotal, rightHueTotal);
+            } catch (Exception e) {
+                telemetry.addData("Error writing jewel files", e);
+                telemetry.update();
+            }
+        }
+
+        return winner;
     }
 
     public void dropMarker() {
+        updateStep("drop marker");
+
         robot.marker.setPosition(robot.markerDropPosition);
 
         ElapsedTime timer = new ElapsedTime();
-        while (timer.seconds() < 1) {
+        while (timer.seconds() < 1 && opModeIsActive()) {
             idle();
         }
     }
@@ -315,33 +289,30 @@ public class BaseRoverRuckusAuto extends MotoLinearOpMode {
     }
 
     public PolarCoord goToPosition(PolarCoord startPosition, PolarCoord goalPosition, boolean override) {
-        return goToPosition(startPosition.x, startPosition.y, goalPosition.x, goalPosition.y, override);
-    }
 
-    public PolarCoord goToPosition(double startX, double startY,
-                                   double goalX, double goalY,
-                                   boolean override) {
+        updateStep(String.format("GoToPosition: %s", goalPosition.name));
 
-        double xDiff = goalX - startX;
-        double yDiff = goalY - startY;
-
-        double angleGoal = Math.atan2(yDiff, xDiff) * (180 / Math.PI);
+        double goalDistance = PolarCoord.getDistanceBetween(startPosition, goalPosition);
+        double angleGoal = PolarCoord.getAngleBetween(startPosition, goalPosition);
         double angleStart = robot.getAngle();
 
-        double goalDistance = Math.sqrt((Math.pow(yDiff, 2) + Math.pow(xDiff, 2)));
-
         if (goalDistance > GO_TO_POSITION_BUFFER || override) {
-            goToAngle(angleStart, angleGoal);
-            goToDistance(goalDistance);
+            goToAngle(angleStart, angleGoal, goalPosition.name);
+            goToDistance(goalDistance, 1, goalPosition.name);
+            return goalPosition.withTheta(robot.getAngle());
         } else {
             telemetry.addData("Too close. Skipped turning and moving", "");
             telemetry.update();
+            return startPosition.withTheta(robot.getAngle());
         }
-
-        return new PolarCoord(goalX, goalY, robot.getAngle());
     }
 
-    public void goToAngle(double angleStart, double angleGoal) {
+    public void goToAngle(double angleStart, double angleGoal, String name) {
+
+        if (name != null) {
+            updateStep(String.format("goToAngle: %s", name));
+        }
+
         double angleCurrent = angleStart;
 
         while (Math.abs(angleGoal - angleCurrent) > GO_TO_ANGLE_BUFFER && !robot.isTiltedToRedCard() && opModeIsActive()) {
@@ -361,34 +332,15 @@ public class BaseRoverRuckusAuto extends MotoLinearOpMode {
         robot.goStraight(0);
     }
 
-    public void goToDistance(double goalDistance) {
-        final int ticksToGoal = (int) (robot.getInchesToEncoderCounts() * goalDistance);
-
-        robot.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.setTargetPosition(ticksToGoal);
-
-        robot.goStraight(1);
-
-        while (robot.isLeftBusy() && !robot.isTiltedToRedCard() && opModeIsActive()) {
-            double currentTicks = robot.getLeftCurrentPosition();
-            telemetry.addData("Goal Dist    ", "%.2f", goalDistance);
-            telemetry.addData("Current Dist ", "%.2f", currentTicks / robot.getInchesToEncoderCounts());
-            telemetry.addData("Goal Ticks   ", ticksToGoal);
-            telemetry.addData("Current Ticks", currentTicks);
-            telemetry.update();
-            idle();
-        }
-        robot.goStraight(0);
-        robot.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        robot.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-    }
-
     public void goToDistance(double distance,
-                             double speed) {
-        // Ensure that the opmode is still active
-        if (!opModeIsActive()) {
+                             double speed,
+                             String name) {
+
+        if (name != null) {
+            updateStep(String.format("goToDistance: %s", name));
+        }
+
+        if (!opModeIsActive() || robot.isTiltedToRedCard()) {
             return;
         }
 
@@ -400,31 +352,28 @@ public class BaseRoverRuckusAuto extends MotoLinearOpMode {
 
         // Determine new target position, and pass to motor controller
         int targetTicks = (int) (distance * robot.getInchesToEncoderCounts());
-        int leftTargetTicks = robot.left.getCurrentPosition() + targetTicks;
-        int rightTargetTicks = robot.right.getCurrentPosition() + targetTicks;
 
         // Set Target and Turn On RUN_TO_POSITION
-        robot.left.setTargetPosition(leftTargetTicks);
-        robot.right.setTargetPosition(rightTargetTicks);
+        robot.left.setTargetPosition(targetTicks);
+        robot.right.setTargetPosition(targetTicks);
 
         // start motion.
-        robot.left.setPower(speed);
-        robot.right.setPower(speed);
+        robot.goStraight(speed);
 
         // keep looping while we are still active, and BOTH motors are running.
-        while (opModeIsActive() &&
-                (robot.left.isBusy()) && !robot.isTiltedToRedCard()) {
+        while ((robot.left.isBusy() || robot.right.isBusy())
+                && opModeIsActive() && !robot.isTiltedToRedCard()) {
 
             // adjust relative speed based on heading error.
-            double error = AngleUtilities.getNormalizedAngle(robot.getAngle() - angle);
+            double error = AngleUtilities.getNormalizedAngle(angle - robot.getAngle());
             double steer = Range.clip(error * P_DRIVE_COEFF, -1, 1);
 
             // if driving in reverse, the motor correction also needs to be reversed
             if (distance < 0)
                 steer *= -1.0;
 
-            double leftSpeed = speed + steer;
-            double rightSpeed = speed - steer;
+            double leftSpeed = speed - steer;
+            double rightSpeed = speed + steer;
 
             // Normalize speeds if either one exceeds +/- 1.0;
             double max = Math.max(Math.abs(leftSpeed), Math.abs(rightSpeed));
@@ -433,24 +382,24 @@ public class BaseRoverRuckusAuto extends MotoLinearOpMode {
                 rightSpeed /= max;
             }
 
-            robot.left.setPower(leftSpeed);
-            robot.right.setPower(rightSpeed);
+            // TODO turn PID control back on
+            // robot.left.setPower(leftSpeed);
+            // robot.right.setPower(rightSpeed);
+            robot.goStraight(speed);
 
             // Display drive status for the driver.
-
             telemetry.addData("Error/Steer  ", "%5.1f/%5.1f", error, steer);
             telemetry.addData("Goal Distance", "%5.2f", distance);
             telemetry.addData("Goal    Ticks", "%7d:%7d", targetTicks, targetTicks);
             telemetry.addData("Current Ticks", "%7d:%7d", robot.left.getCurrentPosition(),
                     robot.right.getCurrentPosition());
-            telemetry.addData("Speed", "%5.2f:%5.2f", leftSpeed, rightSpeed);
+            telemetry.addData("Speed", "%5.2f:%5.2f", robot.left.getPower(), robot.right.getPower());
             telemetry.update();
 
         }
 
         // Stop all motion;
-        robot.left.setPower(0);
-        robot.right.setPower(0);
+        robot.goStraight(0);
 
         robot.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -459,208 +408,219 @@ public class BaseRoverRuckusAuto extends MotoLinearOpMode {
     public double getPower(double absCurrent, double absGoal, double absStart) {
         double relCurrent = AngleUtilities.getNormalizedAngle(absCurrent - absStart);
         double relGoal = AngleUtilities.getNormalizedAngle(absGoal - absStart);
-        return getPower(relCurrent, relGoal);
+        double remainingDistance = AngleUtilities.getNormalizedAngle(relGoal - relCurrent);
+
+        double basePower = 0.01 * remainingDistance;
+        double stallPower = 0.1 * Math.signum(remainingDistance);
+        return Range.clip(basePower + stallPower, -1, 1);
     }
 
-    public double getPower(double currentPosition, double goal) {
-        double remainingDistance = AngleUtilities.getNormalizedAngle(goal - currentPosition);
-        double basePower = .01 * remainingDistance;
-        double stallPower = .1 * Math.signum(remainingDistance);
-        return basePower + stallPower;
+    public void updateStep(String step) {
+        this.step = step;
+        telemetry.update();
     }
 
     public PolarCoord getDropPosition() {
+        String name = "Drop";
         switch (startCorner) {
             case BLUE_DEPOT:
-                return new PolarCoord(13, 13, 45);
+                return new PolarCoord(13, 13, 45, name);
             case BLUE_CRATER:
-                return new PolarCoord(13, -13, -45);
+                return new PolarCoord(13, -13, -45, name);
             case RED_DEPOT:
-                return new PolarCoord(-13, -13, -135);
+                return new PolarCoord(-13, -13, -135, name);
             case RED_CRATER:
-                return new PolarCoord(-13, 13, 135);
+                return new PolarCoord(-13, 13, 135, name);
         }
 
-        return new PolarCoord(0, 0);
+        return new PolarCoord(0, 0, name);
     }
 
     public PolarCoord getStartPosition() {
+        String name = "Start";
         switch (startCorner) {
             case BLUE_DEPOT:
-                return new PolarCoord(18, 18);
+                return new PolarCoord(18, 18, name);
             case BLUE_CRATER:
-                return new PolarCoord(18, -18);
+                return new PolarCoord(18, -18, name);
             case RED_DEPOT:
-                return new PolarCoord(-18, -18);
+                return new PolarCoord(-18, -18, name);
             case RED_CRATER:
-                return new PolarCoord(-18, 18);
+                return new PolarCoord(-18, 18, name);
         }
-        return new PolarCoord(0, 0);
+        return new PolarCoord(0, 0, name);
     }
 
     public PolarCoord getPreJewelPosition() {
+        String name = "PreJewel";
         switch (this.startCorner) {
             case BLUE_DEPOT:
                 switch (goldPosition) {
                     case LEFT:
-                        return new PolarCoord(8.019544399, 42.70655476, 13.7994854);
+                        return new PolarCoord(8.02, 42.71, 13.80, name);
                     case MIDDLE:
-                        return new PolarCoord(23.52207794, 23.52207794, 45);
+                        return new PolarCoord(23.52, 23.52, 45.00, name);
                     case RIGHT:
-                        return new PolarCoord(42.70655476, 8.019544399, 76.2005146);
+                        return new PolarCoord(42.71, 8.02, 76.20, name);
                 }
             case BLUE_CRATER:
                 switch (goldPosition) {
                     case LEFT:
-                        return new PolarCoord(42.70655476, -8.019544399, -76.2005146);
+                        return new PolarCoord(42.71, -8.02, -76.20, name);
                     case MIDDLE:
-                        return new PolarCoord(23.52207794, -23.52207794, -45);
+                        return new PolarCoord(23.52, -23.52, -45.00, name);
                     case RIGHT:
-                        return new PolarCoord(8.019544399, -42.70655476, -13.7994854);
+                        return new PolarCoord(8.02, -42.71, -13.80, name);
                 }
             case RED_DEPOT:
 
                 switch (goldPosition) {
                     case LEFT:
-                        return new PolarCoord(-8.019544399, -42.70655476, -166.2005146);
+                        return new PolarCoord(-8.02, -42.71, -166.20, name);
                     case MIDDLE:
-                        return new PolarCoord(-23.52207794, -23.52207794, -135);
+                        return new PolarCoord(-23.52, -23.52, -135.00, name);
                     case RIGHT:
-                        return new PolarCoord(-42.70655476, -8.019544399, -103.7994854);
+                        return new PolarCoord(-42.71, -8.02, -103.80, name);
                 }
             case RED_CRATER:
                 switch (goldPosition) {
                     case LEFT:
-                        return new PolarCoord(-42.70655476, 8.019544399, 103.7994854);
+                        return new PolarCoord(-42.71, 8.02, 103.80, name);
                     case MIDDLE:
-                        return new PolarCoord(-23.52207794, 23.52207794, 135);
+                        return new PolarCoord(-23.52, 23.52, 135.00, name);
                     case RIGHT:
-                        return new PolarCoord(-8.019544399, 42.70655476, 166.2005146);
+                        return new PolarCoord(-8.02, 42.71, 166.20, name);
                 }
         }
-        return new PolarCoord(0, 0, 0);
+        return new PolarCoord(0, 0, 0, name);
     }
 
     public PolarCoord getJewelPosition() {
+        String name = "Jewel";
         switch (this.startCorner) {
             case BLUE_DEPOT:
                 switch (goldPosition) {
                     case LEFT:
-                        return new PolarCoord(48.5, 27.0);
+                        return new PolarCoord(27.0, 48.5, name);
                     case MIDDLE:
-                        return new PolarCoord(37.75, 37.75);
+                        return new PolarCoord(37.75, 37.75, name);
                     case RIGHT:
-                        return new PolarCoord(27.0, 48.5);
+                        return new PolarCoord(48.5, 27.0, name);
                 }
             case BLUE_CRATER:
                 switch (goldPosition) {
                     case LEFT:
-                        return new PolarCoord(48.5, -27.0);
+                        return new PolarCoord(48.5, -27.0, name);
                     case MIDDLE:
-                        return new PolarCoord(37.75, -37.75);
+                        return new PolarCoord(37.75, -37.75, name);
                     case RIGHT:
-                        return new PolarCoord(27.0, -48.5);
+                        return new PolarCoord(27.0, -48.5, name);
                 }
             case RED_DEPOT:
                 switch (goldPosition) {
                     case LEFT:
-                        return new PolarCoord(-48.5, -27.0);
+                        return new PolarCoord(-27.0, -48.5, name);
                     case MIDDLE:
-                        return new PolarCoord(-37.75, -37.75);
+                        return new PolarCoord(-37.75, -37.75, name);
                     case RIGHT:
-                        return new PolarCoord(-27.0, -48.5);
+                        return new PolarCoord(-48.5, -27.0, name);
                 }
             case RED_CRATER:
                 switch (goldPosition) {
                     case LEFT:
-                        return new PolarCoord(-48.5, 27.0);
+                        return new PolarCoord(-48.5, 27.0, name);
                     case MIDDLE:
-                        return new PolarCoord(-37.75, 37.75);
+                        return new PolarCoord(-37.75, 37.75, name);
                     case RIGHT:
-                        return new PolarCoord(-27.0, 48.5);
+                        return new PolarCoord(-27.0, 48.5, name);
                 }
         }
-        return new PolarCoord(0, 0);
+        return new PolarCoord(0, 0, name);
     }
 
     public PolarCoord getDepotPosition() {
+        String name = "Depot";
         switch (this.startCorner) {
             case BLUE_DEPOT:
-                return new PolarCoord(50, 54);
+                return new PolarCoord(50, 54, name);
             case BLUE_CRATER:
                 switch (goldPosition) {
                     case RIGHT:
-                        return new PolarCoord(62, 54);
+                        return new PolarCoord(62, 54, name);
                     case MIDDLE:
-                        return new PolarCoord(58, 54);
+                        return new PolarCoord(58, 54, name);
                     case LEFT:
-                        return new PolarCoord(58, 54);
+                        return new PolarCoord(58, 54, name);
                 }
             case RED_DEPOT:
             case RED_CRATER:
-                return new PolarCoord(-54, -54);
+                return new PolarCoord(-54, -54, name);
         }
-        return new PolarCoord(0, 0);
+        return new PolarCoord(0, 0, name);
     }
 
     public PolarCoord getCraterPosition() {
+        String name = "Crater";
         switch (this.startCorner) {
             case BLUE_DEPOT:
             case BLUE_CRATER:
-                return new PolarCoord(60, -28);
+                return new PolarCoord(60, -28, name);
             case RED_DEPOT:
             case RED_CRATER:
-                return new PolarCoord(-60, 28);
+                return new PolarCoord(-60, 28, name);
         }
-        return new PolarCoord(0, 0);
+        return new PolarCoord(0, 0, name);
     }
 
     public PolarCoord getSafePosition() {
+        String name = "Safe";
         switch (this.startCorner) {
             case BLUE_DEPOT:
             case BLUE_CRATER:
                 switch (goldPosition) {
                     case RIGHT:
-                        return new PolarCoord(62, 0);
+                        return new PolarCoord(62, 0, name);
                     case MIDDLE:
                     case LEFT:
-                        return new PolarCoord(58, 0);
+                        return new PolarCoord(58, 0, name);
                 }
             case RED_DEPOT:
             case RED_CRATER:
-                return new PolarCoord(-60, 24);
+                return new PolarCoord(-60, 24, name);
         }
-        return new PolarCoord(0, 0);
+        return new PolarCoord(0, 0, name);
     }
 
     public PolarCoord getPreDepotPosition() {
+        String name = "PreDepot";
         switch (this.startCorner) {
             case BLUE_DEPOT:
             case BLUE_CRATER:
                 switch (goldPosition) {
                     case RIGHT:
-                        return new PolarCoord(62, 36);
+                        return new PolarCoord(62, 36, name);
                     case MIDDLE:
                     case LEFT:
-                        return new PolarCoord(58, 36);
+                        return new PolarCoord(58, 36, name);
                 }
             case RED_DEPOT:
             case RED_CRATER:
-                return new PolarCoord(-60, 36);
+                return new PolarCoord(-60, 36, name);
         }
-        return new PolarCoord(0, 0);
+        return new PolarCoord(0, 0, name);
     }
 
     public PolarCoord getPostDepotPosition() {
+        String name = "PostDepot";
         switch (startCorner) {
             case BLUE_DEPOT:
             case BLUE_CRATER:
-                return new PolarCoord(61, 36);
+                return new PolarCoord(61, 36, name);
             case RED_DEPOT:
             case RED_CRATER:
-                return new PolarCoord(-61, -36);
+                return new PolarCoord(-61, -36, name);
         }
-        return new PolarCoord(0, 0);
+        return new PolarCoord(0, 0, name);
     }
 
     public String formatMovement(PolarCoord startPosition, PolarCoord endPosition) {
@@ -670,7 +630,8 @@ public class BaseRoverRuckusAuto extends MotoLinearOpMode {
         double angleGoal = Math.atan2(yDiff, xDiff) * (180 / Math.PI);
         double distanceToGoal = Math.sqrt((Math.pow(yDiff, 2) + Math.pow(xDiff, 2)));
 
-        return String.format("(%.1f, %.1f)   %.0f     %.1f", endPosition.x, endPosition.y, angleGoal, distanceToGoal);
+        return String.format("(%.1f, %.1f)   %.0f     %.1f",
+                endPosition.x, endPosition.y, angleGoal, distanceToGoal);
     }
 
     public void composeTelemetry() {
@@ -696,7 +657,7 @@ public class BaseRoverRuckusAuto extends MotoLinearOpMode {
                     }
                 });
         telemetry.addLine()
-                .addData("Current Posision:", new Func<String>() {
+                .addData("Current Position:", new Func<String>() {
                     @Override
                     public String value() {
                         return String.valueOf(currentPosition);
@@ -709,6 +670,12 @@ public class BaseRoverRuckusAuto extends MotoLinearOpMode {
                         return String.valueOf(step);
                     }
                 });
+        telemetry.addLine()
+                .addData("Gold:", new Func<String>() {
+                    @Override
+                    public String value() {
+                        return String.valueOf(goldPosition);
+                    }
+                });
     }
-
 }

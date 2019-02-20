@@ -1,10 +1,11 @@
 package org.firstinspires.ftc.teamcode.Autonomous;
 
-import org.firstinspires.ftc.teamcode.Hardware.BaseRRHardware;
-import org.firstinspires.ftc.teamcode.Hardware.RoverRuckusBotHardware;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+
+import org.firstinspires.ftc.teamcode.Hardware.BaseRRHardware;
+import org.firstinspires.ftc.teamcode.Hardware.RoverRuckusBotHardware;
 
 @Autonomous( name = "TicksPerINCH")
 public class TicksPerINCH extends LinearOpMode {
@@ -15,8 +16,6 @@ public class TicksPerINCH extends LinearOpMode {
     public void runOpMode() {
         robot.init(hardwareMap);
 
-        robot.resetEncoderCounts();
-
         robot.setTargetPosition(1000);
 
         waitForStart();
@@ -24,7 +23,12 @@ public class TicksPerINCH extends LinearOpMode {
         robot.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         robot.goStraight(1);
 
-        while(robot.isLeftBusy()){idle();}
-        while (opModeIsActive())     ;
+        while(robot.left.isBusy() || robot.right.isBusy()){
+            idle();
+        }
+
+        while (opModeIsActive()) {
+            idle();
+        }
     }
 }

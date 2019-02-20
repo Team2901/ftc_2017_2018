@@ -15,68 +15,16 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
 public class RRCoachBotHardware extends BaseRRHardware{
 
-    public DcMotor left;
-    public DcMotor right;
+    public static final double MARKER_INIT_POSITION = 0.5;
+    public static final double MARKER_DROP_POSITION = 1;
+    public static final double INCHES_PER_ROTATION = 6.25;
+
     public RRCoachBotHardware() {
-        super(0.5, 1,12.5 / 2);
+        super(MARKER_INIT_POSITION, MARKER_DROP_POSITION, INCHES_PER_ROTATION);
     }
 
     @Override
-
     public void init(HardwareMap ahwMap) {
         super.init(ahwMap);
-
-
-        left = hardwareMap.dcMotor.get("left");
-        right = hardwareMap.dcMotor.get("right");
-
-
-
-        left.setDirection(DcMotorSimple.Direction.REVERSE);
-        right.setDirection(DcMotorSimple.Direction.FORWARD);
-
-        resetEncoderCounts();
-
-        left.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        right.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-
-    }
-
-    @Override
-    public void goStraight(double power) {
-        left.setPower(power);
-        right.setPower(power);
-    }
-
-    @Override
-    public void turn(double power) {
-        left.setPower(power);
-        right.setPower(-power);
-    }
-    @Override
-    public void resetEncoderCounts() {
-        left.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        right.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-    }
-    public void setMode(DcMotor.RunMode runMode) {
-        left.setMode(runMode);
-        right.setMode(runMode);
-    }
-
-    @Override
-    public void setTargetPosition(int targetPosition) {
-        left.setTargetPosition(targetPosition);
-        right.setTargetPosition(targetPosition);
-    }
-
-    @Override
-    public boolean isLeftBusy() {
-        return left.isBusy();
-    }
-
-    @Override
-    public int getLeftCurrentPosition() {
-        return left.getCurrentPosition();
     }
 }

@@ -14,7 +14,7 @@ public class AutoTest extends BaseRoverRuckusAuto {
     public void runOpMode()  {
         robot.init(hardwareMap);
         waitForStart();
-      goToDistance(120,.75);
+      goToDistance(120,.75, "test");
         while(opModeIsActive()){idle();}
     }
 }

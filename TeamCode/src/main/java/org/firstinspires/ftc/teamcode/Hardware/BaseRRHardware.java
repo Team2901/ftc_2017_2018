@@ -20,13 +20,15 @@ public abstract class BaseRRHardware {
     public static final double ENCODER_COUNTS_PER_REV = 1120; // For neverRest 40s
 
     protected HardwareMap hardwareMap = null;
+    public DcMotor left;
+    public DcMotor right;
     public DcMotor lift;
     public Servo marker;
     public WebcamName webcam = null;
     public BNO055IMU imu;
     public IntegratingGyroscope gyroscope;
     public double offset = 0;
-    public double tiltOffset= 0;
+    public double tiltOffset = 0;
 
     public final double markerInitPosition;
     public final double markerDropPosition;
@@ -41,12 +43,19 @@ public abstract class BaseRRHardware {
     public void init(HardwareMap ahwMap) {
         hardwareMap = ahwMap;
 
+        left = hardwareMap.dcMotor.get("left");
+        left.setDirection(DcMotorSimple.Direction.REVERSE);
+        left.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        left.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        right = hardwareMap.dcMotor.get("right");
+        right.setDirection(DcMotorSimple.Direction.FORWARD);
+        right.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        right.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
         lift = hardwareMap.dcMotor.get("lift");
-
         lift.setDirection(DcMotorSimple.Direction.FORWARD);
-
         lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
         lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         marker = hardwareMap.servo.get("marker");
@@ -74,41 +83,50 @@ public abstract class BaseRRHardware {
     }
 
     public double getAngle() {
+        return AngleUtilities.getNormalizedAngle(getRawAngle() + offset);
+    }
+
+    public double getRawAngle() {
         Orientation orientation = gyroscope.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
-        return AngleUtilities.getNormalizedAngle(orientation.firstAngle + offset);
+        return AngleUtilities.getNormalizedAngle(orientation.firstAngle);
     }
 
     public double getTilt() {
-        Orientation orientation = gyroscope.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
-        return AngleUtilities.getNormalizedAngle(orientation.secondAngle + tiltOffset);
+        return AngleUtilities.getNormalizedAngle(getRawTilt() + tiltOffset);
     }
 
-    public double rawTilt(){
+    public double getRawTilt() {
         Orientation orientation = gyroscope.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
         return AngleUtilities.getNormalizedAngle(orientation.secondAngle);
     }
 
-    public boolean isTiltedToRedCard(){
-        if (Math.abs(getTilt())>= 15){
+    public boolean isTiltedToRedCard() {
+        if (Math.abs(getTilt()) >= 15) {
             goStraight(0);
             return true;
         }
         return false;
     }
 
-    public abstract void goStraight(double power);
+    public void goStraight(double power) {
+        left.setPower(power);
+        right.setPower(power);
+    }
 
-    public abstract void turn(double power);
+    public void turn(double power) {
+        left.setPower(power);
+        right.setPower(-power);
+    }
 
-    public abstract void resetEncoderCounts();
+    public void setMode(DcMotor.RunMode runMode) {
+        left.setMode(runMode);
+        right.setMode(runMode);
+    }
 
-    public abstract void setMode(DcMotor.RunMode runMode);
-
-    public abstract void setTargetPosition(int targetPosition);
-
-    public abstract boolean isLeftBusy();
-
-    public abstract int getLeftCurrentPosition();
+    public void setTargetPosition(int targetPosition) {
+        left.setTargetPosition(targetPosition);
+        right.setTargetPosition(targetPosition);
+    }
 
     public double getInchesToEncoderCounts() {
         return ((1 / inchesPerRotation) * ENCODER_COUNTS_PER_REV);
