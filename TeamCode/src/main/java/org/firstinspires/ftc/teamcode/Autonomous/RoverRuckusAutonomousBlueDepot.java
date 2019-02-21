@@ -10,4 +10,14 @@ public class RoverRuckusAutonomousBlueDepot extends BaseRoverRuckusAuto {
     public RoverRuckusAutonomousBlueDepot() {
         super(BLUE_DEPOT);
     }
+
+    @Override
+    public void runOpMode() throws InterruptedException {
+        super.runOpMode();
+        runOpModeDepotCorner();
+
+        while(opModeIsActive()) {
+            idle();
+        }
+    }
 }

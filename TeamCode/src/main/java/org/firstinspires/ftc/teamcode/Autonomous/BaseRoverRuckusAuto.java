@@ -52,7 +52,7 @@ public class BaseRoverRuckusAuto extends LinearOpMode {
     public boolean writeFiles = false;
 
     public GoldPosition goldPosition = MIDDLE;  // Default goldPosition to use if useWebCam = false
-    public boolean dropSupported = false;
+    public boolean dropSupported = true;
     public boolean useWebCam = true;
     public boolean useVuforiaNav = false;
 
@@ -148,12 +148,6 @@ public class BaseRoverRuckusAuto extends LinearOpMode {
         }
 
         robot.tiltOffset = -robot.getRawTilt();
-
-        if (startCorner == BLUE_DEPOT || startCorner == RED_DEPOT) {
-            runOpModeDepotCorner();
-        } else {
-            runOpModeCraterCorner();
-        }
     }
 
     public PolarCoord runOpModeDepotCorner() {
@@ -406,7 +400,7 @@ public class BaseRoverRuckusAuto extends LinearOpMode {
         robot.goStraight(speed);
 
         // keep looping while we are still active, and BOTH motors are running.
-        while ((robot.left.isBusy() || robot.right.isBusy())
+        while ((robot.left.isBusy() && robot.right.isBusy())
                 && opModeIsActive() && !robot.isTiltedToRedCard()) {
 
             // adjust relative speed based on heading error.

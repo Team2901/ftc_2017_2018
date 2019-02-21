@@ -10,4 +10,14 @@ public class RoverRuckusAutonomousBlueCrater extends BaseRoverRuckusAuto {
     public RoverRuckusAutonomousBlueCrater() {
         super(BLUE_CRATER);
     }
+
+    @Override
+    public void runOpMode() throws InterruptedException {
+        super.runOpMode();
+        runOpModeCraterCorner();
+
+        while(opModeIsActive()) {
+            idle();
+        }
+    }
 }

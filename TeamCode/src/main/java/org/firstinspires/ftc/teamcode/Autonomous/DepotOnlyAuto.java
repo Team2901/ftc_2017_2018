@@ -3,30 +3,31 @@ package org.firstinspires.ftc.teamcode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.Utility.PolarCoord;
+
+import static org.firstinspires.ftc.teamcode.Autonomous.BaseRoverRuckusAuto.GoldPosition.MIDDLE;
+
 @Autonomous(name = "DepotOnlyAuto")
 public class DepotOnlyAuto extends BaseRoverRuckusAuto {
+
     public DepotOnlyAuto() {
-        super(StartCorner.BLUE_DEPOT, GoldPosition.MIDDLE);
+        super(StartCorner.BLUE_DEPOT, GoldPosition.MIDDLE, true, false, false);
     }
+
 
     @Override
     public void runOpMode() throws InterruptedException {
-        robot.init(hardwareMap);
-        robot.offset = dropPosition.theta;
-        telemetry.addData("drop from lander", "");
-        telemetry.update();
-        if (dropSupported) {
-            dropFromLander();
-        }
-        PolarCoord depotPosition = getDepotPosition();
-        telemetry.addData("go to depot", "");
-        telemetry.update();
+        super.runOpMode();
+
+        final PolarCoord depotPosition = getDepotPosition();
+
         goToPosition(dropPosition, depotPosition);
-        telemetry.addData("drop marker", "");
-        telemetry.update();
+
         dropMarker();
-        telemetry.addData("moving back for opponents", "");
-        telemetry.update();
-        goToDistance(-20, .75, "");
+
+        goToDistance(-20, .75, "back out of depot");
+
+        while(opModeIsActive()) {
+            idle();
+        }
     }
 }

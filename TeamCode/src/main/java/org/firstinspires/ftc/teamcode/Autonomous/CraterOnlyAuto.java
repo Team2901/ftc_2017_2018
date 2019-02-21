@@ -6,20 +6,19 @@ import org.firstinspires.ftc.teamcode.Utility.PolarCoord;
 @Autonomous(name = "CraterOnlyAuto")
 public class CraterOnlyAuto extends BaseRoverRuckusAuto {
     public CraterOnlyAuto() {
-        super(StartCorner.BLUE_CRATER, GoldPosition.MIDDLE);
+        super(StartCorner.BLUE_CRATER, GoldPosition.MIDDLE, true, false, false);
     }
+
     @Override
     public void runOpMode() throws InterruptedException {
-        robot.init(hardwareMap);
-        robot.offset = dropPosition.theta;
-        telemetry.addData("drop from lander", "");
-        telemetry.update();
-        if (dropSupported) {
-            dropFromLander();
-        }
-        PolarCoord craterPosition = getJewelPosition();
-        telemetry.addData("go to crater", "");
-        telemetry.update();
+        super.runOpMode();
+
+        final PolarCoord craterPosition = new PolarCoord(40, -40, "crater");
+
         goToPosition(dropPosition, craterPosition);
+
+        while(opModeIsActive()) {
+            idle();
+        }
     }
 }
