@@ -52,7 +52,7 @@ public class BaseRoverRuckusAuto extends LinearOpMode {
     public boolean writeFiles = false;
 
     public GoldPosition goldPosition = MIDDLE;  // Default goldPosition to use if useWebCam = false
-    public boolean dropSupported = true;
+    public boolean dropSupported = false;
     public boolean useWebCam = true;
     public boolean useVuforiaNav = false;
 
@@ -148,6 +148,12 @@ public class BaseRoverRuckusAuto extends LinearOpMode {
         }
 
         robot.tiltOffset = -robot.getRawTilt();
+
+        if (startCorner == BLUE_DEPOT || startCorner == RED_DEPOT) {
+            runOpModeDepotCorner();
+        } else {
+            runOpModeCraterCorner();
+        }
     }
 
     public PolarCoord runOpModeDepotCorner() {
@@ -434,7 +440,6 @@ public class BaseRoverRuckusAuto extends LinearOpMode {
                     robot.right.getCurrentPosition());
             telemetry.addData("Speed", "%5.2f:%5.2f", robot.left.getPower(), robot.right.getPower());
             telemetry.update();
-
         }
 
         // Stop all motion;

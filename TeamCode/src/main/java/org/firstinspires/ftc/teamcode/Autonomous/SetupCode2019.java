@@ -19,6 +19,8 @@ import org.firstinspires.ftc.teamcode.Utility.VuforiaUtilities;
 import java.io.IOException;
 import java.util.List;
 
+import static org.firstinspires.ftc.robotcontroller.internal.JewelFinder.JEWEL_CONFIG_FILE_FORMAT;
+
 @SuppressLint("DefaultLocale")
 @Autonomous(name = "SetUpCode", group = "Setup Code")
 public class SetupCode2019 extends LinearOpModeJewelCamera {
@@ -158,14 +160,14 @@ public class SetupCode2019 extends LinearOpModeJewelCamera {
     }
 
     public void readConfigFiles() {
-        leftConfig = readConfigFile(jewelLeft);
-        middleConfig = readConfigFile(jewelMiddle);
-        rightConfig = readConfigFile(jewelRight);
+        leftConfig = readConfigFile("Left");
+        middleConfig = readConfigFile("Middle");
+        rightConfig = readConfigFile("Right");
         telemetry.update();
     }
 
-    public List<Integer> readConfigFile(JewelFinder jewel) {
-        String fileName = jewel.getConfigFileName();
+    public List<Integer> readConfigFile(String name) {
+        String fileName = String.format(JEWEL_CONFIG_FILE_FORMAT, name);
         try {
             return FileUtilities.readIntegerConfigFile(fileName);
         } catch (IOException e){
