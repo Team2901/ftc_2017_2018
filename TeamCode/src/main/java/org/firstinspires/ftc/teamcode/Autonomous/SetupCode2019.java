@@ -22,7 +22,7 @@ import java.util.List;
 import static org.firstinspires.ftc.robotcontroller.internal.JewelFinder.JEWEL_CONFIG_FILE_FORMAT;
 
 @SuppressLint("DefaultLocale")
-@Autonomous(name = "SetUpCode", group = "Setup Code")
+@Autonomous(name = "SetUpCode", group = "SetupCode")
 public class SetupCode2019 extends LinearOpModeJewelCamera {
     private int leftHueTotal[] = {0, 0};
     private int middleHueTotal[] = {0, 0};
@@ -32,8 +32,8 @@ public class SetupCode2019 extends LinearOpModeJewelCamera {
     private boolean useThreeJewels = false;
     private boolean postToJewels = false;
 
-    WebcamName webcam = null;
-    VuforiaLocalizer vuforia;
+    private WebcamName webcam = null;
+    private VuforiaLocalizer vuforia;
 
     public SetupCode2019() {}
 

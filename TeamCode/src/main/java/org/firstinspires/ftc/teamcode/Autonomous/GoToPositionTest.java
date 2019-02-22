@@ -1,26 +1,34 @@
 package org.firstinspires.ftc.teamcode.Autonomous;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.firstinspires.ftc.teamcode.Utility.PolarCoord;
 
-@Autonomous(name = "GoToPositionTest", group = "Test")
+import static org.firstinspires.ftc.teamcode.Autonomous.BaseRoverRuckusAuto.StartCorner.BLUE_CRATER;
+
+@Disabled
+@Autonomous(name = "GoToPosition Test", group = "Test")
 public class GoToPositionTest extends BaseRoverRuckusAuto {
 
     public GoToPositionTest() {
-        super(StartCorner.BLUE_CRATER);
+        super(BLUE_CRATER,
+                DEFAULT_GOLD_POSITION,
+                false,
+                false,
+                false);
      }
 
     @Override
     public void runOpMode() throws InterruptedException {
-        robot.init(hardwareMap);
-        telemetry.addData("startCorner", startCorner);
-        telemetry.update();
+        super.runOpMode();
 
         goToPosition(new PolarCoord(0,0), new PolarCoord(24, 24));
 
-        waitForStart();
-
         goToPosition(new PolarCoord(24,24), new PolarCoord(-24, -24));
+
+        while(opModeIsActive()){
+            idle();
+        }
     }
 }

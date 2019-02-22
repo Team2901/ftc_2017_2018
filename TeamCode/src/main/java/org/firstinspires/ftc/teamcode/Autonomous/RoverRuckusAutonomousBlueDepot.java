@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import static org.firstinspires.ftc.teamcode.Autonomous.BaseRoverRuckusAuto.StartCorner.BLUE_DEPOT;
 
-@Autonomous ( name = "RoverRuckusAutonomous Depot", group = "Blue")
+@Autonomous ( name =  "RoverRuckus Depot", group = "RoverRuckus")
 public class RoverRuckusAutonomousBlueDepot extends BaseRoverRuckusAuto {
 
     public RoverRuckusAutonomousBlueDepot() {
@@ -14,6 +14,7 @@ public class RoverRuckusAutonomousBlueDepot extends BaseRoverRuckusAuto {
     @Override
     public void runOpMode() throws InterruptedException {
         super.runOpMode();
+
         runOpModeDepotCorner();
 
         while(opModeIsActive()) {

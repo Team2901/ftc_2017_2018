@@ -6,11 +6,15 @@ import org.firstinspires.ftc.teamcode.Utility.PolarCoord;
 
 import static org.firstinspires.ftc.teamcode.Autonomous.BaseRoverRuckusAuto.GoldPosition.MIDDLE;
 
-@Autonomous(name = "DepotOnlyAuto")
+@Autonomous(name = "Depot Marker Only", group = "RoverRuckusPartial")
 public class DepotOnlyAuto extends BaseRoverRuckusAuto {
 
     public DepotOnlyAuto() {
-        super(StartCorner.BLUE_DEPOT, GoldPosition.MIDDLE, true, false, false);
+        super(StartCorner.BLUE_DEPOT,
+                GoldPosition.MIDDLE,
+                DEFAULT_IS_DROP_SUPPORTED,
+                false,
+                false);
     }
 
 

@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import static org.firstinspires.ftc.teamcode.Autonomous.BaseRoverRuckusAuto.StartCorner.BLUE_CRATER;
 
-@Autonomous(name = "RoverRuckusAutonomous Crater", group = "Blue")
+@Autonomous(name = "RoverRuckus Crater", group = "RoverRuckus")
 public class RoverRuckusAutonomousBlueCrater extends BaseRoverRuckusAuto {
 
     public RoverRuckusAutonomousBlueCrater() {
@@ -14,6 +14,7 @@ public class RoverRuckusAutonomousBlueCrater extends BaseRoverRuckusAuto {
     @Override
     public void runOpMode() throws InterruptedException {
         super.runOpMode();
+
         runOpModeCraterCorner();
 
         while(opModeIsActive()) {

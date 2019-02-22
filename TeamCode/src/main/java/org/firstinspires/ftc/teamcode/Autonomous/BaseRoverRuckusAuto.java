@@ -23,8 +23,6 @@ import org.firstinspires.ftc.teamcode.Utility.RoverRuckusUtilities;
 import org.firstinspires.ftc.teamcode.Utility.VuforiaUtilities;
 
 import static org.firstinspires.ftc.teamcode.Autonomous.BaseRoverRuckusAuto.GoldPosition.MIDDLE;
-import static org.firstinspires.ftc.teamcode.Autonomous.BaseRoverRuckusAuto.StartCorner.BLUE_DEPOT;
-import static org.firstinspires.ftc.teamcode.Autonomous.BaseRoverRuckusAuto.StartCorner.RED_DEPOT;
 import static org.firstinspires.ftc.teamcode.Utility.VuforiaUtilities.getWebCameraParameters;
 import static org.firstinspires.ftc.teamcode.Utility.VuforiaUtilities.setUpTrackables;
 
@@ -39,6 +37,11 @@ public class BaseRoverRuckusAuto extends LinearOpMode {
         LEFT, MIDDLE, RIGHT
     }
 
+    public static final GoldPosition DEFAULT_GOLD_POSITION = MIDDLE;
+    public static final boolean DEFAULT_IS_DROP_SUPPORTED = true;
+    public static final boolean DEFAULT_USE_WEBCAM = true;
+    public static final boolean DEFAULT_USE_VUFORIA_NAV = false;
+
     public static final int GO_TO_ANGLE_BUFFER = 3;
     public static final int GO_TO_POSITION_BUFFER = 2;
     public static final int TARGET_LIFT_TICKS = 5000;
@@ -51,10 +54,10 @@ public class BaseRoverRuckusAuto extends LinearOpMode {
 
     public boolean writeFiles = false;
 
-    public GoldPosition goldPosition = MIDDLE;  // Default goldPosition to use if useWebCam = false
-    public boolean dropSupported = true;
-    public boolean useWebCam = true;
-    public boolean useVuforiaNav = false;
+    public GoldPosition goldPosition;  // Default goldPosition to use if useWebCam = false
+    public final boolean dropSupported;
+    public final boolean useWebCam;
+    public final boolean useVuforiaNav;
 
     public double orientation;
     public double tilt;
@@ -66,21 +69,6 @@ public class BaseRoverRuckusAuto extends LinearOpMode {
     public String step;
 
     PolarCoord currentPosition;
-    public BaseRoverRuckusAuto(StartCorner startCorner,
-                               boolean dropSupported,
-                               boolean useWebCam,
-                               boolean useVuforiaNav) {
-        this.startCorner = startCorner;
-        this.goldPosition = goldPosition;
-        this.dropSupported = dropSupported;
-        this.useWebCam = useWebCam;
-        this.useVuforiaNav = useVuforiaNav;
-
-        this.dropPosition = getDropPosition();
-        this.startPosition = getStartPosition();
-        robot.offset = dropPosition.theta;
-    }
-
 
     public BaseRoverRuckusAuto(StartCorner startCorner,
                                GoldPosition goldPosition,
@@ -99,15 +87,11 @@ public class BaseRoverRuckusAuto extends LinearOpMode {
     }
 
     public BaseRoverRuckusAuto(StartCorner startCorner) {
-        this.startCorner = startCorner;
-        dropPosition = getDropPosition();
-        startPosition = getStartPosition();
-        robot.offset = dropPosition.theta;
-    }
-
-    public BaseRoverRuckusAuto(StartCorner startCorner, GoldPosition goldPosition) {
-        this(startCorner);
-        this.goldPosition = goldPosition;
+        this(startCorner,
+                DEFAULT_GOLD_POSITION,
+                DEFAULT_IS_DROP_SUPPORTED,
+                DEFAULT_USE_WEBCAM,
+                DEFAULT_USE_VUFORIA_NAV);
     }
 
     @Override
