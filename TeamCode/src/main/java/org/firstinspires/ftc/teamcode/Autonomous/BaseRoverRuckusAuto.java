@@ -83,6 +83,7 @@ public class BaseRoverRuckusAuto extends LinearOpMode {
 
         this.dropPosition = getDropPosition();
         this.startPosition = getStartPosition();
+        this.currentPosition = dropPosition;
         robot.offset = dropPosition.theta;
     }
 
@@ -141,16 +142,20 @@ public class BaseRoverRuckusAuto extends LinearOpMode {
         final PolarCoord postDepotPosition = getPostDepotPosition();
         final PolarCoord craterPosition = getCraterPosition();
 
-        currentPosition = goToPosition(dropPosition, startPosition, true);
+        if (goldPosition != MIDDLE) {
+            // Skip going to startPosition/preJewelPosition if jewel is in the middle
+            currentPosition = goToPosition(currentPosition, startPosition, true);
 
-        if (useVuforiaNav) {
-            PolarCoord vuforiaCurrentPosition = getVuforiaCurrentPosition();
-            if (vuforiaCurrentPosition != null) {
-                currentPosition = vuforiaCurrentPosition;
+            if (useVuforiaNav) {
+                PolarCoord vuforiaCurrentPosition = getVuforiaCurrentPosition();
+                if (vuforiaCurrentPosition != null) {
+                    currentPosition = vuforiaCurrentPosition;
+                }
             }
+
+            currentPosition = goToPosition(currentPosition, preJewelPosition);
         }
 
-        currentPosition = goToPosition(currentPosition, preJewelPosition);
         currentPosition = goToPosition(currentPosition, depotPosition);
         dropMarker();
         currentPosition = goToPosition(currentPosition, postDepotPosition);
@@ -174,7 +179,12 @@ public class BaseRoverRuckusAuto extends LinearOpMode {
         final PolarCoord depotPosition = getDepotPosition();
         final PolarCoord craterPosition = getCraterPosition();
 
-        currentPosition = goToPosition(dropPosition, startPosition, true);
+        final double jewelToPreJewelDistance = -PolarCoord.getDistanceBetween(jewelPosition, preJewelPosition);
+
+        if (goldPosition != MIDDLE) {
+            // Skip going to startPosition if jewel is in the middle
+            currentPosition = goToPosition(currentPosition, startPosition, true);
+        }
 
         if (useVuforiaNav) {
             PolarCoord vuforiaCurrentPosition = getVuforiaCurrentPosition();
@@ -186,7 +196,8 @@ public class BaseRoverRuckusAuto extends LinearOpMode {
         currentPosition = goToPosition(currentPosition, preJewelPosition);
 
         goToPosition(preJewelPosition, jewelPosition);
-        goToDistance(-PolarCoord.getDistanceBetween(jewelPosition, preJewelPosition), 1, preJewelPosition.name);
+
+        goToDistance(jewelToPreJewelDistance, 1, preJewelPosition.name);
 
         currentPosition = goToPosition(currentPosition, safePosition);
         currentPosition = goToPosition(currentPosition, preDepot);
