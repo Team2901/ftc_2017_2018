@@ -28,7 +28,7 @@ public class DepotOnlyAuto extends BaseRoverRuckusAuto {
 
         dropMarker();
 
-        goToDistance(-20, .75, "back out of depot");
+        goToDistance(-48, .75, "back out of depot");
 
         while(opModeIsActive()) {
             idle();
