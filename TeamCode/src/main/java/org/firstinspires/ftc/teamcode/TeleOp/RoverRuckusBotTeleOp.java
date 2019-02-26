@@ -19,6 +19,8 @@ public class RoverRuckusBotTeleOp extends OpMode {
     double modifier = 1;
     boolean isAPressed = false;
     boolean isBackwards = false;
+    double intakePower= 0;
+
 
     @Override
     public void loop() {
@@ -71,17 +73,19 @@ public class RoverRuckusBotTeleOp extends OpMode {
         */
 
 
-        robot.shoulder.setPower(-g2LeftStick );
+        robot.shoulder.setPower(g2LeftStick );
         robot.elbow.setPower(-g2RightStick);
 
         //Intake Mechanism will be operated off gamepad 2 triggers
         if (gamepad2.right_trigger > .2) {
-            robot.intake.setPower(1);
+            intakePower=1;
         } else if (gamepad2.left_trigger > .2) {
-            robot.intake.setPower(-1);
-        } else {
-            robot.intake.setPower(0);
+            intakePower=-1;
+        } else if (gamepad2.left_bumper || gamepad2.right_bumper){
+            intakePower=0;
         }
+        robot.intake.setPower(intakePower);
+
 
 
         // telemetry.addData("lift position", robot.lift.getCurrentPosition());
