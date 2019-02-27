@@ -6,7 +6,7 @@ import org.firstinspires.ftc.teamcode.Utility.PolarCoord;
 
 import static org.firstinspires.ftc.teamcode.Autonomous.BaseRoverRuckusAuto.GoldPosition.MIDDLE;
 
-@Autonomous(name = "Depot Marker Only", group = "RoverRuckusPartial")
+@Autonomous(name = "Depot: Marker Only", group = "RoverRuckusPartial")
 public class DepotOnlyAuto extends BaseRoverRuckusAuto {
 
     public DepotOnlyAuto() {

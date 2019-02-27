@@ -3,9 +3,10 @@ package org.firstinspires.ftc.teamcode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.Utility.PolarCoord;
-@Autonomous(name = "Crater Parking Only", group = "RoverRuckusPartial")
-public class CraterOnlyAuto extends BaseRoverRuckusAuto {
-    public CraterOnlyAuto() {
+@Autonomous(name = "Crater: Parking Only", group = "RoverRuckusPartial")
+public class CraterParkingOnly extends BaseRoverRuckusAuto {
+
+    public CraterParkingOnly() {
         super(StartCorner.BLUE_CRATER,
                 GoldPosition.MIDDLE,
                 DEFAULT_IS_DROP_SUPPORTED,

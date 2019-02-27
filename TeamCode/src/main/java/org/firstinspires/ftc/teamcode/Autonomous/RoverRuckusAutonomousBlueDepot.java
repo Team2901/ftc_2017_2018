@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import static org.firstinspires.ftc.teamcode.Autonomous.BaseRoverRuckusAuto.StartCorner.BLUE_DEPOT;
 
-@Autonomous ( name =  "RoverRuckus Depot", group = "RoverRuckus")
+@Autonomous( name =  "Depot: Full", group = "RoverRuckus")
 public class RoverRuckusAutonomousBlueDepot extends BaseRoverRuckusAuto {
 
     public RoverRuckusAutonomousBlueDepot() {

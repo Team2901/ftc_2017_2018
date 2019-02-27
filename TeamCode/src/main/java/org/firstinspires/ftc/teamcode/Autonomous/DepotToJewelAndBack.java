@@ -3,10 +3,10 @@ package org.firstinspires.ftc.teamcode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.Utility.PolarCoord;
-@Autonomous(name = "Depo to Jewel and Back", group = "RoverRuckusPartial")
-public class DepoToJewelAndBack extends BaseRoverRuckusAuto {
+@Autonomous(name = "Depot: Jewel and Marker", group = "RoverRuckusPartial")
+public class DepotToJewelAndBack extends BaseRoverRuckusAuto {
 
-    public DepoToJewelAndBack() {
+    public DepotToJewelAndBack() {
         super(BaseRoverRuckusAuto.StartCorner.BLUE_DEPOT,
                 BaseRoverRuckusAuto.GoldPosition.MIDDLE,
                 DEFAULT_IS_DROP_SUPPORTED, DEFAULT_USE_WEBCAM, DEFAULT_USE_VUFORIA_NAV);

@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode.Autonomous;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
-@Autonomous(name = "GoToDistance Test", group = "Test")
+@Autonomous(name = "GoToDistance", group = "Test")
 public class GoToDistanceTest extends BaseRoverRuckusAuto {
 
     public GoToDistanceTest() {

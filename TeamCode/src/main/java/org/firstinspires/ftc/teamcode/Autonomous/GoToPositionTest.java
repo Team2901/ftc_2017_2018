@@ -8,7 +8,7 @@ import org.firstinspires.ftc.teamcode.Utility.PolarCoord;
 import static org.firstinspires.ftc.teamcode.Autonomous.BaseRoverRuckusAuto.StartCorner.BLUE_CRATER;
 
 @Disabled
-@Autonomous(name = "GoToPosition Test", group = "Test")
+@Autonomous(name = "GoToPosition", group = "Test")
 public class GoToPositionTest extends BaseRoverRuckusAuto {
 
     public GoToPositionTest() {
