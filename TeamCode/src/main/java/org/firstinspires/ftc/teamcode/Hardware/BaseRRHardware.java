@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.Hardware;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -19,7 +20,7 @@ public abstract class BaseRRHardware {
 
     public static final double ENCODER_COUNTS_PER_REV = 1120; // For neverRest 40s
 
-    protected HardwareMap hardwareMap = null;
+    public HardwareMap hardwareMap = null;
     public DcMotor left;
     public DcMotor right;
     public DcMotor lift;
@@ -131,4 +132,6 @@ public abstract class BaseRRHardware {
     public double getInchesToEncoderCounts() {
         return ((1 / inchesPerRotation) * ENCODER_COUNTS_PER_REV);
     }
+
+    public abstract void armOut(LinearOpMode linearOpMode);
 }

@@ -54,11 +54,7 @@ public class RoverRuckusBotTeleOp extends OpMode {
         Might Change but lift being limited between the physical restraints of the mechanism and
           being controlled by left and right trigger. Limit can be reset by hittig y
           */
-        if (gamepad1.y) {
-            robot.lift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            robot.lift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-        }
 
         if (gamepad1.left_bumper) {
             robot.lift.setPower(1);

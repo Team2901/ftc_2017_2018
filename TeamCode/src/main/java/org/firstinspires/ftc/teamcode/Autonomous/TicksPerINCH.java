@@ -1,35 +1,22 @@
 package org.firstinspires.ftc.teamcode.Autonomous;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.DcMotor;
 
-import org.firstinspires.ftc.teamcode.Hardware.BaseRRHardware;
-import org.firstinspires.ftc.teamcode.Hardware.RoverRuckusBotHardware;
+import static org.firstinspires.ftc.teamcode.Autonomous.BaseRoverRuckusAuto.StartCorner.BLUE_CRATER;
 
-@Disabled
-@Autonomous( name = "TicksPerINCH")
-public class TicksPerINCH extends LinearOpMode {
+@Autonomous(name = "TICKS Per inch", group = "RoverRuckus")
+public class TicksPerINCH extends BaseRoverRuckusAuto {
 
-    BaseRRHardware robot = new RoverRuckusBotHardware();
+    public TicksPerINCH() {
+        super(BLUE_CRATER, GoldPosition.MIDDLE, false, false,false
+        );
+    }
 
     @Override
-    public void runOpMode() {
-        robot.init(hardwareMap);
-
-        robot.setTargetPosition(1000);
-
-        waitForStart();
-
-        robot.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        robot.goStraight(1);
-
-        while(robot.left.isBusy() || robot.right.isBusy()){
-            idle();
-        }
-
-        while (opModeIsActive()) {
+    public void runOpMode() throws InterruptedException {
+      super.runOpMode();
+      robot.armOut(this);
+      while(opModeIsActive()) {
             idle();
         }
     }
