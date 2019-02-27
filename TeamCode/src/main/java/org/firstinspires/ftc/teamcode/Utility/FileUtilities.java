@@ -21,6 +21,7 @@ public class FileUtilities {
     public final static String TEAM_FOLDER_NAME = "Team";
     public final static String WINNER_FILE_NAME_3 = "writeWinnerFile3Jewels.txt";
     public final static String WINNER_FILE_NAME_2 = "writeWinnerFile2Jewels.txt";
+    public final static String ARM_POSITION = "armPosition.txt";
 
     public static void writeConfigFile(String filename,
                                        List<? extends Object> config) throws IOException {
@@ -182,5 +183,16 @@ public class FileUtilities {
         //TODO
     }
 
+    public static void writeArmFile(String fileName,
+                                       int shoulderPosition, int elbowPosition) throws IOException {
+        final File teamDir = new File(Environment.getExternalStorageDirectory(), TEAM_FOLDER_NAME);
+        boolean newDir = teamDir.mkdirs();
+        final File file = new File(teamDir, fileName);
 
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
+            writer.write("Shoulder Position is " + shoulderPosition);
+            writer.newLine();
+            writer.write("Elbow Position is " + elbowPosition);
+        }
+    }
 }
