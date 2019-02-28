@@ -7,7 +7,7 @@
             <NeveRest40Gearmotor name="lift" port="2" />
             <NeveRest60Gearmotor name="shoulder" port="3" />
             <Servo name="marker" port="0" />
-            <ContinuousRotationServo name="intake" port="3" />
+            <ContinuousRotationServo name="intake" port="1" />
             <LynxEmbeddedIMU name="imu" port="0" bus="0" />
         </LynxModule>
         <LynxModule name="Expansion Hub 2" port="2">
