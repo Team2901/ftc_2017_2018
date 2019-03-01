@@ -143,6 +143,8 @@ public class BaseRoverRuckusAuto extends LinearOpMode {
 
     public PolarCoord runOpModeDepotCorner() {
 
+        /*setting the major autonomous position.  These positions are what we use as reference points
+        and goals during autonomous.*/
         final PolarCoord preJewelPosition = getPreJewelPosition();
         final PolarCoord depotPosition = getDepotPosition();
         final PolarCoord postDepotPosition = getPostDepotPosition();
