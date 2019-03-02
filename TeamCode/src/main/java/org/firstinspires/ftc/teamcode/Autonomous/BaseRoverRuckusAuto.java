@@ -277,7 +277,7 @@ public class BaseRoverRuckusAuto extends LinearOpMode {
         if (writeFiles) {
             try {
                 FileUtilities.writeBitmapFile("jewelBitmap.png", bitmap);
-                FileUtilities.writeHueFile("jewelHuesBig.txt", bitmap);
+                FileUtilities.writeHueFile("jewelHuesBig.txt", bitmap, this);
                 FileUtilities.writeWinnerFile(winner, leftHueTotal, middleHueTotal, rightHueTotal);
             } catch (Exception e) {
                 telemetry.addData("Error writing jewel files", e);
@@ -374,6 +374,7 @@ public class BaseRoverRuckusAuto extends LinearOpMode {
         robot.goStraight(0);
     }
 
+    //TODO return the new position as a PolarCoord
     public void goToDistance(double distance,
                              double speed,
                              String name) {

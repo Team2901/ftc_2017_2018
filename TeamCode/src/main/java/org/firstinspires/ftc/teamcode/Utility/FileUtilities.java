@@ -4,6 +4,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Environment;
 
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+
 import org.firstinspires.ftc.teamcode.Autonomous.BaseRoverRuckusAuto;
 
 import java.io.BufferedReader;
@@ -17,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FileUtilities {
-    public final static String PICTURES_FOLDER_NAME = "Pictures";
+    public final static String PICTURES_FOLDER_NAME = "Team";
     public final static String TEAM_FOLDER_NAME = "Team";
     public final static String WINNER_FILE_NAME_3 = "writeWinnerFile3Jewels.txt";
     public final static String WINNER_FILE_NAME_2 = "writeWinnerFile2Jewels.txt";
@@ -162,8 +164,9 @@ public class FileUtilities {
     }
 
     public static void writeHueFile(String filename,
-                                    Bitmap bitmap) throws IOException, InterruptedException {
-        int[] colorCounts = ColorUtilities.getColorCounts(bitmap);
+                                    Bitmap bitmap,
+                                    LinearOpMode opMode) throws IOException, InterruptedException {
+        int[] colorCounts = ColorUtilities.getHueDistribution(bitmap, opMode);
 
         final File teamDir = new File(Environment.getExternalStorageDirectory(), TEAM_FOLDER_NAME);
         boolean newDir = teamDir.mkdirs();
