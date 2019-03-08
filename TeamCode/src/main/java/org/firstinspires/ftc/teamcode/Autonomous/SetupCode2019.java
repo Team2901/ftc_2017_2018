@@ -115,6 +115,7 @@ public class SetupCode2019 extends LinearOpModeJewelCamera {
         if (useThreeJewels) {
             winner = BitmapUtilities.findWinnerLocation(leftHueTotal, middleHueTotal, rightHueTotal);
         } else {
+            //winner = BitmapUtilities.findCorrectGoldLocation(middleHueTotal, rightHueTotal);
             winner = BitmapUtilities.findWinnerLocation(middleHueTotal, rightHueTotal);
         }
 

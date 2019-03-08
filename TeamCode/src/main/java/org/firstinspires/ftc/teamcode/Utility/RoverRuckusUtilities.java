@@ -42,7 +42,7 @@ public class RoverRuckusUtilities {
                 FileUtilities.writeBitmapFile(bwFileName, babyBitmapBW);
             }
 
-            return ColorUtilities.getColorCount(babyBitmap, 25, 40, opMode);
+            return ColorUtilities.getColorCount(babyBitmap, 25, 55, opMode);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

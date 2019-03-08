@@ -77,6 +77,31 @@ public class BitmapUtilities {
         return winner;
     }
 
+    public static BaseRoverRuckusAuto.GoldPosition findCorrectGoldLocation (int[] middleHueTotal,
+                                                                      int[] rightHueTotal) {
+        BaseRoverRuckusAuto.GoldPosition winner = BaseRoverRuckusAuto.GoldPosition.LEFT;
+        int middleColor, rightColor;
+
+
+        if(middleHueTotal[0]/*yellow counts*/ > 0)
+        {
+            middleColor = Color.YELLOW;
+            winner = BaseRoverRuckusAuto.GoldPosition.MIDDLE;
+        }
+        else {
+            middleColor= Color.WHITE;
+        }
+        if(rightHueTotal[0]/*yellow counts*/ > 0)
+        {
+            rightColor = Color.YELLOW;
+            winner = BaseRoverRuckusAuto.GoldPosition.RIGHT;
+        }
+        else {
+            rightColor= Color.WHITE;
+        }
+        return winner;
+    }
+
     BaseRoverRuckusAuto.GoldPosition findGoldPosition(int leftHueTotal,
                                                       int middleHueTotal,
                                                       int rightHueTotal) {
