@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 @TeleOp (name = "Gamepad TeleOp" )
-public class GamepadTeleOp extends OpMode {
+public class TestGamepad extends OpMode {
     ButtonState aButton = new ButtonState();
     ElapsedTime timer = new ElapsedTime();
     @Override

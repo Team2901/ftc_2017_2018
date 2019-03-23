@@ -29,8 +29,8 @@ public class SetupCode2019 extends LinearOpModeJewelCamera {
     private int rightHueTotal[] = {0, 0};
 
     private boolean useWebCam = true;
-    private boolean useThreeJewels = false;
-    private boolean postToJewels = false;
+    private boolean useThreeJewels = true;
+    private boolean postToJewels = true;
 
     private WebcamName webcam = null;
     private VuforiaLocalizer vuforia;

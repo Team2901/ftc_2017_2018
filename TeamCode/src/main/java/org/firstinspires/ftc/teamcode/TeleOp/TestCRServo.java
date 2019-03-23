@@ -21,7 +21,7 @@ public class TestCRServo extends OpMode {
     crServo.setPower( - gamepad1.right_stick_y);
 
     telemetry.addData("Joystick" , gamepad1.right_stick_y);
-    telemetry.addData("MotorPower" , crServo.getPower());
+    telemetry.addData("crServo" , crServo.getPower());
     telemetry.update();
     }
 }

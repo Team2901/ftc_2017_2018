@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode.Autonomous;
 
 import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
-import android.os.Environment;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -14,7 +13,6 @@ import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
-import org.firstinspires.ftc.teamcode.Hardware.BaseRRHardware;
 import org.firstinspires.ftc.teamcode.Hardware.RoverRuckusBotHardware;
 import org.firstinspires.ftc.teamcode.Utility.AngleUtilities;
 import org.firstinspires.ftc.teamcode.Utility.BitmapUtilities;
@@ -22,11 +20,6 @@ import org.firstinspires.ftc.teamcode.Utility.FileUtilities;
 import org.firstinspires.ftc.teamcode.Utility.PolarCoord;
 import org.firstinspires.ftc.teamcode.Utility.RoverRuckusUtilities;
 import org.firstinspires.ftc.teamcode.Utility.VuforiaUtilities;
-
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 
 import static org.firstinspires.ftc.teamcode.Autonomous.BaseRoverRuckusAuto.GoldPosition.MIDDLE;
 import static org.firstinspires.ftc.teamcode.Utility.VuforiaUtilities.getWebCameraParameters;
@@ -53,7 +46,7 @@ public class BaseRoverRuckusAuto extends LinearOpMode {
     public static final int TARGET_LIFT_TICKS = 5000;
     public static final double P_DRIVE_COEFF = 0.05;
 
-    public final BaseRRHardware robot = new RoverRuckusBotHardware();
+    public final RoverRuckusBotHardware robot = new RoverRuckusBotHardware();
 
     public VuforiaLocalizer vuforia;
     VuforiaTrackables roverRuckus;
