@@ -26,7 +26,7 @@ public class PresentationBotHardware {
 
     public BNO055IMU imu;
     public IntegratingGyroscope gyroscope;
-    public DistanceSensor distanceSensor;
+  //  public DistanceSensor distanceSensor;
 
 
     private ElapsedTime period = new ElapsedTime();
@@ -37,8 +37,8 @@ public class PresentationBotHardware {
 
 
         // Define and Initialize Motors
-        leftMotor = hwMap.dcMotor.get("left_drive");
-        rightMotor = hwMap.dcMotor.get("right_drive");
+        leftMotor = hwMap.dcMotor.get("leftMotor");
+        rightMotor = hwMap.dcMotor.get("rightMotor");
 
         leftMotor.setDirection(DcMotor.Direction.REVERSE);
         rightMotor.setDirection(DcMotor.Direction.FORWARD);
@@ -75,7 +75,7 @@ public class PresentationBotHardware {
         imu = hwMap.get(BNO055IMU.class, "imu");
         imu.initialize(parameters);
 
-        distanceSensor = hwMap.get(DistanceSensor.class, "sensor_color_distance");
+       // distanceSensor = hwMap.get(DistanceSensor.class, "sensor_color_distance");
 
 
     }

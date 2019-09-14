@@ -8,7 +8,6 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 
 @Autonomous(name = "Imu Demonstration")
-@Disabled
 public class ImuDemonstration extends LinearOpMode {
 
     PresentationBotHardware robot = new PresentationBotHardware();

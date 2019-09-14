@@ -23,7 +23,7 @@ public class PresentationTurnAtWall extends LinearOpMode {
 
         while (opModeIsActive()) {
             //Determines distance to the nearest surface IN INCHES
-            double distance = robot.distanceSensor.getDistance(DistanceUnit.INCH);
+            double distance =2;// robot.distanceSensor.getDistance(DistanceUnit.INCH);
             //If less than 2ft, turn if not jeep going
             if (distance < 24) {
                 turn(90);
